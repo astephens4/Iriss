@@ -1,0 +1,21 @@
+Software Modules needed
+
+--==* Raspberry Pi software *==--
++ libLineAnalysis - for a given image, find any straight lines and get info about it
+    + class LineDetector - For a given RGB bitmap, find the lines of a given color set.
+
+    + class ImageFilter - For a given RGB bitmap, perform noise reduction, color filtering, and edge detection, producing a B/W bitmap
+
+    + class LineAnalyzer - Uses result of line detection along with calibration data to get real-world measurements
+
++ Find library to do SPI communications w/ ardupilot
+
++ Look for library for packing and sending video
+
++ Main IRISS program
+
++ Look for library for getting camera frames and setting camera operation modes <-- Found in raspi userland repo
+
+--==* Desktop Software *==--
+Should be portable! (Develop in Java)
+

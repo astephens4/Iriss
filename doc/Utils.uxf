@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>10</x>
+      <y>20</y>
+      <w>350</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Utilities that will be used throughout the C++ projects
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>170</x>
+      <y>180</y>
+      <w>210</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+Utils::Distance
+--
+value: float
+--
+/+ set(value: Units::Distance&amp;)/
+/+ asInches(): Units::Inches/
+/+ asFeet(): Units::Feet/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>40</x>
+      <y>350</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Utils::Inches
+--
+--
++ asInches(): Units::Inches
++ asFeet(): Units::Feet
++ getValue(): float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>290</x>
+      <y>350</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Utils::Feet
+--
+--
++ asInches(): Units::Inches
++ asFeet(): Units::Feet
++ getValue(): float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>550</x>
+      <y>30</y>
+      <w>210</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+Utils::Angle
+--
+value: float
+--
+/+ set(value: Units::Angle&amp;)/
+/+ asDegrees(): Units::Degrees/
+/+ asRadians(): Units::Radians/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>420</x>
+      <y>220</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Utils::Degrees
+--
+--
++ asDegrees(): Units::Degrees
++ asRadians(): Units::Radians
++ getValue(): float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>670</x>
+      <y>220</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Utils::Radians
+--
+--
++ asDegrees(): Units::Degrees
++ asRadians(): Units::Radians
++ getValue(): float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>120</y>
+      <w>170</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>150;30;30;100</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>620</x>
+      <y>120</y>
+      <w>170</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;150;100</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>120</x>
+      <y>270</y>
+      <w>170</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>150;30;30;80</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>240</x>
+      <y>270</y>
+      <w>170</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;150;80</additional_attributes>
+  </element>
+</diagram>

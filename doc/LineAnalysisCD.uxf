@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>912</x>
+      <y>270</y>
+      <w>240</w>
+      <h>186</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+/LineAnalysis::Image/
+--
+- width: int
+- height: int
+- depth: int
+- format: LineAnalysis::Image::ColorFormat
+- data: unsigned int*
+- file: std::string
+--
++ getWidth(void): int
++ getHeight(void): int
++ getColorDepth(void): int
++ getFormat(void): LineAnalysis::Image::ColorFormat
+/+ getIntensity(x: int, y: int): float&amp;/
+/+ readImage(fileName: std::string): bool/
+/+ writeImage(fileName: std::string): bool/
+--
+Responsibilities
+Represent a generic image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>228</x>
+      <y>270</y>
+      <w>240</w>
+      <h>222</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::Line
+--
+- length: int
+- width: int
+- color: LineAnalysis::Color
+- angle: Units::Degrees
+- endPoints: LineAnalysys::Segment
+- containingImage: LineAnalysis::Image&amp;
+--
++ getLength(void): int
++ getWidth(void): int
++ getColor(void): LineAnalysis::Color
++ getAngle(void): Units::Angle
++ getEndPoints(void): LineAnalysis::Segment
++ getImageRef(void): LineAnalysys::Image&amp;
+
++ setLength(lenPix int): void
++ setWidth(widthPix: int): void
++ setColor(color: LineAnalysis::Color): void
++ setAngle(angle: Units::Angle&amp;): void
++ setEndPoints(segment: LineAnalysis::Segment): void
++ setImageRef(image: LineAnalysys::Image&amp;): void
+--
+Responsibilities
+Represent an oriented line segment in an image</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>228</x>
+      <y>528</y>
+      <w>240</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::Segment
+--
+- pointLow: Point2d&lt;int&gt;
+- pointHigh: Point2d&lt;int&gt;
+--
++ getLowPoint(void): Point2d&lt;int&gt;
++ getHighPoint(void): Point2d&lt;int&gt;
+--
+Responsibilities
+Represents a line segment. Immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>558</x>
+      <y>270</y>
+      <w>240</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::Color
+--
+r: unsigned char
+g: unsigned char
+b: unsigned char
+--
++ asUint32(void): unsigned int
++ red(void): unsigned char
++ green(void): unsigned char
++ blue: unsigned char
+--
+Responsibilities
+Represents a 24-bit color. Immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>552</x>
+      <y>42</y>
+      <w>252</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::LineDetector
+--
+- colors: std::vector&lt;LineAnalysis::Color&gt;
+- lines: std::vector&lt;LineAnalysis::Line&gt;
+- image: LineAnalysis::ColorImage
+--
++ setImage(LineAnalysis::ColorImage image): void
++ setColors(std::vector&lt;LineAnalysis::Color&gt; colorList): void
++ addColor(LineAnalysis::Color color): void
++ getLines(void): std::vector&lt;LineAnalysis::Line&gt;
+--
+Responsibilities
+For a given 24-bit RGB bitmap,
+find lines which are close to the
+specified colors.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>636</x>
+      <y>516</y>
+      <w>258</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::BWImage
+--
+--
++ getIntensity(x: int, y: int): float&amp;
++ readImage(fileName: std::string): bool
++ writeImage(fileName: std::string): bool
+--
+Responsibilities
+Represent a Black and White image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>906</x>
+      <y>516</y>
+      <w>258</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::ColorImage
+--
+--
++ getIntensity(x: int, y: int): float&amp;
++ getColor(x: int, y: int): LineAnalysis::Color&amp;
++ readImage(fileName: std::string): bool
++ writeImage(fileName: std::string): bool
+--
+Responsibilities
+Represent a color image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1176</x>
+      <y>516</y>
+      <w>276</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::GrayScaleImage
+--
+- percentRed: float
+- percentGreen: float
+- percentBlue: float
+--
++ setGrayPercent(red: float, green: float, blue: float): void
++ getGrayPercent(red: float&amp;, green: float&amp;, blue: float&amp;): void
++ getIntensity(x: int, y: int): float
++ readImage(fileName: std::string): bool
++ writeImage(fileName: std::string): bool
+--
+Responsibilities
+Represent a grayscale image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>330</x>
+      <y>162</y>
+      <w>258</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m2=0..*
+</panel_attributes>
+    <additional_attributes>246;18;18;108</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>324</x>
+      <y>474</y>
+      <w>30</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m2=1
+</panel_attributes>
+    <additional_attributes>18;18;18;54</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>654</x>
+      <y>162</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m2=0..*</panel_attributes>
+    <additional_attributes>18;18;18;108</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>720</x>
+      <y>162</y>
+      <w>324</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m2=0..*</panel_attributes>
+    <additional_attributes>18;18;312;108</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>744</x>
+      <y>438</y>
+      <w>300</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>288;18;18;78</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1014</x>
+      <y>438</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;18;78</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1014</x>
+      <y>438</y>
+      <w>318</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;306;78</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>0</x>
+      <y>6</y>
+      <w>270</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>Still need to find a place for Point2D&lt;type&gt; and Units::
+bg=yellow
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>864</x>
+      <y>36</y>
+      <w>582</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::ImageFilter
+--
+--
+_+ getFilteredImage(image: LineAnalysis::ColorImage&amp;, targetColor: LineAnalysis::Color, noiseReduction: bool=false): LineAnalysis::BWImage*_
+--
+Responsibilities
+Takes a color image and optionally does a noise reduction
+follwed by a color filter, and then edge detection. The resulting
+BWImage is non-zero where an edge was found and 0 where an edge was
+not found.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>786</x>
+      <y>66</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>78;18;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>930</x>
+      <y>144</y>
+      <w>258</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>LineAnalysis::ConvertToHeight
+--
+- param1: float
+- param2: float
+- param3: float
+--
+_+ getInstance(p1: float, p2: float, p3: float): ConvertToHeight_
++ setConversionParameters(p1: float, p2: float, p3: float): void
++ getHeightForWidth(widthPx: int): Units::Inches
+--
+Responsibilities
+Represent a Black and White image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>786</x>
+      <y>66</y>
+      <w>156</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>144;114;18;18</additional_attributes>
+  </element>
+</diagram>

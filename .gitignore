@@ -11,3 +11,8 @@
 *.lai
 *.la
 *.a
+
+# Other binaries
+debug/
+release/
+*.zip

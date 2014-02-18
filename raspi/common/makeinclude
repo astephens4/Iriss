@@ -1,0 +1,25 @@
+# Tool chain to use
+CC=/opt/raspi/buildtools/bin/arm-bcm2708hardfp-linux-gnueabi-gcc
+CXX=/opt/raspi/buildtools/bin/arm-bcm2708hardfp-linux-gnueabi-g++
+LINK=/opt/raspi/buildtools/bin/arm-bcm2708hardfp-linux-gnueabi-g++
+AR=/opt/raspi/buildtools/bin/arm-bcm2708hardfp-linux-gnueabi-ar
+AS=/opt/raspi/buildtools/bin/arm-bcm2708hardfp-linux-gnueabi-as
+
+SYS_INCLUDES=-I/opt/raspi/buildtools/arm-bcm2708hardfp-linux-gnueabi/sysroot/include \
+        -I/opt/raspi/buildtools/arm-bcm2708hardfp-linux-gnueabi/sysroot/usr/include \
+
+SYS_LIBS=-L/opt/raspi/buildtools/arm-bcm2708hardfp-linux-gnueabi/sysroot/lib \
+     -L/opt/raspi/buildtools/arm-bcm2708hardfp-linux-gnueabi/sysroot/usr/lib \
+
+# Specify wheather to build debug or release, uncomment the one
+# you want and comment out the one you don't want
+
+# BUILD_VERSION=release
+# BUILD_ARGS=-O2
+BUILD_VERSION=debug
+BUILD_ARGS=-g3
+
+COMPILE=${CXX} -c
+INSTALL=cp
+SHARED_LIB_ARGS=-shared -o
+CXXFLAGS=-fPIC -Wall -Wextra ${BUILD_ARGS}

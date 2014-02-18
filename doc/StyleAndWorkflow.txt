@@ -1,0 +1,183 @@
+C++ Coding Style and Workflow Guide for IRISS
+Sections:
+1. Code Formatting
+2. Object Oriented Design and Inheritance
+3. Runtime performance and effiency
+4. Memory performance and effiency
+5. Bug Reduction
+6. Workflow
+
+1. Code Formatting - The purpose of these rules is to ensure a code base with common appearance and reduces
+    merge conflicts on style differences and whilespace alone.
+    1.1 Use four spaces instead of tabs. Almost every text editor can be configured to insert spaces on tab
+    1.2 Use UNIX style line endings ('\n') as opposed to DOS style ("\r\n")
+    1.3 Opening curly brace for function definitions are placed on the next empty line following the function 
+        signature.
+            EX: 
+                void foo(int bar)
+                {
+                    // function logic
+                }
+            EXCEPTION: Trivial getters and setters do not need to follow this convention
+    1.4 Opening curly braces in all other cases are place on the same line, with a space between the statement
+        and the brace
+            EX: Conditional and loop statements
+                if(boolVar) {
+                    // do if true
+                }
+
+            EX: ScopeGuard
+                {
+                    // do something
+                }
+            EX: Initializing a struct
+                struct aStruct s = {
+                    .mem1 = 0,
+                    .mem2 = 1
+                };
+    1.5 An else statement is placed on an empty line following the closing curly brace for the if.
+            EX:
+            if(foo) {
+                // do when foo is true
+            }
+            else {
+                // do when foo is false
+            }
+    1.6 Always use curly braces with conditional and loop statements. Reasoning: More statements could be
+        added at a later time and it saves some hassle and possible bugs by including the braces to begin with.
+    1.7 Use const global variables instead of #define
+    1.8 Capitalization and variable naming conventions
+        a. All local stack variables and struct members begin with a lowercase letter, and all proceeding
+            words in the variable name are capitalized
+            EX: int myInt;
+                int foo;
+                int myOtherInt;
+        b. All global variables, #define (if necessary), and enum members are all capitalized, with
+            underscores ('_') between
+            words.
+            EX: const int MY_INT = 9001;
+                #define MY_OTHER_INT 9002
+                enum MyEnumeration {
+                    VALUE1,
+                    VALUE2
+                };
+        c. All classes, structs, and enums are named beginning with a capital letter, and subsequent words are
+            also calitalized
+            EX: class MyClass { };
+        d. All class private data members are named m_<variable name>, where <variable name> is styled like
+            1.8.a
+            EX:
+            class MyClass {
+                private:
+                int m_myInt;
+            };
+        e. Functions are named in all lowercase with underscores ('_') between words
+            EX: 
+                void do_something(int var)
+                {
+                    // do something
+                }
+    1.9 Place function prototypes in the header file associated with the function definition if the function
+        is to be used in other *.cpp files.
+    1.10 Use Doxygen style comment blocks for all functions in header files
+        1.10 Exception: getters and setters do not need function comments
+    1.11 In code comments should be limited to single line C++ style comments (use "// comment")
+        a. Limit in code comments to short but informative statement on the author's intent
+    1.12 Do not comment out blocks of code, use Git's branching feature instead if you want to experiment. See
+        Section 6. Workflow for more information.
+    1.13 Do not use exception specifications. They will cause more bad than good for us.
+
+2. Object Oriented Design and Inheritance
+    2.1 All data members should be private
+    2.2 All classes should have an associated unit test file, which is developed after the header file
+        and before the implementation file. See Section 6. Workflow for more information
+    2.3 Avoid the diamond inheritance pattern. See 
+        http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem for details.
+    2.4 Abstract base classes must have a virtual destructor
+    2.5 Trivial getters and setters can be defined in the header file
+        EX:
+            class MyClass {
+                private:
+                int m_myInt;
+
+                public:
+                void set_my_int(int m) { m_myInt = m; }
+                int get_my_int(void) { return m_myIny; }
+            };
+    2.6 Constructors which require only a single primitive data type as an argument should be marked as
+        explicit. This avoids construction from occuring on accident.
+        EX:
+            class MyClass {
+                public:
+                explicit MyClass(int val);
+                ...
+            };
+    2.7 Use the Resource Acquisition is Initialization (RAII) design pattern where applicable. 
+        See http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization for details.
+    2.8 Mark member functions which do not alter class state as const
+    2.9 Mark member functions which do not access this as static. EXCEPTION: Singleton pattern
+
+3. Runtime Performance and Efficency
+    3.1 Use pass-by-reference and pass-by-const-reference to avoid unnecessary construction and destruction
+        EX:
+        class BigClass {...};
+        class TinyClass {...};
+
+        void alter_big_class(BigClass& obj, TinyClass tc);
+
+        int calc_from_big_class(const BigClass& obj, float calcParam);
+        
+    3.2 Do not use recursion, convert to iterative if necessary. Function stack is limited.
+    3.3 Use return codes to signify success or failure.
+    3.4 Use exceptions to signify bad input
+    3.5 Attempt to only call inline'd functions from inside loops.
+
+4. Memory Performance and Effiency
+    4.1 Attempt to use stack allocation and references before dynamic allocation and pointers.
+    4.2 See 3.1. Seriously, pass by reference when possible.
+    4.3 When pointers are needed, use C++'s smart pointer classes. Document ownership in code.
+    4.4 Use nullptr as opposed to NULL and 0 when initializing a pointer to null.
+    4.5 Use delete [] operator with new [] operator and delete operator with new operator.
+
+5. Bug Reduction - Empty for now
+
+6. Workflow - Git, project layout, makefiles, and testing
+    6.1 All text based design documents, source code, and other documentation is under Git version control
+    6.2 All binary files are ignored by Git (executables, libraries)
+    6.3 When adding a new subproject, use the Makefile.<template> in the common/ directory
+    6.4 ALL projects must have a test/ subdirectory with corresponding test source.
+    6.5 ALL classes, libraries, publicly available functions must have a corresponding set of unit tests
+    6.6 Development Cycle for classes and libraries:
+        * Create interface specification
+        * Create class definition (Class.hpp)
+        * Create class unit tests (test/ClassTest.cpp)
+        * Create class implementation (Class.cpp)
+        * Run class unit tests for correctness
+            - Fix any semantic errors
+        * Run class unit tests under valgrind memcheck
+            - Fix any memory leaks
+    6.7 Development cycle for executables
+        * Create execution flow design document
+        * Create acceptance tests
+        * Write main function with stubs as necessary
+        * test program execution paths, modifying stubs as needed
+        * implement stubs
+        * Perform acceptance testing
+    6.8 When making modifications to code, create a local branch before modifying, merge after unit tests are
+        passed.
+        git branch <featureName>
+        git checkout <featureName>
+        <make modifications, make sure builds correctly>
+        git add ...
+        git commit -m 'Short but meaningful message'
+        git checkout master
+        git merge <featureName>
+    6.9 When updating code ALWAYS do it in the following order (rebase used to avoid merge commits):
+        1. git pull --rebase origin <branch>
+        2. fix merge errors
+        3. IMPORTANT: compile & fix any compiler errors and warnings
+        4. git add and git commit -m 'Short but meaningful message'
+        4. repeat 1-4 until nothing new is pulled down
+        5. git push origin <branch>
+    6.10 Configure git to check out and check in with UNIX style line endings and to remove trailing white
+        spaces
