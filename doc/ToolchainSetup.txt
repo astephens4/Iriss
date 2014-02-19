@@ -8,18 +8,15 @@ various build configurations in the project. The toolchain is used to compile th
 	git clone https://github.com/raspberrypi/tools.git ./raspi_tc
 
 3. Set up the installation location in /opt:
-	mkdir -p /opt/{build,mkimage}
-	sudo chown -R $(whoami) /opt/build
-	sudo chgroup -R $(whoami) /opt/build
-	sudo chown -R $(whoami) /opt/mkimage
-	sudo chgroup -R $(whoami) /opt/mkimage
+	sudo mkdir -p /opt/raspi/{buildtools,mkimage}
+	sudo chown -R $(whoami) /opt/raspi/{buildtools,mkimage}
+	sudo chgrp -R $(whoami) /opt/raspi/{buildtools,mkimage}
 
 4. Copy the toolchain we are using into the /opt/build directory
-	cp -rf ~/raspi_tc/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi /opt/build
+	cp -rf ~/raspi_tc/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi /opt/raspi/buildtools
 
 5. Copy the mkimage tool into /opt/mkimage
-	cp -rf ~/raspi_tc/mkimage /opt/mkimage
+	cp -rf ~/raspi_tc/mkimage /opt/raspi/mkimage/buildtools
 
-6. Test to see if the installation worked:
-	cd <IrissProjDir>/raspi/3rdParty/
-	./buildAll debug
+The installation of the toolchain is complete, now make sure you have the rest of the dependencies installed and start building
+3rdParty!
