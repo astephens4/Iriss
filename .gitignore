@@ -16,3 +16,5 @@
 debug/
 release/
 *.zip
+*.tar*
+*.tgz
