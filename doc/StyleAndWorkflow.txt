@@ -45,7 +45,8 @@ Sections:
             }
     1.6 Always use curly braces with conditional and loop statements. Reasoning: More statements could be
         added at a later time and it saves some hassle and possible bugs by including the braces to begin with.
-    1.7 Use const global variables instead of #define
+    1.7 Use const global variables instead of #define, if #define is used, prefix symbol with IRISS_ so possible redefinitions
+        only come from our own codebase. 
     1.8 Capitalization and variable naming conventions
         a. All local stack variables and struct members begin with a lowercase letter, and all proceeding
             words in the variable name are capitalized
@@ -86,7 +87,171 @@ Sections:
     1.12 Do not comment out blocks of code, use Git's branching feature instead if you want to experiment. See
         Section 6. Workflow for more information.
     1.13 Do not use exception specifications. They will cause more bad than good for us.
+    1.14 Place class definitions in a header file with the same name as the class. Implement all non-trivial methods
+        in an associated .cpp file. EXCEPTION: Template classes are defined entirely in the header file.
+        EX:
+        file MyClass.hpp
+        
+        #ifndef IRISS_MY_CLASS_HPP
+        #define IRISS_MY_CLASS_HPP 1
 
+        class MyClass {
+            public:
+            /**
+             * Simple constructor
+             */
+            MyClass();
+
+            /**
+             * Simple destructor
+             */
+            ~MyClass();
+
+            /**
+             * Get some attribute of the class
+             */
+            int get_foo() { return m_foo; }
+
+            /**
+             * Get the result of some calculation this class does.
+             */
+            float do_calculation(float param);
+
+            private:
+            
+            int m_foo; ///< Some class attribute
+        };
+
+        #endif // IRISS_MY_CLASS_HPP
+
+        file MyClass.cpp
+
+        #include "MyClass.hpp"
+
+        MyClass::MyClass() :
+            m_foo(10)
+        {
+
+        }
+
+        MyClass::~MyClass()
+        {
+
+        }
+
+        float MyClass::do_calculation(float param)
+        {
+            return param * static_cast<float>(m_foo);
+        }
+
+        1.15 All header files should use the .hpp file extension, all implementation files should use the .cpp file extension
+        1.16 All header files should use include guards to prevent multiple inclusions (and therefore definitions). The guards
+            should be formatted like:
+            #ifndef IRISS_RELEVANT_NAME_HPP
+            #define IRISS_RELEVANT_NAME_HPP 1
+
+            // define/declare stuff
+
+            #endif // IRISS_RELEVANT_NAME_HPP
+
+            prefixing with IRISS_ prevents the possibility that the symbol was already declared elsewhere
+
+        1.17 Use forward declares in header files when possible, include the related header in the implementation
+            file. NOTE: This only works when using a pointer to the object, if you are using a stack allocated variable,
+            you must include the header.
+
+            EX 1:
+
+            class OtherClass;
+
+            class MyClass {
+            public:
+                // functions
+
+            private:
+                OtherClass *m_otherClass;
+            }
+
+            EX 2:
+
+            #include "OtherClass.hpp"
+
+            class MyClass2 {
+            public:
+                // functions
+
+            private:
+                OtherClass m_otherClass;
+            };
+
+            (the reason for this is that the compiler needs to know the size of all of the members in the class when
+            it's defined. A pointer has a fixed size, whereas an instance of an object is the size of the object as it's
+            defined, which can only be gained from knowing its definition if it is a user defined type)
+
+        1.18 Do not use typedef on structs. In this project, structs will transparent objects, and typedef-ing them will
+            make them more opaque and harder to search for.
+        1.19 Do use typedef on stl-based containers inside classes. This will shorten other code later and if the type
+            is ever changed, less changes will need to be made throughout the code, if any.
+            EX:
+
+            #include <map>
+
+            class MyClass {
+            public:
+                typedef std::map<long, std::string> Registry;
+
+                void print_reg();
+            private:
+                Registry reg;
+            
+            };
+
+            void MyClass::print_reg()
+            {
+                for(Registry::const_iterator itr = reg.cbegin(); itr != reg.cend(); ++itr) {
+                    std::cout << (*itr).second << std::endl;
+                }
+                return;
+            }
+
+        1.20 Declare for loop iterators in the loop initial conditions
+            EX:
+            for(int i = 0; i < 10; ++i) {
+                // do something
+            }
+            --instead of--
+            int i;
+            for(i = 0; i < 10; ++i) {
+                // do something
+            }
+        1.21 Use auto with templates inside of template functions. Avoids deducing complex types by yourself and
+            requiring the typename keyword, also can be used to shorten stl iterator declarations (like in for loops)
+            EX:
+            template <typename T>
+            T get_key(const std::string& val) {
+                std::map<T, std::string>& reg = get_reg<T>();
+                // without auto, lb would have to be declared like
+                // typename std::map<T, std::string>::iterator
+                auto lb = reg.lower_bound(val);
+                if(lb != reg.end())
+                    return (*lb).first;
+                throw std::out_of_range("Value not found in registry");
+            }
+
+            EX 2:
+            std::vector<MyClass> myVec;
+
+            // stuff ...
+
+            for(auto itr = myVec.begin(); itr != myVec.end(); ++itr) {
+                // do something
+            }
+            -- vs --
+
+            for(std::vector<MyClass>::iterator itr = myVec.begin(); itr != nyVec.end(); ++itr) {
+                // do something
+            }
+            
 2. Object Oriented Design and Inheritance
     2.1 All data members should be private
     2.2 All classes should have an associated unit test file, which is developed after the header file
