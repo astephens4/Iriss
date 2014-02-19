@@ -1,0 +1,25 @@
+These are the directions for setting up the Arm toolchain on Ubuntu 12.04. This toolchain and it's locations are referenced throughout 
+various build configurations in the project. The toolchain is used to compile the IRISS Raspberry Pi projects, 3rd Party Libraries, and kernel.
+
+1. If you are using 64-bit Ubuntu, install the 32-bit libraries the toolchain needs to run:
+	sudo apt-get install ia32-libs
+
+2. Download the tool chain from the Raspberry Pi Github:
+	git clone https://github.com/raspberrypi/tools.git ./raspi_tc
+
+3. Set up the installation location in /opt:
+	mkdir -p /opt/{build,mkimage}
+	sudo chown -R $(whoami) /opt/build
+	sudo chgroup -R $(whoami) /opt/build
+	sudo chown -R $(whoami) /opt/mkimage
+	sudo chgroup -R $(whoami) /opt/mkimage
+
+4. Copy the toolchain we are using into the /opt/build directory
+	cp -rf ~/raspi_tc/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi /opt/build
+
+5. Copy the mkimage tool into /opt/mkimage
+	cp -rf ~/raspi_tc/mkimage /opt/mkimage
+
+6. Test to see if the installation worked:
+	cd <IrissProjDir>/raspi/3rdParty/
+	./buildAll debug
