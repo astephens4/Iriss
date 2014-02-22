@@ -13,10 +13,10 @@ various build configurations in the project. The toolchain is used to compile th
 	sudo chgrp -R $(whoami) /opt/raspi/{buildtools,mkimage}
 
 4. Copy the toolchain we are using into the /opt/build directory
-	cp -rf ~/raspi_tc/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi /opt/raspi/buildtools
+	cp -rf ./raspi_tc/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/* /opt/raspi/buildtools
 
 5. Copy the mkimage tool into /opt/mkimage
-	cp -rf ~/raspi_tc/mkimage /opt/raspi/mkimage/buildtools
+	cp -rf ./raspi_tc/mkimage/* /opt/raspi/mkimage
 
 The installation of the toolchain is complete, now make sure you have the rest of the dependencies installed and start building
 3rdParty!

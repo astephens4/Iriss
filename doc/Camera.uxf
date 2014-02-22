@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>190</x>
+      <y>20</y>
+      <w>460</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Camera::Camera
+--
+{depends on implementation}
+--
++ open_camera(void): bool
++ set_frame_handler(handler: Camera::CaptureCallback): void
++ set_capture_mode(mode: Camera::CaptureMode): void
++ have_lock(void): bool
++ release_lock(void): void
++ try_lock(unsigned int time_out): bool
++ get_frame(void): Utils::Image*
+--
+Responsibilities
+Provide a means for opening a camera,
+configuring its settings, and setting capture
+callbacks.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>230</x>
+      <y>300</y>
+      <w>340</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Camera::CaptureCallback
+--
+--
+/+exec(frame: Utils::Image&amp;): void/
+--
+Responsibilities
+Interface for implementing an action to be
+taken on every frame capture for the camera.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>380</x>
+      <y>210</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>30;30;30;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>500</y>
+      <w>360</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>Camera::TransmitPhotoCapture
+--
+- m_destination: std::shared_ptr&lt;Utils::Socket&gt;
+- m_doCompression: bool
+--
++ exec(frame: Utils::Image&amp;): void
++ enable_compression(doCompression: bool): void
++ set_socket(socket: std::shared_ptr&lt;Utils::Socket&gt;&amp;): void
+--
+Responsibilities
+Send a frame to a specified destination when it
+becomes available.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>180</x>
+      <y>400</y>
+      <w>220</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>200;30;30;100</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>400</x>
+      <y>500</y>
+      <w>440</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>Camera::TransmitVideoStream
+--
+- m_destination: std::shared_ptr&lt;Utils::Socket&gt;
+- m_doCompression: bool
+--
++ exec(frame: Utils::Image&amp;): void
++ enable_compression(doCompression: bool): void
++ set_socket(socket: std::shared_ptr&lt;Utils::Socket&gt;&amp;): void
+--
+Responsibilities
+Send a frame to a specified destination when it
+becomes available using video streaming techniques.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>350</x>
+      <y>400</y>
+      <w>310</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;290;100</additional_attributes>
+  </element>
+</diagram>

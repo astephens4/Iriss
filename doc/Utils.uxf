@@ -1,75 +1,390 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="12.2">
-  <zoom_level>10</zoom_level>
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>6</zoom_level>
   <element>
-    <type>com.umlet.element.Note</type>
+    <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>10</x>
-      <y>20</y>
-      <w>350</w>
-      <h>60</h>
+      <x>546</x>
+      <y>282</y>
+      <w>240</w>
+      <h>216</h>
     </coordinates>
-    <panel_attributes>Utilities that will be used throughout the C++ projects
-bg=yellow</panel_attributes>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+/Utils::Image/
+--
+- width: int
+- height: int
+- depth: int
+- format: Utils::Color::Format
+- data: unsigned int*
+- file: std::string
+- time: Utils::TimeStamp
+--
++ getWidth(void): int
++ getHeight(void): int
++ getColorDepth(void): int
++ getFormat(void): Utils::Color::Format
++ pack(void): void
++ unpack(fullByteStream: const char*): void
+/+ getIntensity(x: int, y: int): float&amp;/
+/+ readImage(fileName: std::string): bool/
+/+ writeImage(fileName: std::string): bool/
+--
+Responsibilities
+Represent a generic image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>378</x>
+      <y>480</y>
+      <w>300</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>288;18;18;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>270</x>
+      <y>552</y>
+      <w>258</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Utils::BWImage
+--
+--
++ getIntensity(x: int, y: int): float&amp;
++ readImage(fileName: std::string): bool
++ writeImage(fileName: std::string): bool
+--
+Responsibilities
+Represent a Black and White image.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>170</x>
-      <y>180</y>
+      <x>540</x>
+      <y>552</y>
+      <w>258</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Utils::ColorImage
+--
+--
++ getIntensity(x: int, y: int): float&amp;
++ getColor(x: int, y: int): Utils::Color&amp;
++ readImage(fileName: std::string): bool
++ writeImage(fileName: std::string): bool
+--
+Responsibilities
+Represent a color image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>816</x>
+      <y>552</y>
+      <w>276</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Utils::GrayScaleImage
+--
+- percentRed: float
+- percentGreen: float
+- percentBlue: float
+--
++ setGrayPercent(red: float, green: float, blue: float): void
++ getGrayPercent(red: float&amp;, green: float&amp;, blue: float&amp;): void
++ getIntensity(x: int, y: int): float
++ readImage(fileName: std::string): bool
++ writeImage(fileName: std::string): bool
+--
+Responsibilities
+Represent a grayscale image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>648</x>
+      <y>480</y>
+      <w>30</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;18;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>648</x>
+      <y>480</y>
+      <w>324</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;312;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>876</x>
+      <y>306</y>
+      <w>204</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>Utils::TimeStamp
+--
+year: unsigned int
+month: TimeStamp::Month
+calDay: unsigned int
+weekDay: TimeStamp::Day
+hour: unsigned int
+minute: unsigned int
+sec: unsigned int
+--
++ update(void): void
++ read(asStr: std::string): void
++ write(void): std::string
+--
+Responsibilities
+Set time information at creation, and update if
+requested. Allows reading and writing to streams</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>570</x>
+      <y>42</y>
+      <w>186</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Utils::Serializeable
+--
+# buf: unsigned char[]
+# packedSize: unsigned int
+# inTransmission: unsigned int
+_+ type: const unsigned int_
+--
+/+ pack(void): void/
+/+ unpack(fullByteStream: const char[]): void/
++ sendSync(sock: Utils::Socket&amp;): void
++ sendAsync(sock: Utils::Socket&amp;): void
++ isSending(void): bool
++ receiveSync(sock: Utils::Socket&amp;): void
++ receiveAsync(sock: Utils::Socket&amp;): void
++ isReceiving(void): bool
+--
+Responsibilities
+Classes derived from this interface support
+packing into a byte stream for sending over
+a network.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>804</x>
+      <y>78</y>
       <w>210</w>
-      <h>120</h>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Utils::Serializeable::Type
+--
+IMAGE: unsigned int
+IRISS_STATUS: unsigned int
+--
+Responsibilities
+Every time a new class implements serializeable,
+add that type to this enum</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>222</x>
+      <y>888</y>
+      <w>498</w>
+      <h>186</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-Utils::Distance
+Utils::Socket
 --
-value: float
+- Sock: struct { addr: std::string; port: int }
+- sockLock: mutex
+_- sockMap: std::map&lt;Sock,std::sharedptr&lt;Socket&gt; &gt;_
+# fd: int
 --
-/+ set(value: Units::Distance&amp;)/
-/+ asInches(): Units::Inches/
-/+ asFeet(): Units::Feet/</panel_attributes>
+_+ get_connection(addr: std::string, portNo: unsigned short, protocol: Utils::Socket::Layer4Protocol): sharedptr&lt;Socket&gt;_
++ verify(void): bool
++ close(): void
++ send(buf: const unsigned char*, size: unsigned int): void
++ receive(buf: unsigned char*, size: unsigned int): unsigned int
+/# do_send(buf: const unsigned char*, size: unsigned int): void/
+/# do_receive(buf: unsigned char*, size: unsigned int): unsigned int/
+--
+Responsibilities
+Open and verify an IP socket. Send and receive
+data through this socket. Manages all connections opened
+through this class so a connection may be shared.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>40</x>
-      <y>350</y>
-      <w>210</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>Utils::Inches
---
---
-+ asInches(): Units::Inches
-+ asFeet(): Units::Feet
-+ getValue(): float</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>290</x>
-      <y>350</y>
-      <w>210</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>Utils::Feet
---
---
-+ asInches(): Units::Inches
-+ asFeet(): Units::Feet
-+ getValue(): float</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>550</x>
-      <y>30</y>
-      <w>210</w>
+      <x>192</x>
+      <y>1116</y>
+      <w>276</w>
       <h>120</h>
+    </coordinates>
+    <panel_attributes>Utils::TCPSocket
+--
+--
+# do_send(buf: const unsigned char*, size: unsigned int): void
+# do_receive(buf: unsigned char*, size: unsigned int): unsigned int
+--
+Responsibilities
+Open and verify a TCP IP socket. Send and receive
+data through this socket with verification and
+resubmission.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>504</x>
+      <y>1116</y>
+      <w>264</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Utils::UDPSocket
+--
+--
+# do_send(buf: const unsigned char*, size: unsigned int): void
+# do_receive(buf: unsigned char*, size: unsigned int): unsigned int
+--
+Responsibilities
+Open and verify a UDP IP socket. Send and receive
+data through this socket without verification.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>654</x>
+      <y>216</y>
+      <w>30</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;18;66</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>738</x>
+      <y>102</y>
+      <w>78</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>18;18;66;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>462</x>
+      <y>1056</y>
+      <w>192</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;180;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>330</x>
+      <y>1056</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>150;18;18;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>768</x>
+      <y>372</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;108;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>660</x>
+      <y>648</y>
+      <w>144</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Utils::Color
+--
++ red: unsigned char
++ green: unsigned char
++ blue: unsigned char
+--
++ asUint32(format: Utils::Color::Format): unsigned int
+--
+Responsibilities
+Represents a 24-bit color.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>708</x>
+      <y>720</y>
+      <w>30</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>18;42;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>672</x>
+      <y>762</y>
+      <w>96</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Utils::Color::Format
+--
+RGB
+BGR
+BLACK_WHITE
+GRAY_SCALE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>450</x>
+      <y>678</y>
+      <w>126</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 Utils::Angle
@@ -82,12 +397,50 @@ value: float
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.Class</type>
+    <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>420</x>
-      <y>220</y>
-      <w>210</w>
-      <h>100</h>
+      <y>732</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>96;18;18;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>498</x>
+      <y>732</y>
+      <w>96</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;84;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>522</x>
+      <y>792</y>
+      <w>126</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Utils::Radians
+--
+--
++ asDegrees(): Units::Degrees
++ asRadians(): Units::Radians
++ getValue(): float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>372</x>
+      <y>792</y>
+      <w>126</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Utils::Degrees
 --
@@ -100,61 +453,176 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>670</x>
-      <y>220</y>
-      <w>210</w>
-      <h>100</h>
+      <x>234</x>
+      <y>792</y>
+      <w>126</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>Utils::Radians
+    <panel_attributes>Utils::Feet
 --
 --
-+ asDegrees(): Units::Degrees
-+ asRadians(): Units::Radians
++ asInches(): Units::Inches
++ asFeet(): Units::Feet
 + getValue(): float</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>500</x>
-      <y>120</y>
-      <w>170</w>
-      <h>120</h>
+      <x>204</x>
+      <y>744</y>
+      <w>102</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>150;30;30;100</additional_attributes>
+    <additional_attributes>18;18;90;48</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>162</x>
+      <y>690</y>
+      <w>126</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+Utils::Distance
+--
+value: float
+--
+/+ set(value: Units::Distance&amp;)/
+/+ asInches(): Units::Inches/
+/+ asFeet(): Units::Feet/</panel_attributes>
+    <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>620</x>
-      <y>120</y>
-      <w>170</w>
-      <h>120</h>
+      <x>132</x>
+      <y>744</y>
+      <w>102</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;150;100</additional_attributes>
+    <additional_attributes>90;18;18;48</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>84</x>
+      <y>792</y>
+      <w>126</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Utils::Inches
+--
+--
++ asInches(): Units::Inches
++ asFeet(): Units::Feet
++ getValue(): float</panel_attributes>
+    <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>120</x>
-      <y>270</y>
-      <w>170</w>
-      <h>100</h>
+      <x>750</x>
+      <y>480</y>
+      <w>72</w>
+      <h>318</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>150;30;30;80</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>36;18;60;66;60;300;18;306</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>240</x>
-      <y>270</y>
-      <w>170</w>
-      <h>100</h>
+      <x>654</x>
+      <y>612</y>
+      <w>78</w>
+      <h>48</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;150;80</additional_attributes>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>18;18;66;36</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>954</y>
+      <w>150</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Utils::Socket::Layer4Protocol
+--
+TCP
+UDP</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>132</x>
+      <y>972</y>
+      <w>102</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>90;18;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>114</x>
+      <y>420</y>
+      <w>342</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Utils::FileIO
+--
+--
+_+ writeImageFile(image: const Utils::Image&amp;, type: Utils::Image::FileType): bool_
+_+ readImageFile(fileName: const std::string&amp;, image: Utils::Image&amp;): bool_
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>390</x>
+      <y>294</y>
+      <w>96</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Utils::Image::FileType
+--
+PNG_COMPRESSED
+PNG_UNCOMPRESSED
+BMP
+JPEG</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>468</x>
+      <y>318</y>
+      <w>90</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>78;36;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>270</x>
+      <y>318</y>
+      <w>132</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>120;18;18;102</additional_attributes>
   </element>
 </diagram>
