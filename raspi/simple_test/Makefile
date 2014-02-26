@@ -30,7 +30,9 @@ INCLUDES = ${SYS_INCLUDES} \
 # are located
 LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/common/${BUILD_VERSION}/lib \
-	-lopencv_core
+	-lopencv_core \
+	-lopencv_imgproc \
+	-lopencv_highgui
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.
