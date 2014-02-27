@@ -34,8 +34,8 @@ INCLUDES = ${INCLUDES} \
 
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
-	${AR} ${OUTPUT} ${OBJS}
-	${INSTALL} ${TARGET} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
+	${AR} rcs ${OUTPUT} ${OBJS}
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
 	@echo
 
 %.o: %.cpp %.h

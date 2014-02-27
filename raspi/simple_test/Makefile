@@ -40,7 +40,7 @@ LIBS = ${SYS_LIBS} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
-	${INSTALL} ${TARGET} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
 	@echo
 
 %.o: %.cpp

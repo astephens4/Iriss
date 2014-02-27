@@ -4,7 +4,7 @@
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>546</x>
-      <y>282</y>
+      <y>240</y>
       <w>240</w>
       <h>216</h>
     </coordinates>
@@ -37,7 +37,7 @@ Represent a generic image.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>378</x>
-      <y>480</y>
+      <y>438</y>
       <w>300</w>
       <h>84</h>
     </coordinates>
@@ -48,7 +48,7 @@ Represent a generic image.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>270</x>
-      <y>552</y>
+      <y>510</y>
       <w>258</w>
       <h>78</h>
     </coordinates>
@@ -67,7 +67,7 @@ Represent a Black and White image.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>540</x>
-      <y>552</y>
+      <y>510</y>
       <w>258</w>
       <h>78</h>
     </coordinates>
@@ -87,7 +87,7 @@ Represent a color image.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>816</x>
-      <y>552</y>
+      <y>510</y>
       <w>276</w>
       <h>126</h>
     </coordinates>
@@ -111,7 +111,7 @@ Represent a grayscale image.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>648</x>
-      <y>480</y>
+      <y>438</y>
       <w>30</w>
       <h>84</h>
     </coordinates>
@@ -122,7 +122,7 @@ Represent a grayscale image.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>648</x>
-      <y>480</y>
+      <y>438</y>
       <w>324</w>
       <h>84</h>
     </coordinates>
@@ -133,7 +133,7 @@ Represent a grayscale image.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>876</x>
-      <y>306</y>
+      <y>264</y>
       <w>204</w>
       <h>156</h>
     </coordinates>
@@ -160,7 +160,7 @@ requested. Allows reading and writing to streams</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>570</x>
-      <y>42</y>
+      <y>0</y>
       <w>186</w>
       <h>192</h>
     </coordinates>
@@ -191,7 +191,7 @@ a network.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>804</x>
-      <y>78</y>
+      <y>36</y>
       <w>210</w>
       <h>78</h>
     </coordinates>
@@ -210,7 +210,7 @@ add that type to this enum</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>222</x>
-      <y>888</y>
+      <y>846</y>
       <w>498</w>
       <h>186</h>
     </coordinates>
@@ -240,7 +240,7 @@ through this class so a connection may be shared.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>192</x>
-      <y>1116</y>
+      <y>1074</y>
       <w>276</w>
       <h>120</h>
     </coordinates>
@@ -260,7 +260,7 @@ resubmission.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>504</x>
-      <y>1116</y>
+      <y>1074</y>
       <w>264</w>
       <h>120</h>
     </coordinates>
@@ -279,7 +279,7 @@ data through this socket without verification.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>654</x>
-      <y>216</y>
+      <y>174</y>
       <w>30</w>
       <h>78</h>
     </coordinates>
@@ -290,7 +290,7 @@ data through this socket without verification.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>738</x>
-      <y>102</y>
+      <y>60</y>
       <w>78</w>
       <h>30</h>
     </coordinates>
@@ -301,7 +301,7 @@ data through this socket without verification.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>462</x>
-      <y>1056</y>
+      <y>1014</y>
       <w>192</w>
       <h>72</h>
     </coordinates>
@@ -312,7 +312,7 @@ data through this socket without verification.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>330</x>
-      <y>1056</y>
+      <y>1014</y>
       <w>162</w>
       <h>72</h>
     </coordinates>
@@ -323,7 +323,7 @@ data through this socket without verification.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>768</x>
-      <y>372</y>
+      <y>330</y>
       <w>120</w>
       <h>30</h>
     </coordinates>
@@ -334,7 +334,7 @@ data through this socket without verification.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>660</x>
-      <y>648</y>
+      <y>606</y>
       <w>144</w>
       <h>90</h>
     </coordinates>
@@ -354,7 +354,7 @@ Represents a 24-bit color.</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>708</x>
-      <y>720</y>
+      <y>678</y>
       <w>30</w>
       <h>54</h>
     </coordinates>
@@ -365,7 +365,7 @@ Represents a 24-bit color.</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>672</x>
-      <y>762</y>
+      <y>720</y>
       <w>96</w>
       <h>72</h>
     </coordinates>
@@ -382,7 +382,7 @@ GRAY_SCALE</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>450</x>
-      <y>678</y>
+      <y>636</y>
       <w>126</w>
       <h>72</h>
     </coordinates>
@@ -400,7 +400,7 @@ value: float
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>420</x>
-      <y>732</y>
+      <y>690</y>
       <w>108</w>
       <h>72</h>
     </coordinates>
@@ -411,7 +411,7 @@ value: float
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>498</x>
-      <y>732</y>
+      <y>690</y>
       <w>96</w>
       <h>72</h>
     </coordinates>
@@ -422,7 +422,7 @@ value: float
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>522</x>
-      <y>792</y>
+      <y>750</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -438,7 +438,7 @@ value: float
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>372</x>
-      <y>792</y>
+      <y>750</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -454,7 +454,7 @@ value: float
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>234</x>
-      <y>792</y>
+      <y>750</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -470,7 +470,7 @@ value: float
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>204</x>
-      <y>744</y>
+      <y>702</y>
       <w>102</w>
       <h>60</h>
     </coordinates>
@@ -481,7 +481,7 @@ value: float
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>162</x>
-      <y>690</y>
+      <y>648</y>
       <w>126</w>
       <h>72</h>
     </coordinates>
@@ -499,7 +499,7 @@ value: float
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>132</x>
-      <y>744</y>
+      <y>702</y>
       <w>102</w>
       <h>60</h>
     </coordinates>
@@ -510,7 +510,7 @@ value: float
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>84</x>
-      <y>792</y>
+      <y>750</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -526,7 +526,7 @@ value: float
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>750</x>
-      <y>480</y>
+      <y>438</y>
       <w>72</w>
       <h>318</h>
     </coordinates>
@@ -537,7 +537,7 @@ value: float
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>654</x>
-      <y>612</y>
+      <y>570</y>
       <w>78</w>
       <h>48</h>
     </coordinates>
@@ -548,7 +548,7 @@ value: float
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>0</x>
-      <y>954</y>
+      <y>912</y>
       <w>150</w>
       <h>48</h>
     </coordinates>
@@ -563,7 +563,7 @@ UDP</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>132</x>
-      <y>972</y>
+      <y>930</y>
       <w>102</w>
       <h>30</h>
     </coordinates>
@@ -574,7 +574,7 @@ UDP</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>114</x>
-      <y>420</y>
+      <y>378</y>
       <w>342</w>
       <h>60</h>
     </coordinates>
@@ -590,7 +590,7 @@ _+ readImageFile(fileName: const std::string&amp;, image: Utils::Image&amp;): bo
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>390</x>
-      <y>294</y>
+      <y>252</y>
       <w>96</w>
       <h>72</h>
     </coordinates>
@@ -607,7 +607,7 @@ JPEG</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>468</x>
-      <y>318</y>
+      <y>276</y>
       <w>90</w>
       <h>48</h>
     </coordinates>
@@ -618,7 +618,7 @@ JPEG</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>270</x>
-      <y>318</y>
+      <y>276</y>
       <w>132</w>
       <h>114</h>
     </coordinates>

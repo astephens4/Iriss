@@ -3,8 +3,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>48</x>
-      <y>264</y>
+      <x>162</x>
+      <y>228</y>
       <w>240</w>
       <h>192</h>
     </coordinates>
@@ -34,8 +34,8 @@ Immutable.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>48</x>
-      <y>486</y>
+      <x>162</x>
+      <y>450</y>
       <w>240</w>
       <h>84</h>
     </coordinates>
@@ -54,8 +54,8 @@ Represents a line segment. Immutable</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>372</x>
-      <y>36</y>
+      <x>486</x>
+      <y>0</y>
       <w>330</w>
       <h>138</h>
     </coordinates>
@@ -79,8 +79,8 @@ specified colors.</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>150</x>
-      <y>156</y>
+      <x>264</x>
+      <y>120</y>
       <w>258</w>
       <h>120</h>
     </coordinates>
@@ -92,8 +92,8 @@ m2=0..*
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>144</x>
-      <y>438</y>
+      <x>258</x>
+      <y>402</y>
       <w>30</w>
       <h>60</h>
     </coordinates>
@@ -105,8 +105,8 @@ m2=1
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>306</x>
-      <y>360</y>
+      <x>420</x>
+      <y>324</y>
       <w>486</w>
       <h>84</h>
     </coordinates>
@@ -125,8 +125,8 @@ not found.</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>480</x>
-      <y>156</y>
+      <x>594</x>
+      <y>120</y>
       <w>132</w>
       <h>216</h>
     </coordinates>
@@ -136,8 +136,8 @@ not found.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>654</x>
-      <y>216</y>
+      <x>768</x>
+      <y>180</y>
       <w>258</w>
       <h>78</h>
     </coordinates>
@@ -158,8 +158,8 @@ Represent a Black and White image.</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>570</x>
-      <y>156</y>
+      <x>684</x>
+      <y>120</y>
       <w>222</w>
       <h>72</h>
     </coordinates>
@@ -169,8 +169,8 @@ Represent a Black and White image.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>330</x>
-      <y>534</y>
+      <x>444</x>
+      <y>498</y>
       <w>438</w>
       <h>72</h>
     </coordinates>
