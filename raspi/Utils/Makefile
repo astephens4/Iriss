@@ -23,7 +23,8 @@ OBJS = \
 	Radians.o \
 	Distance.o \
 	Feet.o \
-	Inches.o
+	Inches.o \
+	TimeStamp.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \

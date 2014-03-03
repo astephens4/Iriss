@@ -23,13 +23,17 @@ OBJS = \
 TEMPLATES = \
 
 # List all directories where dependent headers are located
-INCLUDES = ${SYS_INCLUDES} \
+INCLUDES = \
+	${SYS_INCLUDES} \
 	-I${RELATIVE}/common/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = ${SYS_LIBS} \
+LIBS = \
+	${SYS_LIBS} \
 	-L${RELATIVE}/common/${BUILD_VERSION}/lib \
+	-Wl,-rpath-link,${RELATIVE}/common/${BUILD_VERSION}/lib \
+	-Wl,-rpath,/usr/local/lib \
 	-lopencv_core \
 	-lopencv_imgproc \
 	-lopencv_highgui

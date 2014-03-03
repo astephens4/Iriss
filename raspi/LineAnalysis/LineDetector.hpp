@@ -33,20 +33,20 @@ public:
      * Set the image to detect lines in.
      * @param [in] image The image to use for line detectino
      */
-    void setImage(cv::Mat image);
+    void set_image(cv::mat image);
 
     /**
      * Set the colors of the lines to be detected
      * @param [in] colors Colors to use in line detection
      */
-    void setColors(const std::vector<Utils::Color>& colors);
+    void set_colors(const std::vector<Utils::Color>& colors);
 
     /**
      * Set the thresholds to use around the specified colors
      * @param [in] threshLow Percentage below a color which will be ignored in detection for that color
      * @param [in] threshHigh Percentage above a color which will be ignored in detection for that color
      */
-    void setThresholds(float threshLow, float threshHigh);
+    void set_thresholds(float threshLow, float threshHigh);
 
     /**
      * Add a color to the color detection list
@@ -54,7 +54,7 @@ public:
      *                   of a color already in the list, then it will not be added
      * @return True if the color was added to the list, false if it was not.
      */
-    bool addColor(const Utils::Color& color);
+    bool add_color(const Utils::Color& color);
 
 private:
     std::vector<Utils::Color> m_colorList; ///< Check for these color lines in the image

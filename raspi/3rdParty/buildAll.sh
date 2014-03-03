@@ -22,7 +22,8 @@ NUM_CORES=$(grep -c ^processor /proc/cpuinfo)
 # Build opencv
 unzip opencv-2.4.8.zip && cd opencv-2.4.8
 mkdir build && cd build
-cmake ../ -DCMAKE_TOOLCHAIN_FILE=../../rpi.toolchain.cmake -DENABLE_NEON=ON -DENABLE_VFPV3=ON -DCMAKE_INSTALL_PREFIX=../../../common/$BUILD_VERSION -DCMAKE_BUILD_TYPE="$BUILD_VERSION"
+cmake ../ -DCMAKE_TOOLCHAIN_FILE=../../rpi.toolchain.cmake -DENABLE_VFPV3=TRUE -DCMAKE_INSTALL_PREFIX=../../../common/$BUILD_VERSION -DCMAKE_BUILD_TYPE="$BUILD_VERSION" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE -DCMAKE_INSTALL_RPATH=/usr/local/lib
+
 make -j $NUM_CORES && make install
 
 cd ../../ && rm -rf opencv-2.4.8
