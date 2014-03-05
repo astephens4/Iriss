@@ -52,7 +52,7 @@ public:
      * Get the last time this line was updated
      * @return A tamestamp of the last time the line was changed
      */
-    const Utils::TimeStamp& last_updated_at(void);
+    const Utils::TimeStamp& last_updated_at(void) const { return m_time; };
 
 private:
     Utils::Inches m_length; ///< Length of the line in inches

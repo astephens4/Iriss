@@ -3,6 +3,7 @@
 
 #include <core/core.hpp>
 #include <vector>
+#include <map>
 #include "Utils/Color.hpp"
 #include "Line.hpp"
 
@@ -24,6 +25,8 @@ public:
      * of the specified set of colors
      * @param image [in] A color image which should contain colored lines
      * @param colors [in] The set of colors the line should be
+     * @param [in] threshLow Percentage below a hue which will be ignored in detection for that color
+     * @param [in] threshHigh Percentage above a hue which will be ignored in detection for that color
      */
     LineDetector(cv::Mat image, const std::vector<Utils::Color>& colors, float threshLow, float threshHigh);
 
@@ -33,7 +36,7 @@ public:
      * Set the image to detect lines in.
      * @param [in] image The image to use for line detectino
      */
-    void set_image(cv::mat image);
+    void set_image(cv::mat& image);
 
     /**
      * Set the colors of the lines to be detected
@@ -43,8 +46,8 @@ public:
 
     /**
      * Set the thresholds to use around the specified colors
-     * @param [in] threshLow Percentage below a color which will be ignored in detection for that color
-     * @param [in] threshHigh Percentage above a color which will be ignored in detection for that color
+     * @param [in] threshLow Percentage below a hue which will be ignored in detection for that color
+     * @param [in] threshHigh Percentage above a hue which will be ignored in detection for that color
      */
     void set_thresholds(float threshLow, float threshHigh);
 
@@ -56,12 +59,22 @@ public:
      */
     bool add_color(const Utils::Color& color);
 
+    /**
+     * Find the lines in the image, with hints if possible
+     * @param [out] detectedLines A set of lines that were found in the image
+     * @return True if there are any line detections
+     */
+    bool get_lines(std::vector<LineAnalysis::Line>& detectedLines);
+
 private:
     std::vector<Utils::Color> m_colorList; ///< Check for these color lines in the image
     std::vector<LineAnalysis::Line> m_lineList; ///< The list of detected lines
     cv::Mat m_image; ///< The image to check for lines
     float m_threshLow; ///< The precentage below a color which will not be used in line detection
     float m_threshHigh; ///< The percentage above a color which will not be used in line detection
+
+    typedef std::map<Utils::Color, LineAnalysis::Line> HintMap;
+    HintMap hints; ///< A place to keep track of previous detections to help with future detections
 };
 
 }
