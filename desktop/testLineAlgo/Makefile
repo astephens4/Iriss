@@ -32,7 +32,8 @@ LIBS = \
 	-L/usr/local/lib \
 	-lopencv_core \
 	-lopencv_highgui \
-	-lopencv_imgproc
+	-lopencv_imgproc \
+	-lm
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.

@@ -1,0 +1,3 @@
+Hue range: 40-50
+Saturation range: 150-255
+Value range: 115-225
