@@ -109,7 +109,7 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
         LineAnalysis::ImageFilter(m_image,
                                   prelimLines,
                                   cv::Scalar(lineHue*(1.0f-m_threshLow), 55, 55),
-                                  cv::Scalar(lineHue*(1.0f+m_threshHigh), 200, 200)
+                                  cv::Scalar(lineHue*(1.0f+m_threshHigh), 255, 255)
                                  );
     }
 
@@ -117,10 +117,11 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
     std::vector<std::vector<cv::Vec2f> > similarLines;
     float thetaHigh;
     float thetaLow;
+    const float similarPercent = 0.02f;
     for(auto line = prelimLines.begin(); line != prelimLines.end(); ++line) {
         // find another line in the list with a similar theta
-        thetaHigh = (*line)[1] * 1.02;
-        thetaLow = (*line)[1] * 0.98f;
+        thetaHigh = (*line)[1] * 1.0f + similarPercent;
+        thetaLow = (*line)[1] * 1.0f - similarPercent;
         std::vector<cv::Vec2f> currentList;
         currentList.push_back(*line);
         for(auto line2 = line+1; line2 != prelimLines.end();) {
@@ -142,7 +143,8 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
     double pixLong;
     for(auto similar : similarLines) {
         if(similar->size() == 2) {
-            // create a LineAnalysis::Line! 
+            // Create a LineAnalysis::Line!
+            pixApart = std::fabs((*similar)[0] - (*similar)[1]);
         }
         else { // 3 or more similarly oriented lines, check distances. Meh
             // for an even number of lines, there may be adjacent parallel lines
