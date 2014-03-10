@@ -1,5 +1,7 @@
 #include "LineDetector.hpp"
 
+namespace LineAnalysis {
+
 /**
  * Create an empty line detector
  */
@@ -102,66 +104,50 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
 
     // do image processing for each color in the list
     m_lineList.clear();
-    unsigned char lineHue;
-    std::vector<cv::Vec2f> prelimLines;
-    for(auto color : m_colors) {
-        linehue = Utils::hue(*color);
-        LineAnalysis::ImageFilter(m_image,
-                                  prelimLines,
-                                  cv::Scalar(lineHue*(1.0f-m_threshLow), 55, 55),
-                                  cv::Scalar(lineHue*(1.0f+m_threshHigh), 255, 255)
-                                 );
-    }
+    std::map<Utils::Color, std::vector<Line> > coloredLines;
+    cv::Mat filtered(m_image.size(), CV_8UC1);
+    for(auto color : m_colorList) {
+        // convert to HSV
+        cv::Range hueRange(color.hue()*(1.0f-m_threshLow), color.hue()*(1.0f+m_threshHigh));
+        cv::Range satRange(140, 255);
+        cv::Range valRange(115, 245);
+        get_filtered_image(m_image, filtered, hueRange, satRange, valRange, true); 
 
-    // Match pairs of lines to get a single line
-    std::vector<std::vector<cv::Vec2f> > similarLines;
-    float thetaHigh;
-    float thetaLow;
-    const float similarPercent = 0.02f;
-    for(auto line = prelimLines.begin(); line != prelimLines.end(); ++line) {
-        // find another line in the list with a similar theta
-        thetaHigh = (*line)[1] * 1.0f + similarPercent;
-        thetaLow = (*line)[1] * 1.0f - similarPercent;
-        std::vector<cv::Vec2f> currentList;
-        currentList.push_back(*line);
-        for(auto line2 = line+1; line2 != prelimLines.end();) {
-            // similar theta means +-2%? <--- TODO tweak percentage as needed
-            if((*line2)[1] >= thetaLow && (*line2)[1] <= thetaHigh) {
-                currentList.push_back(*line2);
-                line2 = prelimLines.erase(line2);
-            }
-            else {
-                ++line2;
-            }
-        }
-        if(currentList.size() > 1) {
-            similarLines.push_back(currentList);
-        }
-    }
-
-    double pixApart;
-    double pixLong;
-    for(auto similar : similarLines) {
-        if(similar->size() == 2) {
-            // Create a LineAnalysis::Line!
-            pixApart = std::fabs((*similar)[0] - (*similar)[1]);
-        }
-        else { // 3 or more similarly oriented lines, check distances. Meh
-            // for an even number of lines, there may be adjacent parallel lines
-            // of similar dimensions, check for that
-
-        }
-        LineAnalysis::Line detectedLine;
-        // calculate real world width
-        detectedLine.setWidth(LineAnalysis::ConvertPixelsToInches(pixApart));
-
-        // calculate real world length
-        // uuh, HoughLines won't report where lines stop, wait to see if this is really
-        // needed. Until then, set it as the length from where the parallel line between
-        // the two enters and exits the image.
-
+        // do some sool stuff!
     }
 
     // Update the hint map
 }
 
+void LineAnalysis::get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur)
+{
+    assert(filtered.depth() == CV_8U && filtered.channels() == 1);
+    cv::Mat origHSV;
+    cv::cvtColor(image, origHSV, CV_BGR2HSV); 
+    if(doBlur) {
+        // Step 0: Blur!
+        cv::blur(origHSV, origHSV, cv::Size(3, 3));
+    }
+
+    // Step 1: Perform threshold filtering
+    cv::Scalar low(hueRange.start, satRange.start, valRange.start);
+    cv::Scalar high(hueRange.end, satRange.end, valRange.end);
+    cv::inRange(origHSV, low, high, filtered);
+
+    // Step 2: Discard small fragments which passed threshold filtering
+    std::vector<std::vector<cv::Point> > contours;
+    cv::findCountours(filtered, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+    for(auto contour : contours) {
+        std::vector<std::vector<cv::Point> > contourPoly;
+        cv::approxPolyDP(cv::Mat(contour), contourPoly, 3, true);
+        cv::Rect bbox = cv::boundingRect(cv::Mat(contourPoly));
+        if(bbox.area() < 100) {
+            // draw the ROI as black
+            cv::Mat roi(filtered, bbox);
+            roi = cv::Scalar(0, 0, 0);
+        }
+    }
+
+}
+
+} // end namespace LineAnalysis

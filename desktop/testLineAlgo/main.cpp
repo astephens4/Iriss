@@ -65,6 +65,17 @@ void UpdateImages(int, void*)
     cv::Mat threshed;
     cv::inRange(origHSV, cv::Scalar(hueLow, satLow, valLow), cv::Scalar(hueHigh, satHigh, valHigh), threshed);
 
+//    std::vector<std::vector<cv::Point> > contours;
+//    cv::findContours(threshed, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+//    for(auto contour : contours) {
+//        cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
+//        if(bbox.area() < 10) {
+//            // draw the ROI as black
+//            cv::Mat roi(threshed, bbox);
+//            roi = cv::Scalar(0, 0, 0);
+//        }
+//    }
+
     // Step 2: Perform edge detection
     cv::Mat edged;
     cv::Canny(threshed, edged, 75, 255, 3);
