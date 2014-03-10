@@ -13,6 +13,7 @@ int satLow;
 int satHigh;
 int valLow;
 int valHigh;
+int angle;
 cv::Mat orig;
 
 void UpdateImages(int, void*);
@@ -42,11 +43,12 @@ int main(int nargs, char **argv)
     }
     hueLow = 40;
     hueHigh = 50;
-    satLow = 130;
+    satLow = 140;
     satHigh = 255;
-    valLow = 105;
-    valHigh = 235;
-    UpdateImages(0, (void*)NULL);
+    valLow = 115;
+    valHigh = 245;
+    cv::namedWindow("Original");
+    cv::createTrackbar("Rotation", "Original", &angle, 359, UpdateImages);
     cv::waitKey();
 }
 
@@ -63,13 +65,13 @@ void UpdateImages(int, void*)
     cv::Mat threshed;
     cv::inRange(origHSV, cv::Scalar(hueLow, satLow, valLow), cv::Scalar(hueHigh, satHigh, valHigh), threshed);
 
-    // Step 2: Perform edge detecredtion
+    // Step 2: Perform edge detection
     cv::Mat edged;
     cv::Canny(threshed, edged, 75, 255, 3);
 
     // Step 3: Perform line detection
     std::vector<cv::Vec2f> lines;
-    cv::HoughLines(edged, lines, 1, CV_PI/180.0f, 60);
+    cv::HoughLines(edged, lines, 1, CV_PI/180.0f, 100);
 
     cv::Mat lineImg(edged.size(), CV_8UC3, cv::Scalar(0, 0, 0));
 
@@ -88,6 +90,15 @@ void UpdateImages(int, void*)
         cv::line(lineImg, p1, p2, cv::Scalar(0, 0, 255), 2, CV_AA);
     }
 
+    // Draw a rectangle around the line!
+    cv::Vec2f horizontal(88, 0);
+    cv::Vec2f vertical(0, 719);
+    cv::RotatedRect r(cv::Point2f((504+607)/2, 360), cv::Size2f(85, 720), 1.5f);
+    cv::Point2f verticies[4];
+    r.points(verticies);
+    for(int i = 0; i < 4; ++i) {
+        line(blured, verticies[i], verticies[(i+1)%4], cv::Scalar(0, 0, 255));
+    }
     cv::imshow("Original", blured);
     cv::imshow("Thresholding", threshed);
     cv::imshow("Edges", edged);

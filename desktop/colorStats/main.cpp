@@ -72,6 +72,11 @@ int main(int nargs, char **argv)
     }
 
     cv::Mat image = cv::imread(imageFile);
+    if(image.empty()) {
+        std::cerr << "Unable to read " << imageFile << std::endl;
+        return -1;
+    }
+    std::cout << "FILE:" << imageFile << std::endl;
 
     cv::Mat asHSV;
     cv::cvtColor(image, asHSV, CV_BGR2HSV);
@@ -111,12 +116,16 @@ int main(int nargs, char **argv)
     cv::Mat hsvChannels[3];
     cv::split(asHSV, hsvChannels);
 
+    cv::Mat adjustedHue(hsvChannels[0].size(), hsvChannels[0].depth());
     for(int i = 0; i < image.channels(); ++i) {
         cv::minMaxLoc(hsvChannels[i], &min, &max, &minLoc, &maxLoc);
         std::ostringstream oss;
         switch(i) {
             case 0:
                 oss << "H;";
+                // adjust the contrast of the hue channel
+                adjustedHue = 180 * (hsvChannels[0] - min)/(max - min);
+                imshow("Contrast Stretched Hue", adjustedHue);
                 break;
             case 1:
                 oss << "S;";
@@ -125,7 +134,10 @@ int main(int nargs, char **argv)
                 oss << "V;";
                 break;
         }
-        oss << "MIN:" << minLoc << "{" << min << "}" << "," << "MAX:" << maxLoc << "{" << max << "}";
+        // grab the already known line's bounding box and take the average of those values
+        cv::Mat lineBB(hsvChannels[i], cv::Rect(504, 0, 88, 720));
+        double average = cv::mean(lineBB)[0];
+        oss << "MIN:" << minLoc << "{" << min << "}" << "," << "MAX:" << maxLoc << "{" << max << "}" << "AVG:{" << average << "}";
         show_point(hsvChannels[i], minLoc, cv::Scalar(0), 4);
         show_point(hsvChannels[i], maxLoc, cv::Scalar(255), 4);
         imshow(oss.str(), hsvChannels[i]);

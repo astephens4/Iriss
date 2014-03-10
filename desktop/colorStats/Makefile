@@ -44,7 +44,7 @@ ${TARGET}: ${TEMPLATES} ${OBJS}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
 	@echo
 
-%.o: %.cpp %.h
+%.o: %.cpp
 	@echo Compiling $< ... $@
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo
