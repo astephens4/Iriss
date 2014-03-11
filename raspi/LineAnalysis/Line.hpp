@@ -1,6 +1,12 @@
 #ifndef IRISS_LINE_H
 #define IRISS_LINE_H 1
 
+#include "opencv2/core/core.hpp"
+#include "Utils/Inches.hpp"
+#include "Utils/Degrees.hpp"
+#include "Utils/Color.hpp"
+#include "Utils/TimeStamp.hpp"
+
 namespace LineAnalysis {
 
 class Line {
@@ -9,6 +15,11 @@ public:
      * Create a line with default values
      */
     Line(void);
+
+    /**
+     * Create a line with everything known
+     */
+    Line(const Utils::Distance& len, const Utils::Distance& width, const Utils::Color& c, const Utils::Angle& ang);
 
     // setters
     /**
@@ -35,18 +46,11 @@ public:
      */
     void set_angle(const Utils::Angle& angle) { m_angle = angle; };
 
-    /**
-     * Set which image the line was taken from
-     * @param [in] image A reference to the image the line found in
-     */
-    void set_image(const cv::Mat& image) { m_image = image; };
-
     // getters
     Utils::Inches get_length() const { return m_length; };
     Utils::Inches get_width() const { return m_width; };
     Utils::Color get_color() const { return m_color; };
     Utils::Degrees get_angle() const { return m_angle; };
-    cv::Mat& get_image() const { return m_image; };
 
     /**
      * Get the last time this line was updated
@@ -59,7 +63,6 @@ private:
     Utils::Inches m_width; ///< Width of the line in inches
     Utils::Color m_color; ///< Color of the line
     Utils::Degrees m_angle; ///< Angle of the line w.r.t. the bottom of the image
-    cv::Mat& m_image; ///< A reference to which image contains this line
     Utils::TimeStamp m_time; ///< When the line was created or last updated
 };
 

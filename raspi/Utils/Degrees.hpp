@@ -1,7 +1,7 @@
 #ifndef IRISS_DEGREES_H
 #define IRISS_DEGREES_H 1
 
-#include "Angle.hpp"
+#include "Utils/Angle.hpp"
 
 namespace Utils {
 

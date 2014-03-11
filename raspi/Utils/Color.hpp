@@ -11,7 +11,8 @@ public:
     unsigned char r;
     unsigned char g;
     unsigned char b;
-
+    
+    Color(unsigned char r, unsigned char g, unsigned char b);
     /**
      * Get the color as a 32-bit integer, with the least significant
      * 24 bits storing each color component in the order rgb

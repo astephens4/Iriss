@@ -1,13 +1,25 @@
 #ifndef IRISS_LINE_DETECTOR_H
 #define IRISS_LINE_DETECTOR_H 1
 
-#include <core/core.hpp>
 #include <vector>
 #include <map>
 #include "Utils/Color.hpp"
-#include "Line.hpp"
+#include "LineAnalysis/Line.hpp"
 
 namespace LineAnalysis {
+
+/**
+ * Apply a filter to create a binary image, where it is white for any
+ * value between the thresholds, and black elsewhere. Any small white areas
+ * are also removed.
+ * @param [in] image HSV image to filter
+ * @param [out] filtered Binary result of filtering the image
+ * @param [in] hueRange Range of accepted hue values
+ * @param [in] satRange Range of accepted saturation values
+ * @param [in] valRange Range of accepted value values
+ * @param [in] doBlur Blur the image before filtering
+ */
+void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur);
 
 /**
  * Use this class to detect lines of a specific color
@@ -36,7 +48,7 @@ public:
      * Set the image to detect lines in.
      * @param [in] image The image to use for line detectino
      */
-    void set_image(cv::mat& image);
+    void set_image(cv::Mat& image);
 
     /**
      * Set the colors of the lines to be detected

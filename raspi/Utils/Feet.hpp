@@ -1,7 +1,7 @@
-#ifndef IRISS_RADIANS_H
-#define IRISS_RADIANS_H 1
+#ifndef IRISS_FEET_H
+#define IRISS_FEET_H 1
 
-#include "Distance.hpp"
+#include "Utils/Distance.hpp"
 
 namespace Utils {
 
@@ -32,4 +32,4 @@ private:
 
 } // end namespace Utils
 
-#endif // IRISS_RADIANS_H
+#endif // IRISS_FEET_H

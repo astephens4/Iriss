@@ -1,4 +1,9 @@
 #include "LineDetector.hpp"
+#include <iostream>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include "Utils/Inches.hpp"
+#include "Utils/Degrees.hpp"
 
 namespace LineAnalysis {
 
@@ -38,7 +43,7 @@ LineDetector::~LineDetector(void)
  * Set the image to detect lines in.
  * @param [in] image The image to use for line detectino
  */
-void LineDetector::set_image(cv::mat& image)
+void LineDetector::set_image(cv::Mat& image)
 {
     m_image = image;
 }
@@ -49,8 +54,8 @@ void LineDetector::set_image(cv::mat& image)
  */
 void LineDetector::set_colors(const std::vector<Utils::Color>& colors)
 {
-    m_colors.clear();
-    m_colors.insert(colors.begin(), colors.end());
+    m_colorList.clear();
+    m_colorList.assign(colors.begin(), colors.end());
 }
 
 /**
@@ -81,15 +86,20 @@ bool LineDetector::add_color(const Utils::Color& color)
 {
     float lowHue;
     float highHue;
-    unsigned char hue = Utils::hue(color);
-    for(auto itr = m_colors.begin(); itr != m_colors.end(); ++itr) {
-        lowHue = Utils::hue(*itr)*(1.0f-m_lowThresh);
-        highHue = Utils::hue(*itr)*(1.0f+m_highThresh);
-        if(Utils::hue(color) >= lowHue && Utils::hue(color) <= highHue) {
+    cv::Vec3b bgr(color.b, color.g, color.r), hsv;
+    cv::cvtColor(bgr, hsv, CV_BGR2HSV);
+    for(auto c : m_colorList) {
+        bgr[0] = c.b;
+        bgr[1] = c.g;
+        bgr[2] = c.r;
+        cv::cvtColor(bgr, hsv, CV_BGR2HSV);
+        lowHue = hsv[0]*(1.0f-m_threshLow);
+        highHue = hsv[0]*(1.0f+m_threshHigh);
+        if(hsv[0] >= lowHue && hsv[0] <= highHue) {
             return false;
         }
     }
-    m_colors.push_back(color);
+    m_colorList.push_back(color);
     return true;
 }
 
@@ -108,40 +118,47 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
     cv::Mat filtered(m_image.size(), CV_8UC1);
     for(auto color : m_colorList) {
         // convert to HSV
-        cv::Range hueRange(color.hue()*(1.0f-m_threshLow), color.hue()*(1.0f+m_threshHigh));
+        cv::Vec3b hsv;
+        cv::Vec3b bgr(color.b, color.g, color.r);
+        cv::cvtColor(bgr, hsv, CV_BGR2HSV);
+        cv::Range hueRange(hsv[0]*(1.0f-m_threshLow), hsv[0]*(1.0f+m_threshHigh));
         cv::Range satRange(140, 255);
         cv::Range valRange(115, 245);
         get_filtered_image(m_image, filtered, hueRange, satRange, valRange, true); 
 
-        // do some sool stuff!
+        cv::Rect r = boundingRect(filtered); 
+        std::cout << "Line Width: " << r.width << std::endl
+                  << "Line Height: " << r.height << std::endl;
+        Line l(Utils::Inches(r.height), Utils::Inches(r.width), color, Utils::Degrees(0));
+        m_lineList.push_back(l);
     }
 
+    detectedLines.assign(m_lineList.begin(), m_lineList.end());
+    return true;
     // Update the hint map
 }
 
-void LineAnalysis::get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur)
+void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur)
 {
     assert(filtered.depth() == CV_8U && filtered.channels() == 1);
-    cv::Mat origHSV;
-    cv::cvtColor(image, origHSV, CV_BGR2HSV); 
+
     if(doBlur) {
         // Step 0: Blur!
-        cv::blur(origHSV, origHSV, cv::Size(3, 3));
+        cv::blur(image, filtered, cv::Size(3, 3));
     }
 
     // Step 1: Perform threshold filtering
     cv::Scalar low(hueRange.start, satRange.start, valRange.start);
     cv::Scalar high(hueRange.end, satRange.end, valRange.end);
-    cv::inRange(origHSV, low, high, filtered);
+    cv::inRange(filtered, low, high, filtered);
 
     // Step 2: Discard small fragments which passed threshold filtering
     std::vector<std::vector<cv::Point> > contours;
-    cv::findCountours(filtered, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+    cv::Mat filtCopy = filtered.clone();
+    cv::findContours(filtCopy, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
     for(auto contour : contours) {
-        std::vector<std::vector<cv::Point> > contourPoly;
-        cv::approxPolyDP(cv::Mat(contour), contourPoly, 3, true);
-        cv::Rect bbox = cv::boundingRect(cv::Mat(contourPoly));
-        if(bbox.area() < 100) {
+        cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
+        if(bbox.area() < 200) {
             // draw the ROI as black
             cv::Mat roi(filtered, bbox);
             roi = cv::Scalar(0, 0, 0);

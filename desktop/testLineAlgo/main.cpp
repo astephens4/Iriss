@@ -14,6 +14,7 @@ int satHigh;
 int valLow;
 int valHigh;
 int angle;
+int bbSize;
 cv::Mat orig;
 
 void UpdateImages(int, void*);
@@ -47,9 +48,10 @@ int main(int nargs, char **argv)
     satHigh = 255;
     valLow = 115;
     valHigh = 245;
-    cv::namedWindow("Original");
-    cv::createTrackbar("Rotation", "Original", &angle, 359, UpdateImages);
-    cv::waitKey();
+    cv::namedWindow("Thresholding");
+    cv::createTrackbar("BB Area Truncate", "Thresholding", &bbSize, 2000, UpdateImages);
+    UpdateImages(0, (void*)NULL);
+    while(cv::waitKey() != 'q') {}
 }
 
 void UpdateImages(int, void*)
@@ -65,53 +67,19 @@ void UpdateImages(int, void*)
     cv::Mat threshed;
     cv::inRange(origHSV, cv::Scalar(hueLow, satLow, valLow), cv::Scalar(hueHigh, satHigh, valHigh), threshed);
 
-//    std::vector<std::vector<cv::Point> > contours;
-//    cv::findContours(threshed, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-//    for(auto contour : contours) {
-//        cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
-//        if(bbox.area() < 10) {
-//            // draw the ROI as black
-//            cv::Mat roi(threshed, bbox);
-//            roi = cv::Scalar(0, 0, 0);
-//        }
-//    }
-
-    // Step 2: Perform edge detection
-    cv::Mat edged;
-    cv::Canny(threshed, edged, 75, 255, 3);
-
-    // Step 3: Perform line detection
-    std::vector<cv::Vec2f> lines;
-    cv::HoughLines(edged, lines, 1, CV_PI/180.0f, 100);
-
-    cv::Mat lineImg(edged.size(), CV_8UC3, cv::Scalar(0, 0, 0));
-
-    for(auto r_theta : lines) {
-        float rho = r_theta[0];
-        float theta = r_theta[1];
-        cv::Point p1, p2;
-        double a = std::cos(theta),
-               b = std::sin(theta);
-        double x0 = a*rho,
-               y0 = b*rho;
-        p1.x = std::round(x0 + 1000*(-b));
-        p1.y = std::round(y0 + 1000*(a));
-        p2.x = std::round(x0 - 1000*(-b));
-        p2.y = std::round(y0 - 1000*(a));
-        cv::line(lineImg, p1, p2, cv::Scalar(0, 0, 255), 2, CV_AA);
+    cv::Mat threshedCopy = threshed.clone();
+    std::vector<std::vector<cv::Point> > contours;
+    cv::findContours(threshedCopy, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+    for(auto contour : contours) {
+        cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
+        if(bbox.area() < bbSize) {
+            // draw the bbox in the same color as its neighbor
+            cv::Point tl = bbox.tl();
+            cv::Scalar fillColor = threshed.at<cv::Scalar>(tl);
+            cv::Mat roi(threshed, bbox);
+            roi = fillColor;
+        }
     }
 
-    // Draw a rectangle around the line!
-    cv::Vec2f horizontal(88, 0);
-    cv::Vec2f vertical(0, 719);
-    cv::RotatedRect r(cv::Point2f((504+607)/2, 360), cv::Size2f(85, 720), 1.5f);
-    cv::Point2f verticies[4];
-    r.points(verticies);
-    for(int i = 0; i < 4; ++i) {
-        line(blured, verticies[i], verticies[(i+1)%4], cv::Scalar(0, 0, 255));
-    }
-    cv::imshow("Original", blured);
     cv::imshow("Thresholding", threshed);
-    cv::imshow("Edges", edged);
-    cv::imshow("Lines", lineImg);
 }
