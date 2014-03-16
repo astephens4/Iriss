@@ -12,8 +12,8 @@ public:
 	Radians(const Angle& other);
 	Radians(const Radians& other);
 	virtual ~Radians() {}
-	virtual float asDegrees() const { return this->value; }
-	virtual float asRadians() const { return this->value*(M_PI/180.0f); }
+	virtual float asDegrees() const { return this->value*(180.0f/M_PI); }
+	virtual float asRadians() const { return this->value; }
 
 	Radians operator+(const Angle& rhs);
 	Radians operator-(const Angle& rhs);

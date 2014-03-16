@@ -1,0 +1,8 @@
+The Iriss program supports sending and receiving certain classes over a network connection. Classes which can go over a network should be
+subclasses of Utils::Packable, and implement the pack and unpack methods, ensuring any multi-byte data is covnerted to network byte order.
+Implementing classes should follow the format below when packing, to make unpacking repeatable:
+
+{MESSAGE_SIZE_BYTES: unsigned char} {[CLASS_ID: unsigned int][class data of length MESSAGE_SIZE_BYTES-1]}
+
+This should be sent in two chunks: The first byte in one chunk, the following MESSAGE_SIZE_BYTES bytes in the second chunk. For a working example,
+check the Iriss::Orders class in FlightController/Orders.hpp

@@ -8,7 +8,7 @@ RELATIVE=..
 ME=Utils
 
 # location of makeinclude in the top-level source directory
-include ${RELATIVE}/common/makeinclude
+include ${RELATIVE}/common/makeinclude.host
 
 # name of output library
 TYPE = lib
@@ -45,7 +45,7 @@ INCLUDES = ${SYS_INCLUDES} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${AR} rcs ${OUTPUT} ${OBJS}
-	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
+	${INSTALL} ${OUTPUT} test/
 	@echo
 
 %.o: %.cpp %.hpp

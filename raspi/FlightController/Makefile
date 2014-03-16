@@ -17,10 +17,13 @@ OUTPUT = ${TARGET}
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
 OBJS = \
+	Orders.o \
 	main.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \
+	Orientation.s \
+	Commands.s
 
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
@@ -44,12 +47,12 @@ ${TARGET}: ${TEMPLATES} ${OBJS}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
 	@echo
 
-%.o: %.cpp %.h
+%.o: %.cpp %.hpp
 	@echo Compiling $< ... $@
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo
 
-%.s: %.h
+%.s: %.hpp
 	@echo Checking syntax of template $< ...
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo

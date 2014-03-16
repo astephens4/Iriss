@@ -17,6 +17,17 @@ TimeStamp::TimeStamp(void)
     m_sec = now->tm_sec;
 }
 
+TimeStamp::TimeStamp(const TimeStamp& other) :
+    m_year(other.m_year),
+    m_month(other.m_month),
+    m_calDay(other.m_calDay),
+    m_weekDay(other.m_weekDay),
+    m_hour(other.m_hour),
+    m_minute(other.m_minute),
+    m_sec(other.m_sec)
+{
+    
+}
 
 void TimeStamp::update(void)
 {

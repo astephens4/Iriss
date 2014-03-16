@@ -19,8 +19,9 @@
 #include <cassert>
 
 // Some Utilities
-#include "Utils/Orders.hpp"
-#include "Utils/Commands.hpp"
+#include "Iriss/Orders.hpp"
+#include "Iriss/Command.hpp"
+#include "Iriss/Orientation.hpp"
 
 int main(int nargs, char *argv[])
 {
@@ -42,10 +43,10 @@ int main(int nargs, char *argv[])
     tcsetattr(uart, 0, &uartSettings); // set them on the serial line
     
     // send an echo command and wait for a reply
-    std::string arduData; 
-    uart << "ECHO";
-    uart >> arduData;
-    if(arduData.compare("ECHO") != 0) {
+    Iriss::Command arduResp; 
+    uart << Iriss::ECHO;
+    uart >> arduResp;
+    if(arduResp != Iriss::Command::ECHO) {
         std::cerr << "Did not get a response from the ArduPilot! EXITING!\n";
         return -1;
     }
@@ -63,15 +64,17 @@ int main(int nargs, char *argv[])
     }
 
     // wait for a command from the CommandCenter
-    Utils::Orders orders;
-    float roll, pitch, yaw, baro;
+    Iriss::Orders orders;
+    struct Iriss::Orientation orientation;
     LineAnalysis::LineDetector detector;
+    std::vector<Iriss::Command> commandList;
+    std::vector<LineAnalysis::Line> lines;
     while(wait_on_orders(cmdCenter, orders)) {
         // update the detector for the given orders
         detector.set_colors(orders.get_colors());
 
         // Now we have command, is it completed?
-        while(!orders_complete(orders)) {
+        while(orders.has_tasks()) {
             std::string imageFile = find_recent_image("/dev/shm/photocache", 0.1f); 
             if(imageFile.empty()) {
                 continue;
@@ -80,25 +83,28 @@ int main(int nargs, char *argv[])
             detector.set_image(imageFile);
 
             // get data from ArduPilot
-            uart << Utils::Commands::GET_ORIENTATION;
-            uart >> roll >> pitch >> yaw >> baro;
+            uart << Iriss::GET_ORIENTATION;
+            uart >> orientation.roll
+                 >> orientation.pitch
+                 >> orientation.yaw
+                 >> orientation.baro;
 
             // Get line info
             detector.get_lines(lines);
             commandList.clear();
             for(LineAnalysis::Line line : lines) {
-                commandList.push_back(orders.current_task(line));
+                commandList.push_back(orders.apply(line, orientation));
             }
             
 
             // Send corrections to ArduPilot
             if(!commandList.empty()) {
-                uart << Utils::Commands::BEGIN_COMMAND_LIST;
+                uart << Iriss::BEGIN_COMMAND_LIST;
             }
-            for(Utils::Command cmd : commandList) {
+            for(Iriss::Command cmd : commandList) {
                 uart << cmd;
             }
-            uart << Utils::Commands::END_COMMAND_LIST;
+            uart << Iriss::END_COMMAND_LIST;
 
         }
     }
@@ -198,7 +204,7 @@ bool Iriss::is_process_running(const std::string& execName)
  * @param [out] ccOrders Orders that are received from the command center
  * @return True if action orders are given, false if disconnected
  */
-bool Iriss::wait_on_orders(int socket, Utils::Orders& ccOrders)
+bool Iriss::wait_on_orders(int socket, Iriss::Orders& ccOrders)
 {
 
 }
@@ -208,7 +214,7 @@ bool Iriss::wait_on_orders(int socket, Utils::Orders& ccOrders)
  * @param [in] orders Orders issued to this quadcopter
  * @return True if the orders are complete, false otherwise.
  */
-bool Iriss::orders_complete(const Utils::Orders& orders)
+bool Iriss::orders_complete(const Iriss::Orders& orders)
 {
 
 }

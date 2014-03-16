@@ -36,6 +36,11 @@ public:
     TimeStamp(void);
 
     /**
+     *
+     */
+    TimeStamp(const TimeStamp& other);
+
+    /**
      * Update this timestamp to the current time
      */
     void update(void);
@@ -51,6 +56,8 @@ public:
     unsigned int get_minute() const { return m_minute; };
     unsigned int get_sec() const { return m_sec; };
    
+    TimeStamp operator+(const TimeStamp& rhs);
+    TimeStamp operator-(const TimeStamp& rhs);
 private:
     unsigned int m_year;
     Month m_month;
