@@ -21,7 +21,7 @@ Distance::~Distance()
 
 bool Distance::operator==(const Distance& rhs) const
 {
-	return FloatEquals(this->asInches(), rhs.asInches());
+	return this->asInches() == rhs.asInches();
 }
 
 bool Distance::operator!=(const Distance& rhs) const
@@ -36,8 +36,7 @@ bool Distance::operator<(const Distance& rhs) const
 
 bool Distance::operator<=(const Distance& rhs) const
 {
-	return this->operator<(rhs) ||
-           this->operator==(rhs);
+	return this->asInches() <= rhs.asInches();
 }
 
 bool Distance::operator>(const Distance& rhs) const

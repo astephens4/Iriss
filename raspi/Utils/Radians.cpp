@@ -10,7 +10,7 @@ Radians::Radians(float value) :
 }
 
 Radians::Radians(const Angle& other) :
-	Angle(other)
+	Angle(other.asRadians())
 {
 	int div = static_cast<int>(this->asRadians() / (M_PI*2.0f));
 	this->value = this->asRadians() - (div*M_PI*2.0f);
@@ -23,26 +23,27 @@ Radians::Radians(const Radians& other) :
 	this->value = this->value - (div*M_PI*2.0f);
 }
 
-Radians Radians::operator+(const Angle& rhs)
+Radians Radians::operator+(const Angle& rhs) const
 {
 	return Radians(this->asRadians() + rhs.asRadians());
 }
 
-Radians Radians::operator-(const Angle& rhs)
+Radians Radians::operator-(const Angle& rhs) const
 {
 	return Radians(this->asRadians() - rhs.asRadians());
 }
 
-Radians Radians::operator*(const Angle& rhs)
+Radians Radians::operator*(const Angle& rhs) const
 {
 	return Radians(this->asRadians() * rhs.asRadians());
 }
 
-Radians Radians::operator/(const Angle& rhs)
+Radians Radians::operator/(const Angle& rhs) const
 {
-	if(rhs.asRadians() == 0)
+	if(FloatEquals(rhs.asRadians(), 0.0f)) {
 		throw std::logic_error("Divide by zero");
-	return Radians(this->asRadians() + rhs.asRadians());
+    }
+	return Radians(this->asRadians() / rhs.asRadians());
 }
 
 

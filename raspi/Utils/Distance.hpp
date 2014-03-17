@@ -2,6 +2,7 @@
 #define IRISS_DISTANCE_H 1
 
 #include <stdexcept>
+#include "FloatEquals.hpp"
 
 namespace Utils {
 

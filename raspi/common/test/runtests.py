@@ -18,6 +18,8 @@ wd = os.getcwd();
 passfail = open(wd+"/passfail.txt", "w");
 
 count = 0;
+passCount = 0;
+failCount = 0;
 for arg in sys.argv :
     if count == 0 :
         count = 1;
@@ -30,7 +32,11 @@ for arg in sys.argv :
     results.write(out);
     if ret < 0 :
         passfail.write(cmd+": Fail\n");
+        failCount = failCount + 1;
     else :
         passfail.write(cmd+": Pass\n");
+        passCount = passCount + 1;
+    count = count + 1;
 
-# do somestuff to display test results
+print(str(passCount)+" tests passed!");
+print(str(failCount)+u" tests failed! \u2639");

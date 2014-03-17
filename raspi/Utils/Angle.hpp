@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include "FloatEquals.hpp"
 
 namespace Utils {
 
@@ -16,12 +17,12 @@ public:
 	virtual float asDegrees() const = 0;
 
 	// Equality
-	bool operator==(const Angle& rhs);
-	bool operator!=(const Angle& rhs);
-	bool operator<(const Angle& rhs);
-	bool operator<=(const Angle& rhs);
-	bool operator>(const Angle& rhs);
-	bool operator>=(const Angle& rhs);
+	bool operator==(const Angle& rhs) const;
+	bool operator!=(const Angle& rhs) const;
+	bool operator<(const Angle& rhs) const;
+	bool operator<=(const Angle& rhs) const;
+	bool operator>(const Angle& rhs) const;
+	bool operator>=(const Angle& rhs) const;
 protected:
 	Angle() { throw std::logic_error("No argument construction is not allowed"); }
 	float value;

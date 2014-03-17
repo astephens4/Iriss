@@ -1,0 +1,26 @@
+Monday March 17th 2014
+    * Move TCP/IP networking interface to Utils
+    * Finish unit testing Utils
+    * Create simple host program to send Iriss::Orders
+    * Test sending Orders between desktop and raspberry pi
+    * Make level shifter circuit (if needed)
+    * Test sending and receiving Iriss::Commands over UART
+    * Read through ArduPilot docs and source code to understand how that will work.
+
+Tuesday March 18th 2014
+    * Go to school
+    * Test send/receive with ArduPilot
+    * Make measurements and get interpolating function for line width (pixels) --> Height (inches)
+    * Complete Orders::apply(line, orientation)
+    * Test takeoff!
+
+Wednesday March 19th 2014
+    * Finish testing take off and landing
+    * Get line following working
+
+Thursday March 20th 2014
+    * Get line following working
+
+Friday March 21st 2014
+    * Get line following working
+    * Update poster

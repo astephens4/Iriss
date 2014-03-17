@@ -19,32 +19,33 @@ Angle::~Angle()
 
 }
 
-bool Angle::operator==(const Angle& rhs)
+bool Angle::operator==(const Angle& rhs) const
 {
-	return this->asRadians() == rhs.asRadians();
+	return FloatEquals(this->asRadians(), rhs.asRadians());
 }
 
-bool Angle::operator!=(const Angle& rhs)
+bool Angle::operator!=(const Angle& rhs) const
 {
 	return !this->operator==(rhs);
 }
 
-bool Angle::operator<(const Angle& rhs)
+bool Angle::operator<(const Angle& rhs) const
 {
 	return this->asRadians() < rhs.asRadians();
 }
 
-bool Angle::operator<=(const Angle& rhs)
+bool Angle::operator<=(const Angle& rhs) const
 {
-	return this->asRadians() <= rhs.asRadians();
+	return this->operator<(rhs) ||
+           this->operator==(rhs);
 }
 
-bool Angle::operator>(const Angle& rhs)
+bool Angle::operator>(const Angle& rhs) const
 {
 	return !this->operator<=(rhs);
 }
 
-bool Angle::operator>=(const Angle& rhs)
+bool Angle::operator>=(const Angle& rhs) const
 {
 	return !this->operator<(rhs);
 }

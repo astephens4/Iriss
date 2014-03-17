@@ -2,8 +2,8 @@
 #define IRISS_TEST_H 1
 
 #include <iostream>
-#include <cmath>
 #include <cinttypes>
+#include <cmath>
 
 #define MAX_ULP_DIFFERENCE 5
 
@@ -29,7 +29,7 @@ void AssertEquals(float arg1, float arg2)
     if(f1.negative() != f2.negative()) {
         if(std::fabs(f1.f) == std::fabs(f2.f))
             return;
-        MAKE_ASSERTION(arg1, ==, arg2); // this should fail, prints something
+        MAKE_ASSERTION(f1.f, ==, f2.f);
     }
 
     int ulpDiff = std::abs(f1.i - f2.i);
@@ -45,5 +45,26 @@ void AssertEquals(uint32_t arg1, uint32_t arg2)
 {
     MAKE_ASSERTION(arg1, ==, arg2);
 }
+
+void AssertEquals(int16_t arg1, int16_t arg2)
+{
+    MAKE_ASSERTION(arg1, ==, arg2);
+}
+
+void AssertEquals(uint16_t arg1, uint16_t arg2)
+{
+    MAKE_ASSERTION(arg1, ==, arg2);
+}
+
+void AssertEquals(uint8_t arg1, uint8_t arg2)
+{
+    MAKE_ASSERTION(arg1, ==, arg2);
+}
+
+void AssertEquals(int8_t arg1, int8_t arg2)
+{
+    MAKE_ASSERTION(arg1, ==, arg2);
+}
+
 
 #endif // IRISS_TEST_H

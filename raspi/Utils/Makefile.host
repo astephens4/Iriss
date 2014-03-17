@@ -17,13 +17,16 @@ OUTPUT = lib${TARGET}.a
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
 OBJS = \
+	FloatEquals.o \
 	Color.o \
 	Angle.o \
 	Degrees.o \
 	Radians.o \
+	AngleOps.o \
 	Distance.o \
 	Feet.o \
 	Inches.o \
+	DistanceOps.o \
 	TimeStamp.o \
 	Packable.o
 
@@ -33,7 +36,8 @@ TEMPLATES = \
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
 	-I../ \
-	-I${RELATIVE}/common/${BUILD_VERSION}/include
+	-I${RELATIVE}/common/${BUILD_VERSION}/include \
+	-I${RELATIVE}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located

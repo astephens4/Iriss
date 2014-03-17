@@ -10,10 +10,10 @@ Degrees::Degrees(float value) :
 }
 
 Degrees::Degrees(const Angle& other) :
-	Angle(other)
+	Angle(other.asDegrees())
 {
-	int div = static_cast<int>(this->asDegrees() / 360.0f);
-	this->value = this->asDegrees() - (div*360.0f);
+	int div = static_cast<int>(this->value / 360.0f);
+	this->value = this->value - (div*360.0f);
 }
 
 Degrees::Degrees(const Degrees& other) :
@@ -23,26 +23,27 @@ Degrees::Degrees(const Degrees& other) :
 	this->value = this->value - (div*360.0f);
 }
 
-Degrees Degrees::operator+(const Angle& rhs)
+Degrees Degrees::operator+(const Angle& rhs) const
 {
 	return Degrees(this->asDegrees() + rhs.asDegrees());
 }
 
-Degrees Degrees::operator-(const Angle& rhs)
+Degrees Degrees::operator-(const Angle& rhs) const
 {
 	return Degrees(this->asDegrees() - rhs.asDegrees());
 }
 
-Degrees Degrees::operator*(const Angle& rhs)
+Degrees Degrees::operator*(const Angle& rhs) const
 {
 	return Degrees(this->asDegrees() * rhs.asDegrees());
 }
 
-Degrees Degrees::operator/(const Angle& rhs)
+Degrees Degrees::operator/(const Angle& rhs) const
 {
-	if(rhs.asDegrees() == 0)
+	if(FloatEquals(rhs.asDegrees(), 0.0f)) {
 		throw std::logic_error("Divide by zero");
-	return Degrees(this->asDegrees() + rhs.asDegrees());
+    }
+	return Degrees(this->asDegrees() / rhs.asDegrees());
 }
 
 

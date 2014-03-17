@@ -15,10 +15,10 @@ public:
 	virtual float asDegrees() const { return this->value; }
 	virtual float asRadians() const { return this->value*(M_PI/180.0f); }
 
-	Degrees operator+(const Angle& rhs);
-	Degrees operator-(const Angle& rhs);
-	Degrees operator*(const Angle& rhs);
-	Degrees operator/(const Angle& rhs);
+	Degrees operator+(const Angle& rhs) const;
+	Degrees operator-(const Angle& rhs) const;
+	Degrees operator*(const Angle& rhs) const;
+	Degrees operator/(const Angle& rhs) const;
 
 	const Degrees& operator=(const Angle& rhs);
 	const Degrees& operator+=(const Angle& rhs);

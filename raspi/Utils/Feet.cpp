@@ -36,7 +36,7 @@ Feet Feet::operator/(const Distance& rhs) const
 {
 	if(rhs.asFeet() == 0)
 		throw std::logic_error("Divide by zero");
-	return Feet(this->asFeet() + rhs.asFeet());
+	return Feet(this->asFeet() / rhs.asFeet());
 }
 
 
