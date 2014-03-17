@@ -9,22 +9,6 @@ namespace Utils {
 class Packable {
 public:
     /**
-     * Send the contents of this class out the given socket
-     * @param [in] socket TCP, connected, stream, etc. socket
-     * @return True if the class was sent. False if the entire class wasn't sent
-     */
-    bool send(int socket) const;
-
-    /**
-     * Receive the contents of this class over the given socket
-     * @param [in] socket TCP, connected, stream, etc. socket
-     * @return True if the class was received. False if the entire class wasn't.
-     *         The contents of this class are unchanged in the event of an incomplete
-     *         reception
-     */
-    bool receive(int socket);
-
-    /**
      * Convert and pack this class into a stream of bytes.
      * @param [out] bytes The packed class contents are placed in here
      */

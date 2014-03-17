@@ -28,7 +28,9 @@ OBJS = \
 	Inches.o \
 	DistanceOps.o \
 	TimeStamp.o \
-	Packable.o
+	Packable.o \
+	NetClient.o \
+	NetServer.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \

@@ -16,7 +16,8 @@ TEST_UNITS = \
 	Color.test \
 	Distance.test \
 	Packable.test \
-	TimeStamp.test
+	TimeStamp.test \
+	Net.test
 
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \

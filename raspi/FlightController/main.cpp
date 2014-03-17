@@ -111,58 +111,6 @@ int main(int nargs, char *argv[])
 }
 
 /**
- * Open an IPv4 TCP stream socket
- * @param [in] addr IPv4 address string to connect to
- * @param [in] portNo Socket port number to connect to
- * @return File descriptor for the socket, or negative value for an error.
- */
-int Iriss::connect_to_command_center(std::string& addr, unsigned short portNo)
-{
-    struct addrinfo hints;
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_PASSIVE;
-
-    struct addrinfo *results = nullptr;
-
-    int status = getaddrinfo(addr.c_str(), portNo, &hints, &results);
-    if(status != 0) {
-        std::cerr << "Error opening connection to CommandCenter: " << gai_strerror(status) << std::endl;
-        std::cerr << "Fix it\n";
-        return status;
-    }
-
-    // get the IPv4 address from the result
-    struct addrinfo *v4Addr = nullptr;
-    for(struct addrinfo *curInfo = results; curInfo != nullptr; curInfo = curInfo->ai_next) {
-        if (curInfo->ai_family == AF_INET) { // IPv4
-            v4Addr = curInfo;
-            break;
-        }
-    }
-
-    if(v4Addr == nullptr) {
-        std::cerr << "Couldn't find IPv4 address!\n" << std::endl;
-        return -1;
-    }
-
-    // open the socket!
-    int fd = socket(v4Addr->ai_family, v4Addr->ai_socktype, v4Addr->ai_protocol);
-    if(fd < 0) {
-        perror("Unable to open socket!");
-        return fd;
-    }
-
-    // attempt to connect to the server
-    status = connect(fd, v4Addr->ai_sockaddr, v4Addr->ai_addrlen);
-    if(status < 0) {
-        perror("Couldn't connect to CommandCenter!");
-    }
-    return fd;
-}
-
-/**
  * Check to see if the named process is running
  * @param [in] process name
  * @return True if the given process name is running, false otherwise

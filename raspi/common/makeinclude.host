@@ -1,7 +1,7 @@
 # Tool chain to use
-CC=clang
-CXX=clang++
-LINK=clang++
+CC=gcc
+CXX=g++
+LINK=g++
 AR=ar
 AS=as
 
@@ -21,4 +21,4 @@ BUILD_ARGS=-g3
 COMPILE=${CXX} -c
 INSTALL=cp
 SHARED_LIB_ARGS=-shared -o
-CXXFLAGS=-Wall -Wextra -Werror -std=c++11 ${BUILD_ARGS}
+CXXFLAGS=-Wall -Wextra -Werror -std=c++0x -pthread ${BUILD_ARGS}

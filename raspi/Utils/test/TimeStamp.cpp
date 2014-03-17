@@ -1,46 +1,15 @@
-#include "TimeStamp.hpp"
-#include <ctime>
+#include "Utils/TimeStamp.hpp"
+#include "test/Testing.hpp"
 
-namespace Utils {
-
-TimeStamp::TimeStamp(void)
+int main(void)
 {
-    // this will only be in Unix, so go crazy with sys calls
-    time_t timer = time(NULL);
-    struct tm *now = localtime(&timer);
-    m_year = 1900 + now->tm_year;
-    m_month = static_cast<Month>(now->tm_mon);
-    m_calDay = now->tm_mday;
-    m_weekDay = static_cast<Day>(now->tm_wday);
-    m_hour = now->tm_hour;
-    m_minute = now->tm_min;
-    m_sec = now->tm_sec;
-}
+    Utils::TimeStamp t1;
 
-TimeStamp::TimeStamp(const TimeStamp& other) :
-    m_year(other.m_year),
-    m_month(other.m_month),
-    m_calDay(other.m_calDay),
-    m_weekDay(other.m_weekDay),
-    m_hour(other.m_hour),
-    m_minute(other.m_minute),
-    m_sec(other.m_sec)
-{
-    
-}
+    sleep(5);
 
-void TimeStamp::update(void)
-{
-    // this will only be in Unix, so go crazy with sys calls
-    time_t timer = time(NULL);
-    struct tm *now = localtime(&timer);
-    m_year = 1900 + now->tm_year;
-    m_month = static_cast<Month>(now->tm_mon);
-    m_calDay = now->tm_mday;
-    m_weekDay = static_cast<Day>(now->tm_wday);
-    m_hour = now->tm_hour;
-    m_minute = now->tm_min;
-    m_sec = now->tm_sec;
-}
+    Utils::TimeStamp t2;
 
-} // end namespace Utils
+    AssertEquals(static_cast<int32_t>(t2.get_sec() - t1.get_sec()), static_cast<int32_t>(5));
+
+    return 0;
+}

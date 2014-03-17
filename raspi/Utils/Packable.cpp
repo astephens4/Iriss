@@ -2,8 +2,7 @@
 #include <cassert>
 #include <cstring>
 #include <iostream>
-#include <sys/socket.h>
-#include <netdb.h>
+#include <arpa/inet.h>
 
 namespace Utils {
 
@@ -15,66 +14,6 @@ union Float_t {
     float f;
     uint32_t i;
 };
-
-bool Packable::send(int socket) const
-{
-    if(socket < 0) {
-        std::cerr << "Given socket is invalid!\n";
-        return false;
-    }
-
-    std::vector<uint8_t> bytes;
-    pack(bytes);
-
-    int bytesToSend = bytes.size();
-    while(bytesToSend > 0) {
-        int numBytes = ::send(socket, &(bytes[0]), bytesToSend, 0);
-        if(numBytes == 0) {
-            std::cerr << "Lost connection receiver!!!!\n";
-            return false;
-        }
-        else if(numBytes < 0) {
-            perror("Oh Noes! (Packable::send)");
-            return false;
-        }
-        bytesToSend -= numBytes;
-    }
-
-    if(bytesToSend == 0) {
-        return true;
-    }
-    return false;
-}
-
-bool Packable::receive(int socket)
-{
-    if(socket < 0) {
-        std::cerr << "Given socket is invalid!\n";
-        return false;
-    }
-
-    std::vector<uint8_t> bytes;
-    unsigned char messageSize;
-    recv(socket, &messageSize, 1, 0);
-    bytes.reserve(messageSize);
-
-    uint32_t pos = 0;
-    while(pos < messageSize) {
-        int numBytes = ::recv(socket, &(bytes[pos]), messageSize-pos, 0);
-        if(numBytes == 0) {
-            std::cerr << "Lost connection to sender!!!!\n";
-            return false;
-        }
-        else if(numBytes < 0) {
-            perror("Oh Noes! (Packable::receive)");
-            return false;
-        }
-        pos += numBytes;
-    }
-
-    unpack(bytes);
-    return true;
-}
 
 void Packable::pack_uint32(uint32_t host, uint8_t *data) const
 {

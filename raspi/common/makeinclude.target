@@ -22,4 +22,4 @@ BUILD_ARGS=-g3
 COMPILE=${CXX} -c
 INSTALL=cp
 SHARED_LIB_ARGS=-shared -o
-CXXFLAGS=-Wall -Wextra -Werror -std=c++11 ${BUILD_ARGS}
+CXXFLAGS=-Wall -Wextra -Werror -std=c++11 -pthread ${BUILD_ARGS}
