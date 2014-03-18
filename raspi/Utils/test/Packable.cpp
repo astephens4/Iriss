@@ -13,7 +13,7 @@ public:
     virtual void pack(std::vector<uint8_t>& bytes) const
     {
         bytes.clear();
-        bytes.reserve(12);
+        bytes.resize(12);
         pack_int32(testInt, &(bytes[0]));
         pack_uint32(testUint, &(bytes[4]));
         pack_float32(testFloat, &(bytes[8]));

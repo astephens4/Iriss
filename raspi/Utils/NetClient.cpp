@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 
 // allow printing of system errors
 #include <cstdio>
@@ -24,6 +25,12 @@ NetClient::NetClient(void) :
 {
 
 }
+
+NetClient::~NetClient(void)
+{
+    close(m_fd);
+}
+
 
 bool NetClient::connect_to_server(const std::string& addr, unsigned short portNo)
 {
@@ -162,16 +169,27 @@ bool NetClient::send(const char *str)
 
 }
 
-bool NetClient::receive(char *buf, unsigned int bufLen)
+bool NetClient::receive(std::vector<char>& buf)
 {
     if(!m_isValid) {
         return false;
     }
 
-    uint32_t pos = 0;
-    ssize_t numBytes = 0;
-    while(pos < bufLen) {
-        numBytes = ::recv(m_fd, reinterpret_cast<void*>(&(buf[pos])), bufLen-pos, 0);
+    int bytesToRecv;
+    int btrNet;
+    int numBytes = ::recv(m_fd, &btrNet, sizeof(int), 0);
+    if(numBytes <= 0) {
+        m_isValid = false;
+        return m_isValid;
+    }
+
+    bytesToRecv = ntohl(btrNet);
+    buf.clear();
+    buf.resize(bytesToRecv);
+
+    int pos = 0;
+    while(pos < bytesToRecv) {
+        numBytes = ::recv(m_fd, reinterpret_cast<void*>(&(buf[pos])), bytesToRecv-pos, 0);
         if(numBytes == 0) {
             std::cerr << "Lost connection to sender!!!!\n";
             m_isValid = false;
@@ -184,7 +202,45 @@ bool NetClient::receive(char *buf, unsigned int bufLen)
         }
         pos += numBytes;
     }
-    return 0;
+    return true;
 }
+
+bool NetClient::receive(Utils::Packable& data)
+{
+    if(!m_isValid) {
+        return false;
+    }
+
+    int btsNet = 0;
+    int numBytes = ::recv(m_fd, &btsNet, sizeof(int), 0);
+    if(numBytes <= 0) {
+        m_isValid = false;
+        return m_isValid;
+    }
+
+    int bytesToRecv = ntohl(btsNet);
+
+    std::vector<uint8_t> bytes;
+    bytes.resize(bytesToRecv, 0);
+    int bytePos = 0;
+    while(bytePos < bytesToRecv) {
+        numBytes = ::recv(m_fd, &(bytes[bytePos]), bytesToRecv-bytePos, 0);
+        if(numBytes == 0) {
+            std::cerr << "Lost connection receiver!!!!\n";
+            m_isValid = false;
+            return false;
+        }
+        else if(numBytes < 0) {
+            perror("Oh Noes! (NetClient::send)");
+            m_isValid = false;
+            return false;
+        }
+        bytePos += numBytes;
+    }
+    
+    data.unpack(bytes);
+    return true;
+}
+
 
 } // end namespace Utils

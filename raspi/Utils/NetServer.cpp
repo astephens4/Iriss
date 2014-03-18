@@ -81,6 +81,15 @@ bool NetServer::start_server(void)
         return m_isValid;
     }
 
+    // Take care of issue with binding to a recently used port
+    int yes = 1;
+    status = setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+    if(status == -1) {
+        perror("setsockopt");
+        m_isValid = false;
+        return m_isValid;
+    }
+
     // bind it to allow for listening
     status = bind(m_fd, v4Addr->ai_addr, v4Addr->ai_addrlen);
     if(status < 0) {
@@ -108,6 +117,7 @@ bool NetServer::start_server(void)
 void NetServer::stop_server(void)
 {
     // the accepting thread is probably blocking on accept(), set quitting now
+    m_isValid = false;
     m_quitting.store(true);
 
     // close the listening fd to stop the accept() call in m_acceptThread
@@ -117,14 +127,11 @@ void NetServer::stop_server(void)
         close(client.first);
     }
 
-    m_isValid = false;
-
     // wait for it to finish
     m_acceptThread.join();
     for(std::vector<std::thread>::iterator itr = m_clientThreads.begin(); itr != m_clientThreads.end(); ++itr) {
         itr->join();
     }
-
 }
 
 bool NetServer::send(int fd, const Utils::Packable& data)
@@ -243,7 +250,7 @@ bool NetServer::do_recv(int fd)
 
     bool ret;
     {
-        std::lock_guard<std::mutex> lock(mutex);
+        std::lock_guard<std::mutex> lock(m_mutex);
         std::pair<int, std::string> client;
         client.first = fd;
         client.second = m_clientList[fd];
@@ -256,15 +263,35 @@ bool NetServer::do_recv(int fd)
 
 void NetServer::acceptor(void)
 {
+    struct pollfd ufds[1];
+    ufds[0].fd = m_fd;
+    ufds[0].events = POLLIN;
+
     struct sockaddr_storage addr;
     socklen_t addrSize = sizeof(addr);
     while(!m_quitting.load()) {
+        int rv = poll(ufds, 1, 50);
+        if(rv < 0) {
+            perror("accept_poll");
+            m_isValid = false;
+            return;
+        }
+        else if(rv > 0 && (ufds[0].revents&POLLHUP || ufds[0].revents&POLLERR || ufds[0].revents&POLLNVAL)) {
+            return;
+        }
+        else if(rv == 0) {
+            return;
+        }
+
         int fd = accept(m_fd, reinterpret_cast<struct sockaddr*>(&addr), &addrSize);
         if(fd < 0) {
+            perror("acceptor thread should exit now");
             continue;
         }
 
         // get the connection information
+        {
+        std::lock_guard<std::mutex> lock(m_mutex);
         char name[16];
         void *ipv4 = reinterpret_cast<void*>(&(reinterpret_cast<struct sockaddr_in*>(&addr)->sin_addr));
         if(inet_ntop(AF_INET, ipv4, name, sizeof(name))) {
@@ -273,9 +300,10 @@ void NetServer::acceptor(void)
         else {
             m_clientList.insert(std::pair<int, std::string>(fd, "Unknown Client"));
         }
-        
+        }
         // kick off a thread to handle the client's connection
         m_clientThreads.push_back(std::thread(&NetServer::client_listener, this, fd));
+
     }
 }
 
@@ -284,7 +312,6 @@ void NetServer::client_listener(int fd)
     struct pollfd ufds[1];
     ufds[0].fd = fd;
     ufds[0].events = POLLIN;
-
     while(!m_quitting.load()) {
         int rv = poll(ufds, 1, 50);
         if(rv > 0 && (ufds[0].revents&POLLHUP || ufds[0].revents&POLLERR || ufds[0].revents&POLLNVAL)) {
@@ -292,8 +319,9 @@ void NetServer::client_listener(int fd)
         }
         else if(rv > 0 && ufds[0].revents&POLLIN) {
             bool isConnected = do_recv(fd);
-            if(!isConnected)
+            if(!isConnected) {
                 break;
+            }
         }
         else if(rv == -1) {
             perror("BAAAD things happened");
@@ -302,5 +330,11 @@ void NetServer::client_listener(int fd)
     }
 }
 
+void NetServer::get_client_list(std::map<int, std::string>& clients)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    clients = m_clientList;
+    return;
+}
 
 } // end namespace Utils

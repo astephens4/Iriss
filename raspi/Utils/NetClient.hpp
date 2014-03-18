@@ -2,6 +2,7 @@
 #define IRISS_NET_H 1
 
 #include <string>
+#include <vector>
 
 namespace Utils {
 
@@ -11,6 +12,7 @@ class NetClient {
 public:
 
     NetClient(void);
+    ~NetClient(void);
 
     /**
      * Open an IPv4 TCP stream socket
@@ -72,7 +74,7 @@ public:
      * @param [in] The buffer to place the data into
      * @return True if at least the entire buffer was filled
      */
-    bool receive(char *buf, unsigned int bufLen);
+    bool receive(std::vector<char>& buf);
 
 
 private:

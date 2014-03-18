@@ -55,7 +55,7 @@ public:
      * Get an immutable list of the connected clients
      * @return a constant reference to the list of clients connected to this server
      */
-    const std::map<int, std::string>& get_client_list(void);
+    void get_client_list(std::map<int, std::string>& clients);
 
 protected:
     /**
@@ -93,7 +93,7 @@ private:
 
     // receiving from client stuff
     std::vector<std::thread> m_clientThreads;
-    std::mutex mutex;
+    std::mutex m_mutex;
 };
 
 } // end namespace Utils
