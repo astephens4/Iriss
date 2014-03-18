@@ -2,9 +2,17 @@
 #define IRISS_ORDERS_H 1
 
 #include "Utils/Packable.hpp"
-#include <queue>
+#include "Command.hpp"
+#include <vector>
+#include <map>
+
+namespace LineAnalysis {
+class Line;
+}
 
 namespace Iriss {
+
+struct Orientation;
 
 class Orders : public Utils::Packable {
 public:
@@ -35,18 +43,6 @@ public:
     bool has_tasks(void);
 
     /**
-     * Send these orders over a network
-     * @param [in] The network socket file descriptor to send the orders over
-     */
-    void send(int socket);
-
-    /**
-     * Wait to receive orders over the network
-     * @param [in] The network socket file descriptor to receive the orders over
-     */
-    void receive(int socket);
-
-    /**
      * Convert and pack this class into a stream of bytes.
      * @param [out] bytes The packed class contents are placed in here
      */
@@ -61,7 +57,7 @@ public:
 
 
 private:
-    std::queue<std::pair<Task, int> > taskList;
+    std::map<Task, int> m_taskList;
 };
 
 } // end namespace Iriss

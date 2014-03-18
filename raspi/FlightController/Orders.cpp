@@ -1,21 +1,23 @@
 #include "Orders.hpp"
+#include "LineAnalysis/Line.hpp"
+#include "LineAnalysis/LineDetector.hpp"
+#include "test/Testing.hpp"
 
 namespace Iriss {
 
 Orders::Orders(void) :
-    taskList()
+    m_taskList()
 {
 }
 
 void Orders::pack(std::vector<uint8_t>& bytes) const
 {
     bytes.clear();
-    bytes.reserve(taskpairSize*m_taskList.size() + 2);
+    bytes.resize(taskpairSize*m_taskList.size() + 2, 0);
 
-    bytes[0] = taskpairSize*m_taskList.size() + 1;
-    bytes[1] = ORDERS_MSG;
-    int bytePos = 2;
-    for( std::pair<Task, int> task : taskList) {
+    bytes[0] = ORDERS_MSG;
+    int bytePos = 1;
+    for(auto task : m_taskList) {
         bytes[bytePos++] = task.first;
         pack_int32(task.second, &(bytes[bytePos]));
         bytePos += 4;
@@ -25,23 +27,19 @@ void Orders::pack(std::vector<uint8_t>& bytes) const
 
 void Orders::unpack(const std::vector<uint8_t>& bytes)
 {
-    size_t len = bytes.size();
-    uint8_t reported = bytes[0];
+    AssertEquals(ORDERS_MSG, bytes[0]);
 
-    AssertEquals(len, reported+1);
-    AssertEquals(ORDERS_MSG, bytes[1]);
-
-    taskList.clear();
-    for(int bytePos = 2; bytePos < len; bytePos += taskpairSize) {
+    m_taskList.clear();
+    for(unsigned int bytePos = 1; bytePos < bytes.size(); bytePos += taskpairSize) {
         std::pair<Task, int> taskPair;
-        taskPair.first = bytes[bytePos];
+        taskPair.first = static_cast<Task>(bytes[bytePos]);
         unpack_int32(&(bytes[bytePos+1]), taskPair.second);
-        taskList.push_back(taskPair);
+        m_taskList.insert(taskPair);
     }
     return;
 }
 
-Iriss::Command Orders::apply(const LineAnalysis::Line& line, const Iriss::Orientation& orientation)
+Iriss::Command Orders::apply(const LineAnalysis::Line& /*line*/, const Iriss::Orientation& /*orientation*/)
 {
     // check the status of the current task, if it is complete move on to the next
     // task
@@ -49,6 +47,7 @@ Iriss::Command Orders::apply(const LineAnalysis::Line& line, const Iriss::Orient
     // Calculate the corrections needed
 
     // Return the bast command for the correction
+    return ECHO;
 }
 
 bool Orders::has_tasks(void)

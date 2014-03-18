@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <string>
 
 // UART library
 #include <termios.h>
@@ -19,9 +20,9 @@
 #include <cassert>
 
 // Some Utilities
-#include "Iriss/Orders.hpp"
-#include "Iriss/Command.hpp"
-#include "Iriss/Orientation.hpp"
+#include "Orders.hpp"
+#include "Command.hpp"
+#include "Orientation.hpp"
 
 int main(int nargs, char *argv[])
 {
@@ -44,19 +45,21 @@ int main(int nargs, char *argv[])
     
     // send an echo command and wait for a reply
     Iriss::Command arduResp; 
-    uart << Iriss::ECHO;
+    uart << Iriss::ACK;
     uart >> arduResp;
-    if(arduResp != Iriss::Command::ECHO) {
+    if(arduResp != Iriss::ACK) {
         std::cerr << "Did not get a response from the ArduPilot! EXITING!\n";
         return -1;
     }
 
     // connect to the CommandCenter software at 192.168.1.81:9001
-    int cmdCenter = connect_to_command_center("192.168.1.81", 9001);
-    if(cmdCenter < 0) {
+    Utils::NetClient cmdCenter;
+    cmdCenter.connect_to_server("192.168.1.81", 9001);
+    if(!cmdCenter.is_valid()) {
+        std::cerr << "Could not establish connection with the command center!\n";
         return -2;
     }
-
+    
     // check for a running process called CameraDaemon.py, run it if isn't running
     if(!is_process_running("CameraDaemon.py")) {
         assert(is_file("/usr/local/bin/CameraDaemon.py"));
@@ -64,12 +67,13 @@ int main(int nargs, char *argv[])
     }
 
     // wait for a command from the CommandCenter
+    std::string removeCmd;
     Iriss::Orders orders;
     struct Iriss::Orientation orientation;
     LineAnalysis::LineDetector detector;
     std::vector<Iriss::Command> commandList;
     std::vector<LineAnalysis::Line> lines;
-    while(wait_on_orders(cmdCenter, orders)) {
+    while(cmdCenter.receive(orders)) {
         // update the detector for the given orders
         detector.set_colors(orders.get_colors());
 
@@ -106,8 +110,13 @@ int main(int nargs, char *argv[])
             }
             uart << Iriss::END_COMMAND_LIST;
 
+            removeCmd = "rm ";
+            removeCmd += imageFile;
+            system(removeCmd.c_str());
         }
     }
+    std::cerr << "Connection with the command center has been terminated! Initiate land!\n";
+    // do a landing sequence where ever we are
 }
 
 /**
@@ -147,27 +156,6 @@ bool Iriss::is_process_running(const std::string& execName)
 }
 
 /**
- * Wait to receive a set of orders from the command center on socket
- * @param [in] socket Open connection to the command center
- * @param [out] ccOrders Orders that are received from the command center
- * @return True if action orders are given, false if disconnected
- */
-bool Iriss::wait_on_orders(int socket, Iriss::Orders& ccOrders)
-{
-
-}
-
-/**
- * Performs various checks to see if the given orders are completed
- * @param [in] orders Orders issued to this quadcopter
- * @return True if the orders are complete, false otherwise.
- */
-bool Iriss::orders_complete(const Iriss::Orders& orders)
-{
-
-}
-
-/**
  * Check to see if the given file exists
  * @param [in] fileName File to check, can be relative or absolute
  */
@@ -182,3 +170,28 @@ bool Iriss::is_file(const std::string& fileName)
     return false;
 }
 
+std::string Iriss::find_recent_image(const std::string& dir, float validWindow)
+{
+    DIR *proc = opendir(dir.c_str());
+    if(proc == nullptr) {
+        perror("Could not open image directory");
+        return std::string("");
+    }
+
+    time_t now = std::time(NULL);
+    time_t shortest = now;
+    std::string retName("");
+    for(struct dirent *entry = readdir(proc); entry != nullptr; entry = readdir(proc)) {
+        std::string fullName = dir + "/" + std::string(entry->d_name);
+        if(is_file(fullName) && fullName.find("jpg") != std::string::npos) {
+            struct stat buf;
+            stat(fullName.c_str(), &buf);
+            double diff = difftime(now, buf.st_mtime);
+            if(diff < shortest) {
+                shortest = diff;
+                retName = fullName;
+            }
+        }
+    }
+    return retName;
+}

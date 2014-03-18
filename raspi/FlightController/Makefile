@@ -23,12 +23,13 @@ OBJS = \
 # List all Template class files with the .s extension
 TEMPLATES = \
 	Orientation.s \
-	Commands.s
+	Command.s
 
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
 	-I${RELATIVE}/common/${BUILD_VERSION}/include \
-	-I${REALTIVE}/
+	-I${RELATIVE}/common/ \
+	-I${RELATIVE}/
 
 # List all directories and library names where dependent libraries
 # are located
