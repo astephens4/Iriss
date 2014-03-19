@@ -16,8 +16,12 @@ Tuesday March 18th 2014
     * Test takeoff!
 
 Wednesday March 19th 2014
-    * Finish testing take off and landing
-    * Get line following working
+    * Make #ifdef APM in Iriss::Command and Iriss::Packable to remove reliance on std::vector
+    * Make public static const uint32_t PACKED_SIZE in Iriss::Command
+    * Add pack(const uint8_t*, uint32_t len) to Iriss::Packable
+    * Add unpack(const uint8_t*, uint32_t len) to Iriss::Packable
+    * Get building ardupilot working
+    * Continue to develop code!
 
 Thursday March 20th 2014
     * Get line following working

@@ -22,7 +22,7 @@ int main(int nargs, char *argv[])
     // connect to the ArduPilot
     Utils::SerialPeer::Settings settings;
     settings.mode = Utils::SerialPeer::UART_8N1;
-    settings.flow = Utils::SerialPeer::UART_HARDWARE;
+    settings.flow = Utils::SerialPeer::UART_NO_FLOW_CONTROL;
     settings.speed = Utils::SerialPeer::BAUD_115200;
     Utils::SerialPeer uart("/dev/ttyUSB0", settings);
 
