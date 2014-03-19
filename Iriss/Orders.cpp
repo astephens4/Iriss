@@ -47,7 +47,8 @@ Iriss::Command Orders::apply(const LineAnalysis::Line& /*line*/, const Iriss::Or
     // Calculate the corrections needed
 
     // Return the bast command for the correction
-    return ECHO;
+    Command cmd(Command::ACK);
+    return cmd;
 }
 
 bool Orders::has_tasks(void)

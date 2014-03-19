@@ -7,8 +7,10 @@ RELATIVE=..
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
 ME=Utils
 
+ARCH=host
+
 # location of makeinclude in the top-level source directory
-include ${RELATIVE}/common/makeinclude.host
+include ${RELATIVE}/common/makeinclude.${ARCH}
 
 # name of output library
 TYPE = lib
@@ -30,7 +32,8 @@ OBJS = \
 	TimeStamp.o \
 	Packable.o \
 	NetClient.o \
-	NetServer.o
+	NetServer.o \
+	SerialPeer.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \
@@ -38,8 +41,7 @@ TEMPLATES = \
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
 	-I../ \
-	-I${RELATIVE}/common/${BUILD_VERSION}/include \
-	-I${RELATIVE}/${BUILD_VERSION}/include
+	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
@@ -51,7 +53,9 @@ INCLUDES = ${SYS_INCLUDES} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${AR} rcs ${OUTPUT} ${OBJS}
-	${INSTALL} ${OUTPUT} test/
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
+	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	@echo
 
 %.o: %.cpp %.hpp

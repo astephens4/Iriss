@@ -1,11 +1,11 @@
 Monday March 17th 2014
     * Move TCP/IP networking interface to Utils <--- DONE!
-	* Add a server TCP/IP network class to Utils <--- WIP!
-    * Finish unit testing Utils <--- (Almost) DONE!
+	* Add a server TCP/IP network class to Utils <--- DONE!
+    * Finish unit testing Utils <--- DONE!
     * Create simple host program to send Iriss::Orders
     * Test sending Orders between desktop and raspberry pi
     * Make level shifter circuit
-    * Test sending and receiving Iriss::Commands over UART
+    * Test sending and receiving Iriss::Commands over UART <--- WIP!
     * Read through ArduPilot docs and source code to understand how that will work.
 
 Tuesday March 18th 2014
@@ -25,10 +25,3 @@ Thursday March 20th 2014
 Friday March 21st 2014
     * Get line following working
     * Update poster
-
-
-(break points)
-NetServer.cpp:205 <-- do_recv
-NetServer.cpp:237 <-- acceptor thread
-NetServer.cpp:278 <-- selector thread
-Net.cpp:27

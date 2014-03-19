@@ -2,7 +2,7 @@
 #define IRISS_ORDERS_H 1
 
 #include "Utils/Packable.hpp"
-#include "Command.hpp"
+#include "Iriss/Command.hpp"
 #include <vector>
 #include <map>
 

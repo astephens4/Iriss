@@ -1,18 +1,9 @@
 #include "main.hpp"
 
-// Terminal and string I/O
+// Basic I/O stuff
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <string>
-
-// UART library
-#include <termios.h>
-
-// TCP/IP sockets
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
 
 // allow printing of system errors
 #include <cstdio>
@@ -20,35 +11,29 @@
 #include <cassert>
 
 // Some Utilities
-#include "Orders.hpp"
-#include "Command.hpp"
-#include "Orientation.hpp"
+#include "Utils/NetClient.hpp"
+#include "Utils/SerialPeer.hpp"
+#include "Iriss/Orders.hpp"
+#include "Iriss/Command.hpp"
+#include "Iriss/Orientation.hpp"
 
 int main(int nargs, char *argv[])
 {
     // connect to the ArduPilot
-    std::fstream uart("/dev/ttyUSB0");
-    if(!uart.is_open()) {
-        std::cerr << "Unable to open UART connection to ArduPilot! EXITING!\n";
-        return -1;
-    }
+    Utils::SerialPeer::Settings settings;
+    settings.mode = Utils::SerialPeer::UART_8N1;
+    settings.flow = Utils::SerialPeer::UART_HARDWARE;
+    settings.speed = Utils::SerialPeer::BAUD_115200;
+    Utils::SerialPeer uart("/dev/ttyUSB0", settings);
 
-    // Configure the serial port
-    struct termios uartSettings;
-    cfsetspeed(&uartSettings, B115200); // set baud rate to 115200
-    uartSettings.c_cflag = 0;
-    uartSettings.c_cflag |= CRTSCTS; // set flow control to CTS/RTS
-    uartSettings.c_cflag |= CS8;    // use 8 data bits
-    uartSettings.c_cflag |= CSTOPB; // use one stop bit
-    uartSettings.c_cflag |= PARODD; // use odd parity
-    tcsetattr(uart, 0, &uartSettings); // set them on the serial line
-    
     // send an echo command and wait for a reply
-    Iriss::Command arduResp; 
-    uart << Iriss::ACK;
-    uart >> arduResp;
-    if(arduResp != Iriss::ACK) {
-        std::cerr << "Did not get a response from the ArduPilot! EXITING!\n";
+    Iriss::Command cmd; 
+    cmd.set(Utils::Command::ACK);
+    uart.send(cmd);
+
+    uart.recv(cmd);
+    if(cmd.get() != Utils::Command::ACK) {
+        std::cerr << "Unable to establish communication with ArduPilot! Exiting!\n";
         return -1;
     }
 
@@ -86,12 +71,10 @@ int main(int nargs, char *argv[])
             
             detector.set_image(imageFile);
 
-            // get data from ArduPilot
-            uart << Iriss::GET_ORIENTATION;
-            uart >> orientation.roll
-                 >> orientation.pitch
-                 >> orientation.yaw
-                 >> orientation.baro;
+            cmd.set(Utils::Command::GET_ORIENTATION);
+            uart.send(cmd);
+
+            uart.recv(orientation);
 
             // Get line info
             detector.get_lines(lines);
@@ -102,14 +85,9 @@ int main(int nargs, char *argv[])
             
 
             // Send corrections to ArduPilot
-            if(!commandList.empty()) {
-                uart << Iriss::BEGIN_COMMAND_LIST;
-            }
-            for(Iriss::Command cmd : commandList) {
-                uart << cmd;
-            }
-            uart << Iriss::END_COMMAND_LIST;
+            // TODO set how this should be done
 
+            // delete the image we have used
             removeCmd = "rm ";
             removeCmd += imageFile;
             system(removeCmd.c_str());

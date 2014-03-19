@@ -19,11 +19,16 @@ mkdir -p ../common/$BUILD_VERSION
 # get the number of CPU cores
 NUM_CORES=$(grep -c ^processor /proc/cpuinfo)
 
-# Build opencv
+# Build opencv for the raspberry pi
 unzip opencv-2.4.8.zip && cd opencv-2.4.8
 mkdir build && cd build
-cmake ../ -DCMAKE_TOOLCHAIN_FILE=../../rpi.toolchain.cmake -DCMAKE_INSTALL_PREFIX=../../../common/$BUILD_VERSION -DCMAKE_BUILD_TYPE="$BUILD_VERSION" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE -DCMAKE_INSTALL_RPATH=/usr/local/lib
+cmake ../ -DCMAKE_TOOLCHAIN_FILE=../../rpi.toolchain.cmake -DCMAKE_INSTALL_PREFIX=../../../target/$BUILD_VERSION -DCMAKE_BUILD_TYPE="$BUILD_VERSION" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE -DCMAKE_INSTALL_RPATH=/usr/local/lib
 
+make -j $NUM_CORES && make install
+
+# build opencv for the host platform
+rm -rf *
+cmake ../ -DCMAKE_INSTALL_PREFIX=../../../host/$BUILD_VERSION -DCMAKE_BUILD_TYPE="$BUILD_VERSION" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE
 make -j $NUM_CORES && make install
 
 cd ../../ && rm -rf opencv-2.4.8

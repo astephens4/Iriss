@@ -5,25 +5,43 @@
 RELATIVE=..
 
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
-ME=
+ME=Utils
+
+ARCH=target
 
 # location of makeinclude in the top-level source directory
-include ${RELATIVE}/common/makeinclude
+include ${RELATIVE}/common/makeinclude.${ARCH}
 
 # name of output library
 TYPE = lib
-TARGET = 
+TARGET = Utils
 OUTPUT = lib${TARGET}.a
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
 OBJS = \
+	FloatEquals.o \
+	Color.o \
+	Angle.o \
+	Degrees.o \
+	Radians.o \
+	AngleOps.o \
+	Distance.o \
+	Feet.o \
+	Inches.o \
+	DistanceOps.o \
+	TimeStamp.o \
+	Packable.o \
+	NetClient.o \
+	NetServer.o \
+	SerialPeer.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \
 
 # List all directories where dependent headers are located
-INCLUDES = ${INCLUDES} \
-	-I${RELATIVE}/common/${BUILD_VERSION}/include \
+INCLUDES = ${SYS_INCLUDES} \
+	-I../ \
+	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
@@ -35,10 +53,12 @@ INCLUDES = ${INCLUDES} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${AR} rcs ${OUTPUT} ${OBJS}
-	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
+	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	@echo
 
-%.o: %.cpp %.h
+%.o: %.cpp %.hpp
 	@echo Compiling $< ... $@
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo

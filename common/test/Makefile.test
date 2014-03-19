@@ -18,8 +18,7 @@ TEST_UNITS = \
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
 	-I${RELATIVE}/common \
-	-I${RELATIVE}/common/${BUILD_VERSION}/include \
-	-I${RELATIVE}/${BUILD_VERSION}/include \
+	-I${RELATIVE}/host/${BUILD_VERSION}/include \
 	-I${RELATIVE}
 
 # List all directories and library names where dependent libraries
@@ -27,6 +26,7 @@ INCLUDES = ${SYS_INCLUDES} \
 # the unit under test's directory
 LIBS = ${SYS_LIBS} \
 	-L./ \
+	-L${RELATIVE}/host/${BUILD_VERSION}/lib \
 	-l${UUT}
 
 ##########    If all variables above are correctly filled out,

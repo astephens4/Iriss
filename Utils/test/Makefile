@@ -7,31 +7,33 @@ RELATIVE=../..
 # The library we are testing
 UUT=Utils
 
-# location of makeinclude in the top-level source directory
+# location of makeinclude for the host system in the top-level source directory
 include ${RELATIVE}/common/makeinclude.host
 
-# List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
+# List all test modules, ending in .test (ex: Module1.cpp --> Module1.test)
 TEST_UNITS = \
+	Net.test \
+	SerialPeer.test \
 	Angle.test \
 	Color.test \
 	Distance.test \
 	Packable.test \
-	TimeStamp.test \
-	Net.test
+	TimeStamp.test
+
 
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
-	-I${RELATIVE}/common/${BUILD_VERSION}/include \
 	-I${RELATIVE}/common \
-	-I${RELATIVE}/${BUILD_VERSION}/include \
+	-I${RELATIVE}/host/${BUILD_VERSION}/include \
 	-I${RELATIVE}
 
 # List all directories and library names where dependent libraries
-# are located
+# are located. The library under test for the host system should be placed in
+# the unit under test's directory
 LIBS = ${SYS_LIBS} \
 	-L./ \
-	-l${UUT} \
-	-lm
+	-L${RELATIVE}/host/${BUILD_VERSION}/lib \
+	-l${UUT}
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.
