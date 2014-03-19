@@ -93,6 +93,45 @@ std::string NetClient::get_destination(void)
     return oss.str();
 }
 
+bool NetClient::send(const std::vector<uint8_t>& bytes)
+{
+    if(!m_isValid) {
+        return false;
+    }
+
+    int bytesToSend = bytes.size();
+    int btsNet = htonl(bytesToSend);
+    int numBytes = ::send(m_fd, &btsNet, sizeof(int), 0);
+    if(numBytes <= 0) {
+        m_isValid = false;
+        return m_isValid;
+    }
+
+    int bytePos = 0;
+    while(bytesToSend > 0) {
+        int numBytes = ::send(m_fd, reinterpret_cast<const void*>(&(bytes[bytePos])), bytesToSend, 0);
+        if(numBytes == 0) {
+            std::cerr << "Lost connection receiver!!!!\n";
+            m_isValid = false;
+            return false;
+        }
+        else if(numBytes < 0) {
+            perror("Oh Noes! (NetClient::send)");
+            m_isValid = false;
+            return false;
+        }
+        bytesToSend -= numBytes;
+        bytePos += numBytes;
+    }
+
+    if(bytesToSend == 0) {
+        return true;
+    }
+    std::cerr << "Sent more bytes than I had to send... WTF?\n";
+    return false;
+
+}
+
 bool NetClient::send(const Utils::Packable& data)
 {
     if(!m_isValid) {

@@ -1,141 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
-  <zoom_level>9</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>819</x>
-      <y>360</y>
-      <w>360</w>
-      <h>324</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;Interface&gt;&gt;
-/Utils::Image/
---
-- width: int
-- height: int
-- depth: int
-- format: Utils::Color::Format
-- data: unsigned int*
-- file: std::string
-- time: Utils::TimeStamp
---
-+ getWidth(void): int
-+ getHeight(void): int
-+ getColorDepth(void): int
-+ getFormat(void): Utils::Color::Format
-+ pack(void): void
-+ unpack(fullByteStream: const char*): void
-/+ getIntensity(x: int, y: int): float&amp;/
-/+ readImage(fileName: std::string): bool/
-/+ writeImage(fileName: std::string): bool/
---
-Responsibilities
-Represent a generic image.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>567</x>
-      <y>657</y>
-      <w>449</w>
-      <h>125</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>432;27;27;108</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>405</x>
-      <y>765</y>
-      <w>387</w>
-      <h>117</h>
-    </coordinates>
-    <panel_attributes>Utils::BWImage
---
---
-+ getIntensity(x: int, y: int): float&amp;
-+ readImage(fileName: std::string): bool
-+ writeImage(fileName: std::string): bool
---
-Responsibilities
-Represent a Black and White image.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>810</x>
-      <y>765</y>
-      <w>387</w>
-      <h>117</h>
-    </coordinates>
-    <panel_attributes>Utils::ColorImage
---
---
-+ getIntensity(x: int, y: int): float&amp;
-+ getColor(x: int, y: int): Utils::Color&amp;
-+ readImage(fileName: std::string): bool
-+ writeImage(fileName: std::string): bool
---
-Responsibilities
-Represent a color image.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>1224</x>
-      <y>765</y>
-      <w>414</w>
-      <h>189</h>
-    </coordinates>
-    <panel_attributes>Utils::GrayScaleImage
---
-- percentRed: float
-- percentGreen: float
-- percentBlue: float
---
-+ setGrayPercent(red: float, green: float, blue: float): void
-+ getGrayPercent(red: float&amp;, green: float&amp;, blue: float&amp;): void
-+ getIntensity(x: int, y: int): float
-+ readImage(fileName: std::string): bool
-+ writeImage(fileName: std::string): bool
---
-Responsibilities
-Represent a grayscale image.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>972</x>
-      <y>657</y>
-      <w>44</w>
-      <h>125</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;27;108</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>972</x>
-      <y>657</y>
-      <w>485</w>
-      <h>125</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;468;108</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>1314</x>
-      <y>396</y>
-      <w>306</w>
-      <h>234</h>
+      <x>450</x>
+      <y>324</y>
+      <w>204</w>
+      <h>156</h>
     </coordinates>
     <panel_attributes>Utils::TimeStamp
 --
@@ -159,27 +30,24 @@ requested. Allows reading and writing to streams</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>855</x>
-      <y>0</y>
-      <w>279</w>
-      <h>288</h>
+      <x>186</x>
+      <y>324</y>
+      <w>234</w>
+      <h>162</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
-Utils::Serializeable
+Utils::Packable
 --
-# buf: unsigned char[]
-# packedSize: unsigned int
-# inTransmission: unsigned int
 _+ type: const unsigned int_
 --
-/+ pack(void): void/
-/+ unpack(fullByteStream: const char[]): void/
-+ sendSync(sock: Utils::Socket&amp;): void
-+ sendAsync(sock: Utils::Socket&amp;): void
-+ isSending(void): bool
-+ receiveSync(sock: Utils::Socket&amp;): void
-+ receiveAsync(sock: Utils::Socket&amp;): void
-+ isReceiving(void): bool
+/+ pack(btyes: std::vector&lt;unsigned char&gt;&amp;): void/
+/+ unpack(bytes: const vector&lt;unsigned char&gt;&amp;): void/
+_# pack_int32(data: int, buf: unsigned char*): void_
+_# pack_uint32(data: int, buf: unsigned char*): void_
+_# pack_float32(data: int, buf: unsigned char*): void_
+_# unpack_int32(data: int, buf: unsigned char*): void_
+_# unpack_uint32(data: int, buf: unsigned char*): void_
+_# unpack_float32(data: int, buf: unsigned char*): void_
 --
 Responsibilities
 Classes derived from this interface support
@@ -190,45 +58,25 @@ a network.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1206</x>
-      <y>54</y>
-      <w>315</w>
-      <h>117</h>
+      <x>48</x>
+      <y>102</y>
+      <w>300</w>
+      <h>174</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-Utils::Serializeable::Type
+    <panel_attributes>Utils::NetClient
 --
-IMAGE: unsigned int
-IRISS_STATUS: unsigned int
+- m_isValid: bool
+- m_fd: int
+- m_targetIP: std::string
+- m_portNo: unsigned short
 --
-Responsibilities
-Every time a new class implements serializeable,
-add that type to this enum</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>333</x>
-      <y>1269</y>
-      <w>747</w>
-      <h>279</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;interface&gt;&gt;
-Utils::Socket
---
-- Sock: struct { addr: std::string; port: int }
-- sockLock: mutex
-_- sockMap: std::map&lt;Sock,std::sharedptr&lt;Socket&gt; &gt;_
-# fd: int
---
-_+ get_connection(addr: std::string, portNo: unsigned short, protocol: Utils::Socket::Layer4Protocol): sharedptr&lt;Socket&gt;_
-+ verify(void): bool
-+ close(): void
-+ send(buf: const unsigned char*, size: unsigned int): void
-+ receive(buf: unsigned char*, size: unsigned int): unsigned int
-/# do_send(buf: const unsigned char*, size: unsigned int): void/
-/# do_receive(buf: unsigned char*, size: unsigned int): unsigned int/
++ connection_to_server(addr: std::string, portNo: unsigned short): bool
++ is_valid(void): bool
++ send(buf: std::vector&lt;unsigned char&gt;): bool
++ send(buf: const char*): bool
++ send(data: const Utils::Packable&amp;): bool
++ receive(buf: std::vector&lt;unsigned char&gt;&amp;): bool
++ receive(data: Utils::Packable&amp;): bool
 --
 Responsibilities
 Open and verify an IP socket. Send and receive
@@ -239,104 +87,10 @@ through this class so a connection may be shared.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>288</x>
-      <y>1611</y>
-      <w>414</w>
-      <h>180</h>
-    </coordinates>
-    <panel_attributes>Utils::TCPSocket
---
---
-# do_send(buf: const unsigned char*, size: unsigned int): void
-# do_receive(buf: unsigned char*, size: unsigned int): unsigned int
---
-Responsibilities
-Open and verify a TCP IP socket. Send and receive
-data through this socket with verification and
-resubmission.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>756</x>
-      <y>1611</y>
-      <w>396</w>
-      <h>180</h>
-    </coordinates>
-    <panel_attributes>Utils::UDPSocket
---
---
-# do_send(buf: const unsigned char*, size: unsigned int): void
-# do_receive(buf: unsigned char*, size: unsigned int): unsigned int
---
-Responsibilities
-Open and verify a UDP IP socket. Send and receive
-data through this socket without verification.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>981</x>
-      <y>261</y>
-      <w>44</w>
-      <h>116</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;27;99</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>1107</x>
-      <y>90</y>
-      <w>117</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>27;27;99;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>693</x>
-      <y>1521</y>
-      <w>288</w>
-      <h>108</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;270;90</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>495</x>
-      <y>1521</y>
-      <w>243</w>
-      <h>108</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>225;27;27;90</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>1152</x>
-      <y>495</y>
-      <w>179</w>
-      <h>44</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;162;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>990</x>
-      <y>909</y>
-      <w>216</w>
-      <h>135</h>
+      <x>624</x>
+      <y>528</y>
+      <w>144</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>Utils::Color
 --
@@ -351,40 +105,12 @@ Represents a 24-bit color.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>1062</x>
-      <y>1017</y>
-      <w>44</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>27;63;27;27</additional_attributes>
-  </element>
-  <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1008</x>
-      <y>1080</y>
-      <w>144</w>
-      <h>108</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-Utils::Color::Format
---
-RGB
-BGR
-BLACK_WHITE
-GRAY_SCALE</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>675</x>
-      <y>954</y>
-      <w>189</w>
-      <h>108</h>
+      <x>414</x>
+      <y>558</y>
+      <w>126</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 Utils::Angle
@@ -399,32 +125,32 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>630</x>
-      <y>1035</y>
-      <w>161</w>
-      <h>107</h>
+      <x>384</x>
+      <y>612</y>
+      <w>108</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>144;27;27;90</additional_attributes>
+    <additional_attributes>96;18;18;60</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>747</x>
-      <y>1035</y>
-      <w>143</w>
-      <h>107</h>
+      <x>462</x>
+      <y>612</y>
+      <w>96</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;126;90</additional_attributes>
+    <additional_attributes>18;18;84;60</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>783</x>
-      <y>1125</y>
-      <w>189</w>
-      <h>90</h>
+      <x>486</x>
+      <y>672</y>
+      <w>126</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Utils::Radians
 --
@@ -437,10 +163,10 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>558</x>
-      <y>1125</y>
-      <w>189</w>
-      <h>90</h>
+      <x>336</x>
+      <y>672</y>
+      <w>126</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Utils::Degrees
 --
@@ -453,10 +179,10 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>351</x>
-      <y>1125</y>
-      <w>189</w>
-      <h>90</h>
+      <x>198</x>
+      <y>672</y>
+      <w>126</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Utils::Feet
 --
@@ -469,21 +195,21 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>306</x>
-      <y>1053</y>
-      <w>153</w>
-      <h>90</h>
+      <x>168</x>
+      <y>624</y>
+      <w>102</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;135;72</additional_attributes>
+    <additional_attributes>18;18;90;48</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>243</x>
-      <y>972</y>
-      <w>189</w>
-      <h>108</h>
+      <x>126</x>
+      <y>570</y>
+      <w>126</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 Utils::Distance
@@ -498,21 +224,21 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>198</x>
-      <y>1053</y>
-      <w>144</w>
-      <h>81</h>
+      <x>96</x>
+      <y>624</y>
+      <w>102</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>135;27;27;72</additional_attributes>
+    <additional_attributes>90;18;18;48</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>126</x>
-      <y>1125</y>
-      <w>189</w>
-      <h>90</h>
+      <x>48</x>
+      <y>672</y>
+      <w>126</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Utils::Inches
 --
@@ -523,106 +249,63 @@ value: float
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>1125</x>
-      <y>657</y>
-      <w>107</w>
-      <h>476</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>54;27;90;99;90;450;27;459</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>981</x>
-      <y>855</y>
-      <w>116</w>
-      <h>71</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>27;27;99;54</additional_attributes>
-  </element>
-  <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>0</x>
-      <y>1368</y>
-      <w>225</w>
-      <h>72</h>
+      <x>372</x>
+      <y>102</y>
+      <w>234</w>
+      <h>186</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-Utils::Socket::Layer4Protocol
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+Utils::NetServer
 --
-TCP
-UDP</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>198</x>
-      <y>1395</y>
-      <w>153</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>135;27;27;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>171</x>
-      <y>567</y>
-      <w>513</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>Utils::FileIO
+- m_isValid: bool
+- m_fd: int
+- m_portNo: unsigned short
 --
++ start_server(void): bool
++ stop_server(void): bool
++ is_valid(void): bool
++ send(fd: int, buf: std::vector&lt;unsigned char&gt;): bool
++ send(fd: int, buf: const char*): bool
++ send(fd: int, data: const Utils::Packable&amp;): bool
+/# receive(client: Client, buf: const char*, len: int): bool/
+- do_recv(fd: int): bool
 --
-_+ writeImageFile(image: const Utils::Image&amp;, type: Utils::Image::FileType): bool_
-_+ readImageFile(fileName: const std::string&amp;, image: Utils::Image&amp;): bool_
---</panel_attributes>
+Responsibilities
+Begin listening on a specified port for TCP
+connections from clients. Implementing classes
+decide on how to handle received data.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>585</x>
-      <y>378</y>
-      <w>144</w>
-      <h>108</h>
+      <x>636</x>
+      <y>102</y>
+      <w>282</w>
+      <h>186</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-Utils::Image::FileType
+    <panel_attributes>Utils::SerialPeer
 --
-PNG_COMPRESSED
-PNG_UNCOMPRESSED
-BMP
-JPEG</panel_attributes>
++ enum Speed;
++ enum Mode;
++ enum FlowControl;
++ struct Settings { speed: Speed; mode: Mode; flow: FlowControl; }
+- m_isValid: bool
+- m_fd: int
+- m_portName: std::string
+--
++ send(buf: std::vector&lt;unsigned char&gt;): bool
++ send(buf: const char*): bool
++ send(data: const Utils::Packable&amp;): bool
++ recv(buf: std::vector&lt;unsigned char&gt;&amp;): bool
++ recv(data: Utils::Packable&amp;): bool
+--
+Responsibilities
+Open a UART serial connection in raw mode
+with the specified settings. Send and receive
+data over the connection.</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>702</x>
-      <y>414</y>
-      <w>134</w>
-      <h>71</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>117;54;27;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>405</x>
-      <y>414</y>
-      <w>197</w>
-      <h>170</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>180;27;27;153</additional_attributes>
   </element>
 </diagram>

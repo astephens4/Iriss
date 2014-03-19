@@ -48,6 +48,13 @@ public:
     unsigned short get_destination_port(void) { return m_portNo; };
 
     /**
+     * Send data from an array of bytes over the connection
+     * @param [in] bytes The bytes to send over the connection
+     * @return True if the entire list of bytes was sent
+     */
+    bool send(const std::vector<uint8_t>& bytes);
+    
+    /**
      * Send the packable class out the connection
      * @param [in] Class to transmit
      * @return True if the entire class was sent
