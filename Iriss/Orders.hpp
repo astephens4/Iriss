@@ -5,6 +5,7 @@
 #include "Iriss/Command.hpp"
 #include <vector>
 #include <map>
+#include <string>
 
 namespace LineAnalysis {
 class Line;
@@ -22,8 +23,8 @@ public:
     enum Task : unsigned char {
         TAKE_OFF = 0,
         LAND,
-        MAINTAIN_ALT,
-        FOLLOW_COLOR
+        LOITER_ALT,
+        FOLLOW_LINE
     };
 
     Orders(void);
@@ -43,6 +44,18 @@ public:
     bool has_tasks(void);
 
     /**
+     * Add a task to perform to the end of the list
+     * @param [in] t Task to perform
+     * @param [in] val Value associated with that task
+     */
+    void queue_task(Task t, unsigned int val);
+
+    /**
+     * Clear the list of tasks to perform
+     */
+    void clear();
+
+    /**
      * Convert and pack this class into a stream of bytes.
      * @param [out] bytes The packed class contents are placed in here
      */
@@ -54,10 +67,10 @@ public:
      */
     virtual void unpack(const std::vector<uint8_t>& bytes);
 
-
+    std::string to_string(void);
 
 private:
-    std::map<Task, int> m_taskList;
+    std::vector<std::pair<Task, unsigned int> > m_taskList;
 };
 
 } // end namespace Iriss

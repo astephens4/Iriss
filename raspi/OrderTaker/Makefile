@@ -4,17 +4,17 @@
 # This directory's location relative to the project root (do not end with '/')
 RELATIVE=../..
 
-ARCH=host
-
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
-ME=SendOrders
+ME=OrderTaker
+
+ARCH=target
 
 # location of makeinclude in the top-level source directory
 include ${RELATIVE}/common/makeinclude.${ARCH}
 
 # name and type of output executable
 TYPE=bin
-TARGET = send_orders
+TARGET = order_taker
 OUTPUT = ${TARGET}
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
@@ -41,6 +41,8 @@ LIBS = ${SYS_LIBS} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/{bin,lib,include}
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	@echo
 
 %.o: %.cpp
@@ -48,7 +50,7 @@ ${TARGET}: ${TEMPLATES} ${OBJS}
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo
 
-%.s: %.h
+%.s: %.hpp
 	@echo Checking syntax of template $< ...
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo

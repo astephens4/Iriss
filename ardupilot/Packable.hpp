@@ -1,8 +1,7 @@
 #ifndef IRISS_PACKABLE_H
 #define IRISS_PACKABLE_H
 
-#include <vector>
-#include <cinttypes>
+#include <inttypes.h>
 
 namespace Utils {
 
@@ -12,13 +11,13 @@ public:
      * Convert and pack this class into a stream of bytes.
      * @param [out] bytes The packed class contents are placed in here
      */
-    virtual void pack(std::vector<uint8_t>& bytes) const = 0;
+    virtual void pack(uint8_t* bytes, uint16_t bufLen) const = 0;
 
     /**
      * Convert the received stream of bytes into this class' contents
      * @param [out] bytes The packed class contents are placed in here
      */
-    virtual void unpack(const std::vector<uint8_t>& bytes) = 0;
+    virtual void unpack(const uint8_t* bytes, uint16_t bufLen) = 0;
 
 protected:
     /**

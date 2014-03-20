@@ -1,30 +1,30 @@
 Monday March 17th 2014
-    * Move TCP/IP networking interface to Utils <--- DONE!
-	* Add a server TCP/IP network class to Utils <--- DONE!
-    * Finish unit testing Utils <--- DONE!
-    * Create simple host program to send Iriss::Orders
-    * Test sending Orders between desktop and raspberry pi
-    * Make level shifter circuit
-    * Test sending and receiving Iriss::Commands over UART <--- WIP!
-    * Read through ArduPilot docs and source code to understand how that will work.
+    * Move TCP/IP networking interface to Utils <--- DONE!!
+	* Add a server TCP/IP network class to Utils <--- DONE!!
+    * Finish unit testing Utils <--- DONE!!
+    * Create simple host program to send Iriss::Orders <--- DONE!!
+    * Test sending Orders between desktop and raspberry pi <--- DONE!!
+    * Make level shifter circuit (I'll just use what's laying around for now)
+    * Read through ArduPilot docs and source code to understand how that will work. <--- I have a fuzzy idea!
 
 Tuesday March 18th 2014
     * Go to school
     * Test send/receive with ArduPilot
+
+Wednesday March 19th 2014
+    * Make #ifdef APM in Iriss::Command and Iriss::Packable to remove reliance on std::vector <--- Instead, copy class for use with ardupilot
+    * Make public static const uint32_t PACKED_SIZE in Iriss::Command <--- DONE!!
+    * Add pack(const uint8_t*, uint32_t len) to Iriss::Packable <--- See first
+    * Add unpack(const uint8_t*, uint32_t len) to Iriss::Packable <--- See first
+    * Get building ardupilot working <--- DONE!!
+    * Continue to develop code! <--- FOREVER WIP!!!!!
+
+Thursday March 20th 2014
+    * Begin attempting to send and receive data over ArduPilot UART
     * Make measurements and get interpolating function for line width (pixels) --> Height (inches)
     * Complete Orders::apply(line, orientation)
     * Test takeoff!
 
-Wednesday March 19th 2014
-    * Make #ifdef APM in Iriss::Command and Iriss::Packable to remove reliance on std::vector
-    * Make public static const uint32_t PACKED_SIZE in Iriss::Command
-    * Add pack(const uint8_t*, uint32_t len) to Iriss::Packable
-    * Add unpack(const uint8_t*, uint32_t len) to Iriss::Packable
-    * Get building ardupilot working
-    * Continue to develop code!
-
-Thursday March 20th 2014
-    * Get line following working
 
 Friday March 21st 2014
     * Get line following working

@@ -21,4 +21,4 @@ BUILD_ARGS=-g3
 COMPILE=${CXX} -c
 INSTALL=cp
 SHARED_LIB_ARGS=-shared -o
-CXXFLAGS=-Wall -Wextra -Werror -std=c++0x -pthread ${BUILD_ARGS} -fPIC
+CXXFLAGS=-Wall -Wextra -Werror -std=c++0x -pthread ${BUILD_ARGS}

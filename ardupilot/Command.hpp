@@ -7,9 +7,9 @@ namespace Iriss {
 
 class Command : public Utils::Packable {
 public:
-    static const unsigned char CMDMSG = 2;
+    static const uint8_t CMDMSG = 2;
     static const uint8_t PACKED_SIZE = 5; ///< uint32t(directive) + uint8_t(CMDMSG)
-    enum Directive : uint32_t {
+    enum Directive {
         NO_COMMAND=0,
         ACK = (1<<1),
         GET_ORIENTATION = (1<<2),
@@ -29,8 +29,8 @@ public:
     Directive get(void) { return m_directive; };
     void set(Directive directive) { m_directive = directive; };
 
-    virtual void pack(std::vector<uint8_t>& bytes) const;
-    virtual void unpack(const std::vector<uint8_t>& bytes);
+    virtual void pack(uint8_t* bytes, uint16_t bufLen) const;
+    virtual void unpack(const uint8_t* bytes, uint16_t bufLen);
 private:
     Directive m_directive;
 };

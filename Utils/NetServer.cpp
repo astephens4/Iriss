@@ -280,15 +280,14 @@ void NetServer::acceptor(void)
             return;
         }
         else if(rv == 0) {
-            return;
+            continue;
         }
-
+        
         int fd = accept(m_fd, reinterpret_cast<struct sockaddr*>(&addr), &addrSize);
         if(fd < 0) {
             perror("acceptor thread should exit now");
             continue;
         }
-
         // get the connection information
         {
         std::lock_guard<std::mutex> lock(m_mutex);

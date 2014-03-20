@@ -23,17 +23,17 @@ fi
 # make the output directory
 mkdir -p ./$OUTDIR/{lib,bin}
 
-# copy the 3rdParty libraries into $OUTDIR/lib
-cp -a ./common/$BUILD_VERSION/lib/* $OUTDIR/lib
+# copy the libraries into $OUTDIR/lib
+cp -a ./target/$BUILD_VERSION/lib/* $OUTDIR/lib
 
-# copy the non-third party libraries into $OUTDIR/lib
-cp -a ./$BUILD_VERSION/lib/* $OUTDIR/lib
+# copy the binaries into $OUTDIR/bin
+cp -a ./target/$BUILD_VERSION/bin/* $OUTDIR/bin
 
-# copy the 3rdParty binaries into $OUTDIR/bin
-cp -a ./common/$BUILD_VERSION/bin/* $OUTDIR/bin
-
-# copy the non-third party binaries into $OUTDIR/bin
-cp -a ./$BUILD_VERSION/bin/* $OUTDIR/bin
+# write the install script
+echo "#!/bin/sh" > ./$OUTDIR/install.sh 
+echo "sudo cp -rf lib/* /usr/local/lib" >> ./$OUTDIR/install.sh
+echo "sudo ldconf" >> ./$OUTDIR/install.sh
+chmod +x ./$OUTDIR/install.sh
 
 # pack $OUTDIR into a zipped tar
 tar czfp $OUTDIR.tgz ./$OUTDIR && rm -rf $OUTDIR
