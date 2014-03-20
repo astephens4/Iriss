@@ -12,10 +12,8 @@ Tuesday March 18th 2014
     * Test send/receive with ArduPilot
 
 Wednesday March 19th 2014
-    * Make #ifdef APM in Iriss::Command and Iriss::Packable to remove reliance on std::vector <--- Instead, copy class for use with ardupilot
+    * Make copies of Command and Packable so they can be built with Arduino's toolchain <--- DONE!
     * Make public static const uint32_t PACKED_SIZE in Iriss::Command <--- DONE!!
-    * Add pack(const uint8_t*, uint32_t len) to Iriss::Packable <--- See first
-    * Add unpack(const uint8_t*, uint32_t len) to Iriss::Packable <--- See first
     * Get building ardupilot working <--- DONE!!
     * Continue to develop code! <--- FOREVER WIP!!!!!
 
