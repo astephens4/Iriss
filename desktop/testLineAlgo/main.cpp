@@ -48,6 +48,11 @@ int main(int nargs, char **argv)
     satHigh = 255;
     valLow = 115;
     valHigh = 245;
+    cv::Mat asHue(1, 1, orig.type(), cv::Scalar(45, (255+140)/2, (245+115)/2));
+    cv::Mat asBGR;
+    cv::cvtColor(asHue, asBGR, CV_HSV2BGR);
+    std::cout << asHue << " ---> " << asBGR << std::endl;
+    std::cout << asHue.at<cv::Vec3b>(0, 0) << " or " << asHue.at<cv::Vec3b>(1, 1) << std::endl;
     cv::namedWindow("Thresholding");
     cv::createTrackbar("BB Area Truncate", "Thresholding", &bbSize, 2000, UpdateImages);
     UpdateImages(0, (void*)NULL);

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include "Utils/Inches.hpp"
 #include "Utils/Degrees.hpp"
 
@@ -86,16 +87,17 @@ bool LineDetector::add_color(const Utils::Color& color)
 {
     float lowHue;
     float highHue;
-    cv::Vec3b bgr(color.b, color.g, color.r), hsv;
+    cv::Mat bgr(1, 1, CV_8UC3, cv::Scalar(color.b, color.g, color.r)), hsv;
     cv::cvtColor(bgr, hsv, CV_BGR2HSV);
     for(auto c : m_colorList) {
-        bgr[0] = c.b;
-        bgr[1] = c.g;
-        bgr[2] = c.r;
+        bgr.at<cv::Scalar>(0).val[0] = c.b;
+        bgr.at<cv::Scalar>(0).val[1] = c.g;
+        bgr.at<cv::Scalar>(0).val[2] = c.r;
         cv::cvtColor(bgr, hsv, CV_BGR2HSV);
-        lowHue = hsv[0]*(1.0f-m_threshLow);
-        highHue = hsv[0]*(1.0f+m_threshHigh);
-        if(hsv[0] >= lowHue && hsv[0] <= highHue) {
+        lowHue = hsv.at<cv::Scalar>(0).val[0]*(1.0f-m_threshLow);
+        highHue = hsv.at<cv::Scalar>(0).val[0]*(1.0f+m_threshHigh);
+        if(hsv.at<cv::Scalar>(0).val[0] >= lowHue && hsv.at<cv::Scalar>(0).val[0] <= highHue) {
+            std::cerr << "Dropping color [" << color.r << ", " << color.b << ", " << color.b << "] because it is similar to another color in the list\n";
             return false;
         }
     }
@@ -116,20 +118,42 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
     m_lineList.clear();
     std::map<Utils::Color, std::vector<Line> > coloredLines;
     cv::Mat filtered(m_image.size(), CV_8UC1);
+    cv::Mat asHsv(m_image.size(), CV_8UC3);
     for(auto color : m_colorList) {
         // convert to HSV
-        cv::Vec3b hsv;
-        cv::Vec3b bgr(color.b, color.g, color.r);
+        cv::Mat hsv;
+        cv::Mat bgr(1, 1, CV_8UC3, cv::Scalar(color.b, color.g, color.r));
         cv::cvtColor(bgr, hsv, CV_BGR2HSV);
-        cv::Range hueRange(hsv[0]*(1.0f-m_threshLow), hsv[0]*(1.0f+m_threshHigh));
+        cv::Range hueRange(hsv.at<cv::Vec3b>(0, 0)[0]*(1.0f-m_threshLow), hsv.at<cv::Vec3b>(0, 0)[0]*(1.0f+m_threshHigh));
         cv::Range satRange(140, 255);
         cv::Range valRange(115, 245);
-        get_filtered_image(m_image, filtered, hueRange, satRange, valRange, true); 
 
-        cv::Rect r = boundingRect(filtered); 
-        std::cout << "Line Width: " << r.width << std::endl
-                  << "Line Height: " << r.height << std::endl;
-        Line l(Utils::Inches(r.height), Utils::Inches(r.width), color, Utils::Degrees(0));
+        cv::cvtColor(m_image, asHsv, CV_BGR2HSV);
+        get_filtered_image(asHsv, filtered, hueRange, satRange, valRange, true);
+        
+        // Step 2: Discard small fragments which passed threshold filtering, and keep very large fragments
+        std::vector<std::vector<cv::Point> > contours;
+        cv::Mat filtCopy = filtered.clone();
+        cv::findContours(filtCopy, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+        float largestBBoxArea = 0;
+        cv::Rect largest;
+        for(auto contour : contours) {
+            cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
+            if(bbox.area() < 200) {
+                // draw the ROI as black
+                cv::Mat roi(filtered, bbox);
+                roi = cv::Scalar(0, 0, 0);
+            }
+            if(bbox.area() > largestBBoxArea) {
+                largestBBoxArea = bbox.area();
+                largest = bbox;
+            }
+            
+        }
+
+        Utils::Inches distance = get_distance_from_width(largest.width);
+        float factor = get_in_per_pix(distance);
+        Line l(distance, Utils::Inches(largest.height*factor), color, Utils::Degrees(0));
         m_lineList.push_back(l);
     }
 
@@ -140,31 +164,29 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
 
 void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur)
 {
-    assert(filtered.depth() == CV_8U && filtered.channels() == 1);
-
     if(doBlur) {
         // Step 0: Blur!
         cv::blur(image, filtered, cv::Size(3, 3));
+    }
+    else {
+        filtered = image.clone();
     }
 
     // Step 1: Perform threshold filtering
     cv::Scalar low(hueRange.start, satRange.start, valRange.start);
     cv::Scalar high(hueRange.end, satRange.end, valRange.end);
     cv::inRange(filtered, low, high, filtered);
+}
 
-    // Step 2: Discard small fragments which passed threshold filtering
-    std::vector<std::vector<cv::Point> > contours;
-    cv::Mat filtCopy = filtered.clone();
-    cv::findContours(filtCopy, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-    for(auto contour : contours) {
-        cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
-        if(bbox.area() < 200) {
-            // draw the ROI as black
-            cv::Mat roi(filtered, bbox);
-            roi = cv::Scalar(0, 0, 0);
-        }
-    }
+Utils::Inches get_distance_from_width(unsigned int pixelsWide)
+{
+    // this function was taken directly from the excel spreadsheet
+    return Utils::Inches(112.702323f * std::exp(-0.0154184 * pixelsWide));
+}
 
+float get_in_per_pix(const Utils::Distance& height)
+{
+    return 0.0007242573f * height.asInches() + 0.0040100253f;
 }
 
 } // end namespace LineAnalysis

@@ -19,7 +19,7 @@ public:
     /**
      * Create a line with everything known
      */
-    Line(const Utils::Distance& len, const Utils::Distance& width, const Utils::Color& c, const Utils::Angle& ang);
+    Line(const Utils::Distance& distance, const Utils::Distance& len, const Utils::Color& c, const Utils::Angle& ang);
 
     // setters
     /**
@@ -29,10 +29,10 @@ public:
     void set_length(const Utils::Distance& length) { m_length = length; };
 
     /**
-     * Set the width of the line
-     * @param [in] width Width of the line
+     * Set the distance of the line
+     * @param [in] distance distance of the line
      */
-    void set_width(const Utils::Distance& width) { m_width = width; };
+    void set_distance(const Utils::Distance& distance) { m_distance = distance; };
 
     /**
      * Set the color of the line
@@ -48,7 +48,7 @@ public:
 
     // getters
     Utils::Inches get_length() const { return m_length; };
-    Utils::Inches get_width() const { return m_width; };
+    Utils::Inches get_distance() const { return m_distance; };
     Utils::Color get_color() const { return m_color; };
     Utils::Degrees get_angle() const { return m_angle; };
 
@@ -59,8 +59,8 @@ public:
     const Utils::TimeStamp& last_updated_at(void) const { return m_time; };
 
 private:
+    Utils::Inches m_distance; ///< distance of the line from the viewer in inches
     Utils::Inches m_length; ///< Length of the line in inches
-    Utils::Inches m_width; ///< Width of the line in inches
     Utils::Color m_color; ///< Color of the line
     Utils::Degrees m_angle; ///< Angle of the line w.r.t. the bottom of the image
     Utils::TimeStamp m_time; ///< When the line was created or last updated

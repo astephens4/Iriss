@@ -22,6 +22,21 @@ namespace LineAnalysis {
 void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur);
 
 /**
+ * Convert the line's width in pixels into height in Inches
+ * @param [in] pixelsWide Line Width in pixels
+ * @return The distance from the line, in Inches
+ */
+Utils::Inches get_distance_from_width(unsigned int pixelsWide);
+
+/**
+ * Get the pixels->Inches conversion factor for this camera at the
+ * given distance.
+ * @param [in] height Distance of the object from the camera
+ * @return The conversion factor, in inches/pixel
+ */
+float get_in_per_pix(const Utils::Distance& height);
+
+/**
  * Use this class to detect lines of a specific color
  * in a given image
  */
