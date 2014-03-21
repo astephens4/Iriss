@@ -1,0 +1,25 @@
+# toolchain to use
+CC=avr-gcc
+CXX=avr-c++
+LINK=avr-c++
+AR=avr-ar
+AS=avr-as
+
+AVR_CPUFLAGS=-mmcu=atmega2560 -mcall-prologues 
+AVR_CPULDFLAGS=-Wl,-m,avr6
+F_CPU = 16000000L
+CXXOPTS=-ffunction-sections -fdata-sections -fno-exceptions -fsigned-char
+ASOPTS=-x assembler-with-cpp 
+
+
+# BUILD_VERSION=release
+# BUILD_ARGS=-O2
+BUILD_VERSION=debug
+BUILD_ARGS=-Os
+
+COMPILE=${CXX} -c
+INSTALL=cp
+SHARED_LIB_ARGS=-shared -o
+CXXFLAGS=${CXXOPTS} ${AVR_CPUFLAGS} ${BUILD_ARGS} -DCONFIG_HAL_BOARD=AVR -DF_CPU=${F_CPU} -DCONFIG_HAL_BOARD=HAL_BOARD_APM2
+LDFLAGS=-g $(AVR_CPUFLAGS) $(BUILD_ARGS)
+LDFLAGS+=-Wl,--gc-sections -Wl,-Map -Wl,$(MAPFILE)

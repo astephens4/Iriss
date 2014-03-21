@@ -19,8 +19,8 @@ Wednesday March 19th 2014
 
 Thursday March 20th 2014
     * Begin attempting to send and receive data over ArduPilot UART
-    * Make measurements and get interpolating function for line width (pixels) --> Height (inches)
-    * Complete Orders::apply(line, orientation)
+    * Make measurements and get interpolating function for line width (pixels) --> Height (inches) <--- DONE!
+    * Complete Orders::apply(line, orientation) <--- WIP!
     * Test takeoff!
 
 
