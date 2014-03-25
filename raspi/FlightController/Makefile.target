@@ -2,41 +2,40 @@
 # in the comments for the specific subdirectory
 
 # This directory's location relative to the project root (do not end with '/')
-RELATIVE=..
+RELATIVE=../..
 
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
-ME=Iriss
+ME=FlightController
 
 ARCH=target
 
 # location of makeinclude in the top-level source directory
 include ${RELATIVE}/common/makeinclude.${ARCH}
 
-# name of output library
-TYPE = lib
-TARGET = Iriss
-OUTPUT = lib${TARGET}.a
+# name and type of output executable
+TYPE=bin
+TARGET = FlightController
+OUTPUT = ${TARGET}
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
 OBJS = \
-	Command.o \
-	Orientation.o \
-	Orders.o
+	main.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \
 
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
-	-I${RELATIVE} \
-	-I${RELATIVE}/common \
 	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include \
+	-I${RELATIVE}/common/
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = ${SYSTEM_LIBS} \
+LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 	-lLineAnalysis \
+	-lIriss \
+	-lMath \
 	-lUtils \
 	-lopencv_core \
 	-lopencv_imgproc \
@@ -47,12 +46,8 @@ LIBS = ${SYSTEM_LIBS} \
 
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
-	${LINK} ${CXXFLAGS} ${SHARED_LIB_ARGS} ${OUTPUT} ${OBJS} ${LIBS}
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/bin
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
+	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
-	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	@echo
 
 %.o: %.cpp %.hpp

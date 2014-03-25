@@ -1,6 +1,11 @@
-#include "Orders.hpp"
+#include "Iriss/Orders.hpp"
+#include "Math/quatf.hpp"
+#include "Math/vec3.hpp"
+#include "Math/operations.hpp"
 #include "LineAnalysis/Line.hpp"
 #include "LineAnalysis/LineDetector.hpp"
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
 #include "test/Testing.hpp"
 #include <sstream>
 
@@ -41,15 +46,73 @@ void Orders::unpack(const std::vector<uint8_t>& bytes)
     return;
 }
 
-Iriss::Command Orders::apply(const LineAnalysis::Line& /*line*/, const Iriss::Orientation& /*orientation*/)
+Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientation& orientation)
 {
+    Task t = (m_taskList.begin())->first;
+    uint32_t param = (m_taskList.begin())->second;
+
+    cv::Mat image = cv::imread(imgFile);
+    if(image.empty()) {
+        std::cerr << "Bad image!\n";
+        return Iriss::Command(Iriss::Command::TX_ERR);
+    }
+
+    LineAnalysis::LineDetector detector;
+    detector.set_image(image);
+    if(t == TAKE_OFF) {
+        // the color should be in the middle of the image
+        cv::Vec3b lineColor = image.at<cv::Vec3b>(image.size().width/2, image.size().height/2);
+        m_detector.add_color(Utils::Color(lineColor[2], lineColor[1], lineColor[0]));
+    }
+    else if(t == FOLLOW_LINE) {
+        m_detector.add_color(Utils::Color(param));
+    }
+    // otherwise use the current colors
+
     // check the status of the current task, if it is complete move on to the next
     // task
+    std::vector<LineAnalysis::Line> detectedLines;
+    m_detector.get_lines(detectedLines);
 
-    // Calculate the corrections needed
+    
+    Iriss::Command cmd;
+    for(LineAnalysis::Line line : detectedLines) {
+        // Determining corrections takes place in two stages:
+        //  1. Corrections to get the quad straight and level
+        //  2. Corrections to accomplish the task
 
-    // Return the bast command for the correction
-    Command cmd(Command::ACK);
+        Math::quatf quaternion(Utils::Degrees(orientation.roll), Math::vec3f(1, 0, 0),
+                              Utils::Degrees(orientation.pitch), Math::vec3f(0, 1, 0),
+                              Utils::Degrees(orientation.yaw), Math::vec3f(0, 0, 1));
+        // start lookat with the center of the line in the image
+        Math::vec3f lookat(0.0f, 0.0f, -line.get_distance().asInches());
+        lookat = lookat * quaternion;
+     
+        // lookat tells us the displacement vector from the camera's center
+
+        // we want to have flat roll and 0 yaw
+        
+
+        switch(t) {
+        case TAKE_OFF:
+
+            break;
+        case FOLLOW_LINE:
+
+            break;
+        case LOITER_ALT:
+
+            break;
+        case LAND:
+
+            break;
+        default:
+            std::cerr << "Unknown task, moving on to the next task\n";
+            m_taskList.erase(m_taskList.begin());
+            cmd.set(Iriss::Command::TX_ERR);
+        }
+    }
+
     return cmd;
 }
 

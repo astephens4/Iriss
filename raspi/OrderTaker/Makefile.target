@@ -2,60 +2,50 @@
 # in the comments for the specific subdirectory
 
 # This directory's location relative to the project root (do not end with '/')
-RELATIVE=..
+RELATIVE=../..
 
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
-ME=Iriss
+ME=OrderTaker
 
 ARCH=target
 
 # location of makeinclude in the top-level source directory
 include ${RELATIVE}/common/makeinclude.${ARCH}
 
-# name of output library
-TYPE = lib
-TARGET = Iriss
-OUTPUT = lib${TARGET}.a
+# name and type of output executable
+TYPE=bin
+TARGET = order_taker
+OUTPUT = ${TARGET}
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
 OBJS = \
-	Command.o \
-	Orientation.o \
-	Orders.o
+	main.o
 
 # List all Template class files with the .s extension
 TEMPLATES = \
 
 # List all directories where dependent headers are located
 INCLUDES = ${SYS_INCLUDES} \
-	-I${RELATIVE} \
-	-I${RELATIVE}/common \
-	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include \
+	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = ${SYSTEM_LIBS} \
+LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
-	-lLineAnalysis \
-	-lUtils \
-	-lopencv_core \
-	-lopencv_imgproc \
-	-lopencv_highgui
+	-lIriss \
+	-lUtils
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.
 
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
-	${LINK} ${CXXFLAGS} ${SHARED_LIB_ARGS} ${OUTPUT} ${OBJS} ${LIBS}
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/bin
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
+	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/{bin,lib,include}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
-	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	@echo
 
-%.o: %.cpp %.hpp
+%.o: %.cpp
 	@echo Compiling $< ... $@
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo

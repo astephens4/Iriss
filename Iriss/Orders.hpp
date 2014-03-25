@@ -2,7 +2,9 @@
 #define IRISS_ORDERS_H 1
 
 #include "Utils/Packable.hpp"
+#include "LineAnalysis/LineDetector.hpp"
 #include "Iriss/Command.hpp"
+#include "Iriss/Orientation.hpp"
 #include <vector>
 #include <map>
 #include <string>
@@ -35,7 +37,7 @@ public:
      * @param [in] orientation Vehicle roll, pitch, yaw, and barometer data
      * @return Command for the ArduPilot
      */
-    Iriss::Command apply(const LineAnalysis::Line& line, const Iriss::Orientation& orientation);
+    Iriss::Command apply(const std::string& imgFile, const Iriss::Orientation& orientation);
 
     /**
      * Check to see if this set of orders has any more tasks to complete
@@ -71,6 +73,7 @@ public:
 
 private:
     std::vector<std::pair<Task, unsigned int> > m_taskList;
+    LineAnalysis::LineDetector m_detector;
 };
 
 } // end namespace Iriss

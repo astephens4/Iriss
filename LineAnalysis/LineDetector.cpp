@@ -154,6 +154,11 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
         Utils::Inches distance = get_distance_from_width(largest.width);
         float factor = get_in_per_pix(distance);
         Line l(distance, Utils::Inches(largest.height*factor), color, Utils::Degrees(0));
+        cv::Point2f mid;
+        mid.x = (largest.br().x + largest.tl().x)/2.0f;
+        mid.y = (largest.br().y + largest.tl().y)/2.0f;
+        l.set_center_x(Utils::Inches(mid.x * factor));
+        l.set_center_y(Utils::Inches(mid.y * factor));
         m_lineList.push_back(l);
     }
 

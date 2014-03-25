@@ -223,6 +223,7 @@ bool SerialPeer::recv(std::vector<uint8_t>& bytes)
     ssize_t ret;
     for(int i = 0; i < 4; ++i) {
         ret = read(m_uartFd, &byte, 1);
+        printf("Byte %d of length: %hhu\n", i, byte);
         if(ret < 0) {
             perror("read bytes");
             m_isValid = false;

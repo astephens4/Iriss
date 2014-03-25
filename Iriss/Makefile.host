@@ -34,16 +34,24 @@ INCLUDES = ${SYS_INCLUDES} \
 
 # List all directories and library names where dependent libraries
 # are located
-# Do _not_ link against other libraries when making a static library
+LIBS = ${SYSTEM_LIBS} \
+	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
+	-lLineAnalysis \
+	-lUtils \
+	-lopencv_core \
+	-lopencv_imgproc \
+	-lopencv_highgui
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.
 
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
-	${AR} rcs ${OUTPUT} ${OBJS} ../host/debug/lib/libUtils.a
-	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
+	${LINK} ${CXXFLAGS} ${SHARED_LIB_ARGS} ${OUTPUT} ${OBJS} ${LIBS}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/bin
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib
 	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	@echo
 

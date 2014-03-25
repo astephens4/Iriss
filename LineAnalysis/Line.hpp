@@ -46,11 +46,18 @@ public:
      */
     void set_angle(const Utils::Angle& angle) { m_angle = angle; };
 
+    void set_center_x(const Utils::Distance& dist) { m_centerX = dist; };
+    
+    void set_center_y(const Utils::Distance& dist) { m_centerY = dist; };
+
     // getters
     Utils::Inches get_length() const { return m_length; };
     Utils::Inches get_distance() const { return m_distance; };
     Utils::Color get_color() const { return m_color; };
     Utils::Degrees get_angle() const { return m_angle; };
+    Utils::Inches set_center_x(void) { return m_centerX; };
+    Utils::Inches set_center_y(void) { return m_centerY;; };
+
 
     /**
      * Get the last time this line was updated
@@ -61,6 +68,8 @@ public:
 private:
     Utils::Inches m_distance; ///< distance of the line from the viewer in inches
     Utils::Inches m_length; ///< Length of the line in inches
+    Utils::Inches m_centerX; ///< Location of the middle of the line, inches from the left side of the image
+    Utils::Inches m_centerY; ///< Location of the middle of the line, inches from the bottom of the image
     Utils::Color m_color; ///< Color of the line
     Utils::Degrees m_angle; ///< Angle of the line w.r.t. the bottom of the image
     Utils::TimeStamp m_time; ///< When the line was created or last updated

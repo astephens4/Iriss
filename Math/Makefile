@@ -1,3 +1,6 @@
+target:
+	make -f Makefile.target
+
 host:
 	make -f Makefile.host
 
