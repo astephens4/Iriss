@@ -46,7 +46,7 @@ ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} ${SHARED_LIB_ARGS} ${OUTPUT} ${OBJS} ${LIBS}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
-	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
+	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	@echo
 
 %.o: %.cpp %.hpp

@@ -33,7 +33,12 @@ INCLUDES = ${SYS_INCLUDES} \
 LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 	-lIriss \
-	-lUtils
+	-lLineAnalysis \
+	-lMath \
+	-lUtils \
+	-lopencv_core \
+	-lopencv_imgproc \
+	-lopencv_highgui
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.

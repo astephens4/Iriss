@@ -34,7 +34,7 @@ INCLUDES = ${SYS_INCLUDES} \
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = ${SYSTEM_LIBS} \
+LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 	-lLineAnalysis \
 	-lUtils \

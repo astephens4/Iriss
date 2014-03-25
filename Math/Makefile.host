@@ -33,13 +33,13 @@ TEMPLATES = \
 	vec4.s
 
 # List all directories where dependent headers are located
-INCLUDES = \
+INCLUDES = ${SYS_INCLUDES} \
 	-I${RELATIVE} \
 	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = \
+LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 	-lm
 

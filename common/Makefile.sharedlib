@@ -24,12 +24,12 @@ OBJS = \
 TEMPLATES = \
 
 # List all directories where dependent headers are located
-INCLUDES = ${INCLUDES} \
+INCLUDES = ${SYS_INCLUDES} \
 	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include \
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = ${LIBS} \
+LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 
 ##########    If all variables above are correctly filled out,
