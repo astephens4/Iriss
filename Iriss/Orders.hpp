@@ -74,6 +74,7 @@ public:
 private:
     std::vector<std::pair<Task, unsigned int> > m_taskList;
     LineAnalysis::LineDetector m_detector;
+    Utils::Inches m_commandedHeight;
 };
 
 } // end namespace Iriss

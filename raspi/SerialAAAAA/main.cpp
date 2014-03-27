@@ -7,9 +7,9 @@ int main(void)
     Utils::SerialPeer::Settings settings;
     settings.mode = Utils::SerialPeer::UART_8N1;
     settings.flow = Utils::SerialPeer::UART_NO_FLOW_CONTROL;
-    settings.speed = Utils::SerialPeer::BAUD_115200;
+    settings.speed = Utils::SerialPeer::BAUD_57600;
 
-    Utils::SerialPeer uart("/dev/ttyAMA0", settings);
+    Utils::SerialPeer uart("/dev/ptmx", settings);
     
     // wait to receive an ACK
     Iriss::Command cmd;

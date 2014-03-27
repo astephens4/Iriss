@@ -17,14 +17,14 @@ public:
         SEND_AGAIN = (1<<1),
         ACK = (1<<2),
         GET_ORIENTATION = (1<<3),
-        NUDGE_LEFT = (1<<4),
-        NUDGE_RIGHT = (1<<5),
+        NUDGE_ROLL_LEFT = (1<<4),
+        NUDGE_ROLL_RIGHT = (1<<5),
         NUDGE_UP = (1<<6),
         NUDGE_DOWN = (1<<7),
-        TURN_RIGHT = (1<<8),
-        TURN_LEFT = (1<<9),
-        NUDGE_FORWARD = (1<<10),
-        NUDGE_BACKWARD = (1<<11)
+        NUDGE_YAW_CCW = (1<<8),
+        NUDGE_YAW_CW = (1<<9),
+        NUDGE_PITCH_DOWN = (1<<10),
+        NUDGE_PITCH_UP = (1<<11)
     };
 
     Command(void);
@@ -47,7 +47,13 @@ public:
      * Add the given directive to this command's directives
      * @param [in] directive Add the directive to this command
      */
-    void include(Directive directive) { m_directives |= directive; };
+    void include(Directive directive) { m_directives |= static_cast<uint32_t>(directive); };
+
+    /**
+     * Make sure the given directive is not part of the command
+     * @param [in] directive Remove the directive from this command
+     */
+    void exclude(Directive directive) { m_directives &= ~static_cast<uint32_t>(directive); };
 
     virtual void pack(std::vector<uint8_t>& bytes) const;
     virtual void unpack(const std::vector<uint8_t>& bytes);

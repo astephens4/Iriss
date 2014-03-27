@@ -136,27 +136,38 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
         cv::Mat filtCopy = filtered.clone();
         cv::findContours(filtCopy, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
         float largestBBoxArea = 0;
-        cv::Rect largest;
+        cv::RotatedRect largest;
         for(auto contour : contours) {
-            cv::Rect bbox = cv::boundingRect(cv::Mat(contour));
-            if(bbox.area() < 200) {
+            cv::RotatedRect bbox = cv::minAreaRect(cv::Mat(contour));
+            if(bbox.size.width * bbox.size.height < 200) {
                 // draw the ROI as black
-                cv::Mat roi(filtered, bbox);
+                cv::Mat roi(filtered, bbox.boundingRect());
                 roi = cv::Scalar(0, 0, 0);
             }
-            if(bbox.area() > largestBBoxArea) {
-                largestBBoxArea = bbox.area();
+            if(bbox.size.width * bbox.size.height > largestBBoxArea) {
+                largestBBoxArea = bbox.size.width * bbox.size.height;
                 largest = bbox;
             }
             
         }
 
-        Utils::Inches distance = get_distance_from_width(largest.width);
+        // assume longest dimension is the height of the line
+        float lineW, lineH;
+        if(largest.size.width > largest.size.height) {
+            lineW = largest.size.height;
+            lineH = largest.size.width;
+        }
+        else {
+            lineW = largest.size.width;
+            lineH = largest.size.height;
+        }
+
+        Utils::Inches distance = get_distance_from_width(lineW);
         float factor = get_in_per_pix(distance);
-        Line l(distance, Utils::Inches(largest.height*factor), color, Utils::Degrees(0));
+        Line l(distance, Utils::Inches(lineH*factor), color, Utils::Degrees(largest.angle));
         cv::Point2f mid;
-        mid.x = (largest.br().x + largest.tl().x)/2.0f;
-        mid.y = (largest.br().y + largest.tl().y)/2.0f;
+        mid.x = largest.center.x - (m_image.cols/2.0f);
+        mid.y = largest.center.y - (m_image.rows/2.0f);
         l.set_center_x(Utils::Inches(mid.x * factor));
         l.set_center_y(Utils::Inches(mid.y * factor));
         m_lineList.push_back(l);

@@ -47,9 +47,11 @@ public:
 
     bool send(const char *str);
     bool send(const std::vector<uint8_t>& bytes);
+    bool send(const uint8_t *bytes, uint32_t len);
     bool send(const Utils::Packable& data);
 
     bool recv(std::vector<uint8_t>& bytes);
+    bool recv(uint8_t *bytes, uint32_t len);
     bool recv(Utils::Packable& data);
 
 private:

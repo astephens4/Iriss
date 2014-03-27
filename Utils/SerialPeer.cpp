@@ -29,6 +29,7 @@ SerialPeer::SerialPeer(const std::string& serFile, const SerialPeer::Settings& s
         perror("open serial file");
     }
     else {
+        printf("File Descriptor! %d\n", m_uartFd);
         struct termios uartSettings;
         tcgetattr(m_uartFd, &uartSettings);
 
@@ -150,6 +151,15 @@ bool SerialPeer::send(const char *str)
     return m_isValid;
 }
 
+bool SerialPeer::send(const uint8_t *bytes, uint32_t len)
+{
+    std::vector<uint8_t> vec;
+    vec.resize(len);
+    for(unsigned int i = 0; i < len; ++i)
+        vec[i] = bytes[i];
+    return send(vec);
+}
+
 bool SerialPeer::send(const std::vector<uint8_t>& bytes)
 {
     if(!m_isValid) return false;
@@ -197,6 +207,17 @@ bool SerialPeer::send(const Utils::Packable& data)
     data.pack(bytes);
     return this->send(bytes);
 
+}
+
+bool SerialPeer::recv(uint8_t *bytes, uint32_t len)
+{
+    std::vector<uint8_t> vec;
+    bool ret = recv(vec);
+    if(!ret || vec.size() > len)
+        return false;
+    for(unsigned int i = 0; i < vec.size(); ++i)
+        bytes[i] = vec[i];
+    return ret;
 }
 
 /**

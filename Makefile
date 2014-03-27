@@ -1,8 +1,8 @@
 TARGET_DIRS =\
 	Utils \
 	Math \
-	Iriss \
 	LineAnalysis \
+	Iriss \
 	raspi/FlightController \
 	raspi/SerialAAAAA \
 	raspi/OrderTaker
@@ -10,8 +10,8 @@ TARGET_DIRS =\
 HOST_DIRS =\
 	Utils \
 	Math \
-	Iriss \
 	LineAnalysis \
+	Iriss \
 	desktop/SendOrders
 
 
@@ -47,6 +47,8 @@ define rule_very_clean
 $(1)-$(2)-very-clean
 endef
 
+all: clean-target target clean-host host
+
 target: $(foreach proj,$(TARGET_DIRS),$(call rule_build,$(proj),target))
 	@echo Done Building for RaspberryPi
 
@@ -56,7 +58,7 @@ host: $(foreach proj,$(HOST_DIRS),$(call rule_build,$(proj),host))
 clean: clean-target clean-host
 	@echo Done Cleaning target and host
 
-clean-target: $(foreach proj,$(HOST_DIRS),$(call rule_clean,$(proj),host))
+clean-target: $(foreach proj,$(TARGET_DIRS),$(call rule_clean,$(proj),target))
 	@echo Done Cleaning target
 
 clean-host: $(foreach proj,$(HOST_DIRS),$(call rule_clean,$(proj),host))
@@ -65,7 +67,7 @@ clean-host: $(foreach proj,$(HOST_DIRS),$(call rule_clean,$(proj),host))
 very_clean: very-clean-target very-clean-host
 	@echo Done Very Cleaning target and host
 
-very-clean-target: $(foreach proj,$(HOST_DIRS),$(call rule_very_clean,$(proj),host))
+very-clean-target: $(foreach proj,$(TARGET_DIRS),$(call rule_very_clean,$(proj),target))
 	@echo Done Very Cleaning target
 
 very-clean-host: $(foreach proj,$(HOST_DIRS),$(call rule_very_clean,$(proj),host))

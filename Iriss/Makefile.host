@@ -15,7 +15,7 @@ include ${RELATIVE}/common/makeinclude.${ARCH}
 # name of output library
 TYPE = lib
 TARGET = Iriss
-OUTPUT = lib${TARGET}.a
+OUTPUT = lib${TARGET}.so
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
 OBJS = \

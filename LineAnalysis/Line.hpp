@@ -55,8 +55,8 @@ public:
     Utils::Inches get_distance() const { return m_distance; };
     Utils::Color get_color() const { return m_color; };
     Utils::Degrees get_angle() const { return m_angle; };
-    Utils::Inches set_center_x(void) { return m_centerX; };
-    Utils::Inches set_center_y(void) { return m_centerY;; };
+    Utils::Inches get_center_x(void) { return m_centerX; };
+    Utils::Inches get_center_y(void) { return m_centerY;; };
 
 
     /**
