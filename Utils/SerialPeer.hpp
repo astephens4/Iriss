@@ -12,7 +12,7 @@ class Packable;
 
 class SerialPeer {
 public:
-    const static unsigned char UART_BEGIN_MESSAGE = 128;
+    const static unsigned char UART_BEGIN_MESSAGE;
     enum Mode {
         UART_8N1,
         UART_7E1,

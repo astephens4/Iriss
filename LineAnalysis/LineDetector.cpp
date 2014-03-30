@@ -173,6 +173,8 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
         m_lineList.push_back(l);
     }
 
+    cv::imshow("AWAWAWAWAW", filtered);
+
     detectedLines.assign(m_lineList.begin(), m_lineList.end());
     return true;
     // Update the hint map

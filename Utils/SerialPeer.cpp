@@ -19,6 +19,9 @@
 
 namespace Utils {
 
+
+const unsigned char SerialPeer::UART_BEGIN_MESSAGE = 128;
+
 SerialPeer::SerialPeer(const std::string& serFile, const SerialPeer::Settings& settings) :
     m_isValid(false),
     m_uartFd()
@@ -164,11 +167,20 @@ bool SerialPeer::send(const std::vector<uint8_t>& bytes)
 {
     if(!m_isValid) return false;
 
+   // write the begin uart message value
+    ssize_t ret = write(m_uartFd, &UART_BEGIN_MESSAGE, 1);
+    if(ret < 0) {
+        perror("send begin");
+        m_isValid = false;
+        return m_isValid;
+    }
+
+
     int len = bytes.size();
 
     // write the number of bytes to be sent
     int lenNet = htonl(len);
-    ssize_t ret = write(m_uartFd, &lenNet, sizeof(int));
+    ret = write(m_uartFd, &lenNet, sizeof(int));
     if(ret < 0) {
         perror("send bytes");
         m_isValid = false;
@@ -185,15 +197,6 @@ bool SerialPeer::send(const std::vector<uint8_t>& bytes)
             return m_isValid;
         }
         bytesSent += ret;
-    }
-
-    // write the EOL characters out of the terminal
-    char EOL[3] = "\r\n";
-    ret = write(m_uartFd, EOL, 2);
-    if(ret < 0) {
-        perror("send string");
-        m_isValid = false;
-        return m_isValid;
     }
 
     return m_isValid;

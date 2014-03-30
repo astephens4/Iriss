@@ -60,8 +60,8 @@ static uint32_t lastSent;
 void setup() 
 {
     // Enable the motors and set at 490Hz update
-    hal.rcout->set_freq(0xF, 490);
-    hal.rcout->enable_mask(0xFF);
+//    hal.rcout->set_freq(0xF, 490);
+//    hal.rcout->enable_mask(0xFF);
 
     // PID Configuration
     pids[PID_PITCH_RATE].kP(0.7);
@@ -307,17 +307,17 @@ void loop()
         long yaw_output =  (long) constrain(pids[PID_ROLL_RATE].get_pid(yaw_stab_output - gyroYaw, 1), -500, 500);  
 
         // mix pid outputs and send to the motors.
-        hal.rcout->write(MOTOR_FL, rcthr + roll_output + pitch_output - yaw_output);
-        hal.rcout->write(MOTOR_BL, rcthr + roll_output - pitch_output + yaw_output);
-        hal.rcout->write(MOTOR_FR, rcthr - roll_output + pitch_output + yaw_output);
-        hal.rcout->write(MOTOR_BR, rcthr - roll_output - pitch_output - yaw_output);
+//        hal.rcout->write(MOTOR_FL, rcthr + roll_output + pitch_output - yaw_output);
+//        hal.rcout->write(MOTOR_BL, rcthr + roll_output - pitch_output + yaw_output);
+//        hal.rcout->write(MOTOR_FR, rcthr - roll_output + pitch_output + yaw_output);
+//        hal.rcout->write(MOTOR_BR, rcthr - roll_output - pitch_output - yaw_output);
     }
     else {
         // motors off
-        hal.rcout->write(MOTOR_FL, 1000);
-        hal.rcout->write(MOTOR_BL, 1000);
-        hal.rcout->write(MOTOR_FR, 1000);
-        hal.rcout->write(MOTOR_BR, 1000);
+//        hal.rcout->write(MOTOR_FL, 1000);
+//        hal.rcout->write(MOTOR_BL, 1000);
+//        hal.rcout->write(MOTOR_FR, 1000);
+//        hal.rcout->write(MOTOR_BR, 1000);
            
         // reset yaw target so we maintain this on takeoff
         yaw_target = yaw;

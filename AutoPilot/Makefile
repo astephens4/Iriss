@@ -80,6 +80,10 @@ size: ${TARGET}
 	@echo
 	@avr-size -C --mcu=${MCU} ${TARGET}
 
+## Program board on /dev/ttyACM0
+upload: $(TARGET)
+	/usr/bin/avrdude -c stk500v2 -p atmega2560 -P /dev/ttyACM0 -b115200  -U flash:w:IrissPilot.hex:i
+
 ## Clean target
 .PHONY: clean
 clean:
