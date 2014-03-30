@@ -47,11 +47,11 @@ std::ostream& operator<<(std::ostream& stream, const Command& cmd)
     if(cmd.m_directives & Iriss::Command::GET_ORIENTATION) {
         stream << "GET_ORIENTATION\n";
     }
-    if(cmd.m_directives & Iriss::Command::NUDGE_LEFT) {
-        stream << "NUDGE_LEFT\n";
+    if(cmd.m_directives & Iriss::Command::NUDGE_ROLL_LEFT) {
+        stream << "NUDGE_ROLL_LEFT\n";
     }
-    if(cmd.m_directives & Iriss::Command::NUDGE_RIGHT) {
-        stream << "NUDGE_RIGHT\n";
+    if(cmd.m_directives & Iriss::Command::NUDGE_ROLL_RIGHT) {
+        stream << "NUDGE_ROLL_RIGHT\n";
     }
     if(cmd.m_directives & Iriss::Command::NUDGE_UP) {
         stream << "NUDGE_UP\n";
@@ -59,17 +59,17 @@ std::ostream& operator<<(std::ostream& stream, const Command& cmd)
     if(cmd.m_directives & Iriss::Command::NUDGE_DOWN) {
         stream << "NUDGE_DOWN\n";
     }
-    if(cmd.m_directives & Iriss::Command::TURN_RIGHT) {
-        stream << "TURN_RIGHT\n";
+    if(cmd.m_directives & Iriss::Command::NUDGE_YAW_CW) {
+        stream << "NUDGE_YAW_CW\n";
     }
-    if(cmd.m_directives & Iriss::Command::TURN_LEFT) {
-        stream << "TURN_LEFT\n";
+    if(cmd.m_directives & Iriss::Command::NUDGE_YAW_CCW) {
+        stream << "NUDGE_YAW_CCW\n";
     }
-    if(cmd.m_directives & Iriss::Command::NUDGE_FORWARD) {
-        stream << "NUDGE_FORWARD\n";
+    if(cmd.m_directives & Iriss::Command::NUDGE_PITCH_DOWN) {
+        stream << "NUDGE_PITCH_DOWN\n";
     }
-    if(cmd.m_directives & Iriss::Command::NUDGE_BACKWARD) {
-        stream << "NUDGE_BACKWARD\n";
+    if(cmd.m_directives & Iriss::Command::NUDGE_PITCH_UP) {
+        stream << "NUDGE_PITCH_UP\n";
     }
     stream << "}\n";
     return stream;

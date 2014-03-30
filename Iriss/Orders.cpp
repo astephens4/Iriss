@@ -13,7 +13,9 @@
 namespace Iriss {
 
 Orders::Orders(void) :
-    m_taskList()
+    m_taskList(),
+    m_detector(),
+    m_commandedHeight(0.0f)
 {
 }
 
@@ -57,7 +59,7 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
         return Iriss::Command(Iriss::Command::TX_ERR);
     }
     if(t == TAKE_OFF || t == LOITER_ALT) {
-        commandedHeight = Utils::Inches(param);
+        m_commandedHeight = Utils::Inches(param);
     }
 
     LineAnalysis::LineDetector detector;
@@ -84,12 +86,12 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
         //  1. Corrections to get the quad straight and level
         //  2. Corrections to accomplish the task
 
-        Math::quatf orientation(Utils::Degrees(orientation.roll), Math::vec3f(1, 0, 0),
+        Math::quatf rotation(Utils::Degrees(orientation.roll), Math::vec3f(1, 0, 0),
                               Utils::Degrees(orientation.pitch), Math::vec3f(0, 1, 0),
                               Utils::Degrees(orientation.yaw), Math::vec3f(0, 0, 1));
         // start lookat with the center of the line in the image
         Math::vec3f lookatCenter(0.0f, 0.0f, -line.get_distance().asInches());
-        lookatCenter = lookatCenter * orientation;
+        lookatCenter = lookatCenter * rotation;
      
         Math::vec3f lookatLine(line.get_center_x().asInches(),
                                line.get_center_y().asInches(),
@@ -130,13 +132,14 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
 
 
         // accomplish task
+        float targetPitch = -1.0f;
         switch(t) {
         case TAKE_OFF:
             // Move towards the line
             if(lookatLine.x() < -0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_LEFT);
             }
-            else if(lookatLine.x > 0.01f) {
+            else if(lookatLine.x()> 0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_RIGHT);
             }
 
@@ -150,12 +153,11 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
             if(lookatLine.x() < -0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_LEFT);
             }
-            else if(lookatLine.x > 0.01f) {
+            else if(lookatLine.x()> 0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_RIGHT);
             }
 
             // move forward
-            float targetPitch = -1.0f;
             if(orientation.pitch < targetPitch) {
                 cmd.exclude(Iriss::Command::NUDGE_PITCH_DOWN);
                 cmd.include(Iriss::Command::NUDGE_PITCH_UP);
@@ -177,7 +179,7 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
             if(lookatLine.x() < -0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_LEFT);
             }
-            else if(lookatLine.x > 0.01f) {
+            else if(lookatLine.x()> 0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_RIGHT);
             }
 
@@ -191,7 +193,7 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
             if(lookatLine.x() < -0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_LEFT);
             }
-            else if(lookatLine.x > 0.01f) {
+            else if(lookatLine.x()> 0.01f) {
                 cmd.include(Iriss::Command::NUDGE_ROLL_RIGHT);
             }
 

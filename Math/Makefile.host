@@ -51,7 +51,10 @@ default: ${TARGET}
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} ${SHARED_LIB_ARGS} ${OUTPUT} ${OBJS} ${LIBS}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${ME}/include
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
+	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${ME}/include
 	@echo
 
 %.o: %.cpp %.hpp
