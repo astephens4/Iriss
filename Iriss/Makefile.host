@@ -48,8 +48,7 @@ LIBS = ${SYS_LIBS} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} ${SHARED_LIB_ARGS} ${OUTPUT} ${OBJS} ${LIBS}
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/bin
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	${INSTALL} *.hpp ${RELATIVE}/${ARCH}/${BUILD_VERSION}/include/${ME}

@@ -41,6 +41,7 @@ LIBS = \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
+	mkdir -p ${RELATIVE}/${BUILD_VERSION}/${TYPE}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
 	@echo
 
