@@ -45,7 +45,7 @@ LIBS = ${SYS_LIBS} \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
-	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/{bin,lib,include}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	@echo
 

@@ -36,14 +36,24 @@ public:
         BAUD_230400 = B230400,
     };
 
+    enum Blocking {
+        UART_FULL_BLOCK,
+        UART_TIMEOUT,
+        UART_NO_BLOCK
+    };
+
     struct Settings {
         Speed speed;
         Mode mode;
         FlowControl flow;
+        Blocking blocking;
+        unsigned int timeout_tenths_sec;
     };
 
     SerialPeer(const std::string& serFile, const SerialPeer::Settings& settings);
     ~SerialPeer(void);
+
+    unsigned int available(void);
 
     bool send(const char *str);
     bool send(const std::vector<uint8_t>& bytes);

@@ -34,7 +34,7 @@ public:
      * Get all of the directives in this command, OR'ed together
      * @return the bitwise or of all of the directives in this command
      */
-    uint32_t get(void) { return m_directives; };
+    uint32_t get(void) const { return m_directives; };
 
     /**
      * Clears all directives under this command and sets it to the provided
@@ -42,6 +42,8 @@ public:
      * @param [in] directive Set the command to only this directive
      */
     void set(Directive directive) { m_directives = directive; };
+
+    void copy(Command command) { m_directives = command.get(); };
 
     /**
      * Add the given directive to this command's directives

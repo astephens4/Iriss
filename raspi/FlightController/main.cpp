@@ -52,7 +52,7 @@ int main(int nargs, char *argv[])
                     return -1;
                 }
                 for(int j = 0; j < 4; ++j) {
-                    if(octets[j] < 1 || octets[j] > 254) {
+                    if(octets[j] < 0 || octets[j] > 255) {
                         std::cerr << "Malformed IP Address: " << argv[i] << std::endl
                                   << "                      ";
                         char *loc = strstr(argv[i], ".");

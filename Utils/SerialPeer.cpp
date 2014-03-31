@@ -14,6 +14,10 @@
 #include <cstdio>
 #include <errno.h>
 
+// ioctl's!
+#include <sys/ioctl.h>
+
+// (u)int*_t!
 #include <cinttypes>
 
 
@@ -27,12 +31,16 @@ SerialPeer::SerialPeer(const std::string& serFile, const SerialPeer::Settings& s
     m_uartFd()
 {
     // connect to the ArduPilot
+    unsigned int openFlags = O_RDWR | O_NOCTTY;
+    if(settings.blocking == UART_NO_BLOCK) {
+        openFlags |= O_NONBLOCK;
+    }
     m_uartFd = ::open(serFile.c_str(), O_RDWR | O_NOCTTY);
     if(m_uartFd < 0) {
         perror("open serial file");
     }
     else {
-        printf("File Descriptor! %d\n", m_uartFd);
+
         struct termios uartSettings;
         tcgetattr(m_uartFd, &uartSettings);
 
@@ -96,6 +104,22 @@ SerialPeer::SerialPeer(const std::string& serFile, const SerialPeer::Settings& s
             break;
         }
 
+        // set the blocking mode
+        switch(settings.blocking) {
+        case UART_FULL_BLOCK:
+            uartSettings.c_cc[VMIN] = 1;
+            uartSettings.c_cc[VTIME] = 0;
+            break;
+        case UART_TIMEOUT:
+            uartSettings.c_cc[VMIN] = 1;
+            uartSettings.c_cc[VTIME] = settings.timeout_tenths_sec; 
+            break;
+        case UART_NO_BLOCK:
+            uartSettings.c_cc[VMIN] = 0;
+            uartSettings.c_cc[VTIME] = 0;
+            break;
+        }
+
         // make the connection raw
         cfmakeraw(&uartSettings);
 
@@ -115,15 +139,31 @@ SerialPeer::~SerialPeer(void)
     ::close(m_uartFd);
 }
 
+unsigned int SerialPeer::available(void)
+{
+    unsigned int avail;
+    ::ioctl(m_uartFd, FIONREAD, &avail);
+    return avail;
+}
+
 bool SerialPeer::send(const char *str)
 {
     if(!m_isValid) return false;
 
     int len = strlen(str);
 
+    ssize_t ret = write(m_uartFd, &UART_BEGIN_MESSAGE, 1);
+
+    if(ret < 0) {
+        perror("send string, uart_msg");
+        m_isValid = false;
+        return m_isValid;
+    }
+
     // write the number of bytes to be sent
     int lenNet = htonl(len);
-    ssize_t ret = write(m_uartFd, &lenNet, sizeof(int));
+    ret = write(m_uartFd, &lenNet, sizeof(int));
+
     if(ret < 0) {
         perror("send string");
         m_isValid = false;
@@ -133,7 +173,8 @@ bool SerialPeer::send(const char *str)
     // write the bytes out of the terminal
     int bytesSent = 0;
     while(bytesSent < len) {
-        ret = write(m_uartFd, str, len);
+        ret = write(m_uartFd, &(str[bytesSent]), 1);
+
         if(ret < 0) {
             perror("send string");
             m_isValid = false;
@@ -145,6 +186,7 @@ bool SerialPeer::send(const char *str)
     // write the EOL characters out of the terminal
     char EOL[3] = "\r\n";
     ret = write(m_uartFd, EOL, 2);
+
     if(ret < 0) {
         perror("send string");
         m_isValid = false;
@@ -169,6 +211,7 @@ bool SerialPeer::send(const std::vector<uint8_t>& bytes)
 
    // write the begin uart message value
     ssize_t ret = write(m_uartFd, &UART_BEGIN_MESSAGE, 1);
+
     if(ret < 0) {
         perror("send begin");
         m_isValid = false;
@@ -181,6 +224,7 @@ bool SerialPeer::send(const std::vector<uint8_t>& bytes)
     // write the number of bytes to be sent
     int lenNet = htonl(len);
     ret = write(m_uartFd, &lenNet, sizeof(int));
+
     if(ret < 0) {
         perror("send bytes");
         m_isValid = false;
@@ -190,7 +234,8 @@ bool SerialPeer::send(const std::vector<uint8_t>& bytes)
     // write the bytes out of the terminal
     int bytesSent = 0;
     while(bytesSent < len) {
-        ret = write(m_uartFd, &(bytes[0]), len);
+        ret = write(m_uartFd, &(bytes[bytesSent]), len);
+
         if(ret < 0) {
             perror("send string");
             m_isValid = false;
@@ -239,15 +284,16 @@ bool SerialPeer::recv(std::vector<uint8_t>& bytes)
         if(byte == UART_BEGIN_MESSAGE) {
             break;
         }
+
     }
-    printf("Got message begin!\n");
+
 
     // read the message size
     int lenNet = 0;
     ssize_t ret;
     for(int i = 0; i < 4; ++i) {
         ret = read(m_uartFd, &byte, 1);
-        printf("Byte %d of length: %hhu\n", i, byte);
+
         if(ret < 0) {
             perror("read bytes");
             m_isValid = false;
@@ -257,12 +303,13 @@ bool SerialPeer::recv(std::vector<uint8_t>& bytes)
         lenNet |= static_cast<int>(byte)<<((3-i)*8);
     }
     int len = lenNet;
-    printf("The message is %d bytes long!\n", len);
+
 
     bytes.resize(len, 0);
     int bytesRecvd = 0;
     while(bytesRecvd < len) {
         ret = read(m_uartFd, &(bytes[bytesRecvd]), 1);
+
         if(ret < 0) {
             perror("read bytes");
             m_isValid = false;

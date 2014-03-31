@@ -4,6 +4,7 @@ TARGET_DIRS =\
 	LineAnalysis \
 	Iriss \
 	raspi/FlightController \
+	raspi/FakeArdupilot \
 	raspi/SerialAAAAA \
 	raspi/OrderTaker
 
@@ -16,6 +17,9 @@ HOST_DIRS =\
 
 
 default: target
+
+libs= libUtils.a libMath.so libIriss.so libLineAnalysis.so
+dirs= Utils Math LineAnalysis Iriss
 
 define build_target
 $(1)-$(2):
@@ -47,7 +51,7 @@ define rule_very_clean
 $(1)-$(2)-very-clean
 endef
 
-all: clean-target target clean-host host
+all: super-clean target clean-host host
 
 target: $(foreach proj,$(TARGET_DIRS),$(call rule_build,$(proj),target))
 	@echo Done Building for RaspberryPi
@@ -73,6 +77,20 @@ very-clean-target: $(foreach proj,$(TARGET_DIRS),$(call rule_very_clean,$(proj),
 very-clean-host: $(foreach proj,$(HOST_DIRS),$(call rule_very_clean,$(proj),host))
 	@echo Done Very Cleaning host
 
+super-clean: very_clean super-clean-host super-clean-target
+	@echo Super Clean!
+
+super-clean-host:
+	@echo ${libs} | sed 's/ /\n/g' | sed 's/lib\(.*\..*\)/host\/debug\/lib\/lib\1/g' | xargs rm -f
+	@echo ${dirs} | sed 's/ /\n/g' | sed 's/\(.*\)/host\/debug\/include\/\1/g' | xargs rm -rf
+	@echo ${libs} | sed 's/ /\n/g' | sed 's/lib\(.*\..*\)/host\/release\/lib\/lib\1/g' | xargs rm -f
+	@echo ${dirs} | sed 's/ /\n/g' | sed 's/\(.*\)/host\/release\/include\/\1/g' | xargs rm -rf
+
+super-clean-target:
+	@echo ${libs} | sed 's/ /\n/g' | sed 's/lib\(.*\..*\)/target\/debug\/lib\/lib\1/g' | xargs rm -f
+	@echo ${dirs} | sed 's/ /\n/g' | sed 's/\(.*\)/target\/debug\/include\/\1/g' | xargs rm -rf
+	@echo ${libs} | sed 's/ /\n/g' | sed 's/lib\(.*\..*\)/target\/release\/lib\/lib\1/g' | xargs rm -f
+	@echo ${dirs} | sed 's/ /\n/g' | sed 's/\(.*\)/target\/release\/include\/\1/g' | xargs rm -rf
 
 
 # Define the rules for building
