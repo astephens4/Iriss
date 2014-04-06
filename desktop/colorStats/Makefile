@@ -2,17 +2,18 @@
 # in the comments for the specific subdirectory
 
 # This directory's location relative to the project root (do not end with '/')
-RELATIVE=..
+RELATIVE=../..
 
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
-ME=
+ME=color
 
+ARCH=host
 # location of makeinclude in the top-level source directory
-include ${RELATIVE}/common/makeinclude
+include ${RELATIVE}/common/makeinclude.${ARCH}
 
 # name and type of output executable
 TYPE=bin
-TARGET = stats
+TARGET = color
 OUTPUT = ${TARGET}
 
 # List all source-headers pairs with a .o extension (i.e. Class.cpp Class.h --> Class.o)
@@ -23,17 +24,16 @@ OBJS = \
 TEMPLATES = \
 
 # List all directories where dependent headers are located
-INCLUDES = \
-	-I/usr/local/include
+INCLUDES = ${SYS_INCLUDES} \
+	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
-LIBS = \
-	-L/usr/local/lib \
-	-lopencv_core \
-	-lopencv_highgui \
-	-lopencv_imgproc \
-	-lm
+LIBS = ${SYS_LIBS} \
+	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
+	-lIriss \
+	-lMath \
+	-lUtils
 
 ##########    If all variables above are correctly filled out,
 ##########    nothing below should have to be changed.
@@ -41,7 +41,8 @@ LIBS = \
 ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
-	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
+	mkdir -p ${RELATIVE}/${ARCH}/${BUILD_VERSION}/bin
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	@echo
 
 %.o: %.cpp
@@ -49,7 +50,7 @@ ${TARGET}: ${TEMPLATES} ${OBJS}
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo
 
-%.s: %.h
+%.s: %.hpp
 	@echo Checking syntax of template $< ...
 	${CXX} -c ${CXXFLAGS} $< -o $@ ${INCLUDES}
 	@echo

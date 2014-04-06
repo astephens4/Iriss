@@ -53,15 +53,15 @@ PID pids[6];
 #define PID_YAW_RATE 4
 #define PID_YAW_STAB 5
 
-static bool waitOnAck = false;
+static bool piOnline = false;
 
 static uint32_t lastSent;
 
 void setup() 
 {
     // Enable the motors and set at 490Hz update
-//    hal.rcout->set_freq(0xF, 490);
-//    hal.rcout->enable_mask(0xFF);
+    hal.rcout->set_freq(0xF, 490);
+    hal.rcout->enable_mask(0xFF);
 
     // PID Configuration
     pids[PID_PITCH_RATE].kP(0.7);
@@ -154,7 +154,7 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
     
     if(directives & Iriss::Command::ACK) {
         // reply with an ACK if not waiting on one
-        if(!waitOnAck) {
+        if(!piOnline) {
             Iriss::Command resp(Iriss::Command::ACK);
             hal.console->write(&Iriss::BEGIN_UART_MESSAGE, 1);
             
@@ -165,10 +165,7 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
             uint8_t cmdBuf[Iriss::Command::PACKED_SIZE];
             resp.pack(cmdBuf, Iriss::Command::PACKED_SIZE);
             hal.console->write(cmdBuf, Iriss::Command::PACKED_SIZE);
-
-        }
-        else {
-            waitOnAck = false;
+            piOnline = true;
         }
     }
 
@@ -307,17 +304,17 @@ void loop()
         long yaw_output =  (long) constrain(pids[PID_ROLL_RATE].get_pid(yaw_stab_output - gyroYaw, 1), -500, 500);  
 
         // mix pid outputs and send to the motors.
-//        hal.rcout->write(MOTOR_FL, rcthr + roll_output + pitch_output - yaw_output);
-//        hal.rcout->write(MOTOR_BL, rcthr + roll_output - pitch_output + yaw_output);
-//        hal.rcout->write(MOTOR_FR, rcthr - roll_output + pitch_output + yaw_output);
-//        hal.rcout->write(MOTOR_BR, rcthr - roll_output - pitch_output - yaw_output);
+        hal.rcout->write(MOTOR_FL, rcthr + roll_output + pitch_output - yaw_output);
+        hal.rcout->write(MOTOR_BL, rcthr + roll_output - pitch_output + yaw_output);
+        hal.rcout->write(MOTOR_FR, rcthr - roll_output + pitch_output + yaw_output);
+        hal.rcout->write(MOTOR_BR, rcthr - roll_output - pitch_output - yaw_output);
     }
     else {
         // motors off
-//        hal.rcout->write(MOTOR_FL, 1000);
-//        hal.rcout->write(MOTOR_BL, 1000);
-//        hal.rcout->write(MOTOR_FR, 1000);
-//        hal.rcout->write(MOTOR_BR, 1000);
+        hal.rcout->write(MOTOR_FL, 1000);
+        hal.rcout->write(MOTOR_BL, 1000);
+        hal.rcout->write(MOTOR_FR, 1000);
+        hal.rcout->write(MOTOR_BR, 1000);
            
         // reset yaw target so we maintain this on takeoff
         yaw_target = yaw;

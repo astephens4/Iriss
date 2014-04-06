@@ -55,8 +55,8 @@ public:
     Utils::Inches get_distance() const { return m_distance; };
     Utils::Color get_color() const { return m_color; };
     Utils::Degrees get_angle() const { return m_angle; };
-    Utils::Inches get_center_x(void) { return m_centerX; };
-    Utils::Inches get_center_y(void) { return m_centerY;; };
+    Utils::Inches get_center_x(void) const { return m_centerX; };
+    Utils::Inches get_center_y(void) const { return m_centerY;; };
 
 
     /**
@@ -65,6 +65,7 @@ public:
      */
     const Utils::TimeStamp& last_updated_at(void) const { return m_time; };
 
+    friend std::ostream& operator<<(std::ostream& out, const Line& line);
 private:
     Utils::Inches m_distance; ///< distance of the line from the viewer in inches
     Utils::Inches m_length; ///< Length of the line in inches

@@ -62,8 +62,7 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
         m_commandedHeight = Utils::Inches(param);
     }
 
-    LineAnalysis::LineDetector detector;
-    detector.set_image(image);
+    m_detector.set_image(image);
     if(t == TAKE_OFF) {
         // the color should be in the middle of the image
         cv::Vec3b lineColor = image.at<cv::Vec3b>(image.size().width/2, image.size().height/2);

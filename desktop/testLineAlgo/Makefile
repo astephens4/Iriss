@@ -2,13 +2,15 @@
 # in the comments for the specific subdirectory
 
 # This directory's location relative to the project root (do not end with '/')
-RELATIVE=..
+RELATIVE=../..
 
 # This directory's name + parents inside of PROJECT_ROOT (ex. if this is ${PROJECT_ROOT}/libA/module1, then ME=libA/module1)
 ME=
 
+ARCH=host
+
 # location of makeinclude in the top-level source directory
-include ${RELATIVE}/common/makeinclude
+include ${RELATIVE}/common/makeinclude.${ARCH}
 
 # name and type of output executable
 TYPE=bin
@@ -24,7 +26,7 @@ TEMPLATES = \
 
 # List all directories where dependent headers are located
 INCLUDES = \
-	-I/usr/local/include
+	-I${RELATIVE}/${ARCH}/${BUILD_VERSION}/include
 
 # List all directories and library names where dependent libraries
 # are located
@@ -42,7 +44,7 @@ ${TARGET}: ${TEMPLATES} ${OBJS}
 	@echo Linking ${TARGET} ...
 	${LINK} ${CXXFLAGS} -o ${OUTPUT} ${OBJS} ${LIBS}
 	mkdir -p ${RELATIVE}/${BUILD_VERSION}/${TYPE}
-	${INSTALL} ${OUTPUT} ${RELATIVE}/${BUILD_VERSION}/${TYPE}
+	${INSTALL} ${OUTPUT} ${RELATIVE}/${ARCH}/${BUILD_VERSION}/${TYPE}
 	@echo
 
 %.o: %.cpp %.h

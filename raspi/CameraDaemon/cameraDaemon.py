@@ -23,8 +23,22 @@ for arg in sys.argv:
         interval = float(sys.argv[count+1]);
     count = count + 1;
 
+count = 0;
+maxPhotos = 5;
+index = 0;
+lastFiles = []
+
 while 1:
     tstamp = time.time();
     fname = datetime.fromtimestamp(tstamp).strftime('%H_%M_%S_%m');
-    fname = photocache + str(fname) + ".jpg";
-    call(["raspistill", "-awb auto", "-mm backlit", "-ex auto", "-w 1280 -h 720", "-t "+str(interval*1000.), "-o", fname]);
+    fname = photocache + os.sep + str(fname) + ".jpg";
+    os.system("raspistill -awb auto -mm backlit -ex auto -w 640 -h 480 -t "+str(interval*1000.) + " -o " + str(fname));
+    if count < maxPhotos :
+        count = count + 1;
+        index = index + 1;
+        lastFiles.append(fname);
+    else :
+        rmCmd = "rm " + str(lastFiles[index]);
+        os.system(rmCmd);
+        lastFiles[index] = fname;
+        index = (index + 1) % maxPhotos;

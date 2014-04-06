@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>8</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>288</x>
+      <y>56</y>
+      <w>376</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>Iriss::Orders
+--
+- m_taskList: std::vector&lt;std::pair&lt;Task,int&gt;&gt;
+- m_detector: LineAnalysis::LineDetector
+- m_commandedHeight: Utils::Inches
+--
++ apply(imageFile: string, orientation: Orientation): Command
++ has_tasks(void): boolean
++ queue_task(t: Task, param: int): void
++ clear(void): void
++ pack(bytes: vector): void
++ unpack(bytes: vector): void
+--
+Responsibilities
+Represents orders that the commandcenter
+can issue to a quadcopter</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>104</x>
+      <y>272</y>
+      <w>376</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>Iriss::Command
+--
+- m_commands: unsigned int
+--
++ get(void): unsigned int
++ set(directive: Directive): void
++ copy(command: Command): void
++ inculde(directive: Directive): void
++ exclude(directive: Directive): void
++ pack(bytes: vector): void
++ unpack(bytes: vector): void
+--
+Responsibilities
+Store all of the commands that can be issued
+to the autopilot</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>496</x>
+      <y>272</y>
+      <w>376</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>Iriss::Orientation
+--
++ roll: float
++ pitch: float
++ yaw: float
+--
+--
+Responsibilities
+Store orientation information and allow
+packing and unpacking of that data</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>72</x>
+      <y>104</y>
+      <w>96</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Task
+--
+TAKE_OFF
+FOLLOW_LINE
+LOITER
+LAND</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>128</x>
+      <y>528</y>
+      <w>144</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Directive
+--
+TX_ERR
+SEND_AGAIN
+ACK
+GET_ORIENTATION
+NUDGE_ROLL_LEFT
+NUDGE_ROLL_RIGHT
+NUDGE_UP
+NUDGE_DOWN
+NUDGE_YAW_CCW
+NUDGE_YAW_CW
+NUDGE_PITCH_DOWN
+NUDGE_PITCH_UP</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>144</x>
+      <y>120</y>
+      <w>160</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>24;32;144;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>176</x>
+      <y>440</y>
+      <w>120</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>24;88;104;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>96</x>
+      <y>16</y>
+      <w>136</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>/Utils::Packable/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>136</x>
+      <y>16</y>
+      <w>360</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>24;24;344;40</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>136</x>
+      <y>16</y>
+      <w>160</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>24;24;144;256</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>136</x>
+      <y>16</y>
+      <w>568</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>24;24;552;256</additional_attributes>
+  </element>
+</diagram>

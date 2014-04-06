@@ -69,6 +69,7 @@ protected:
         std::cout << "Message from " << client.second << ":\n"
                   << message << std::endl;
         ++m_received;
+        delete [] message;
         return 0;
     }
 private:

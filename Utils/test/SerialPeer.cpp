@@ -7,6 +7,7 @@ int main(void)
     settings.mode = Utils::SerialPeer::UART_8N1;
     settings.speed = Utils::SerialPeer::BAUD_115200;
     settings.flow = Utils::SerialPeer::UART_HARDWARE;
+    settings.blocking = Utils::SerialPeer::UART_FULL_BLOCK;
     Utils::SerialPeer usb("/dev/ttyUSB0", settings);
 
     std::vector<uint8_t> recvd;

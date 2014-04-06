@@ -28,4 +28,14 @@ Line::Line(const Utils::Distance& distance, const Utils::Distance& len, const Ut
 
 }
 
+std::ostream& operator<<(std::ostream& out, const Line& line)
+{
+    out << "Line\n"
+        << "\tDistance," << line.get_distance().asInches() << "\n"
+        << "\tAngle," << line.get_angle().asDegrees() << "\n"
+        << "\tCenterX," << line.get_center_x().asInches() << "\n"
+        << "\tCenterY," << line.get_center_y().asInches() << "\n";
+    return out;
+}
+
 } // end namespace LineAnalysis

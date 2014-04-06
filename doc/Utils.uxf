@@ -3,8 +3,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>450</x>
-      <y>324</y>
+      <x>432</x>
+      <y>252</y>
       <w>204</w>
       <h>156</h>
     </coordinates>
@@ -30,8 +30,8 @@ requested. Allows reading and writing to streams</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>186</x>
-      <y>324</y>
+      <x>168</x>
+      <y>252</y>
       <w>234</w>
       <h>162</h>
     </coordinates>
@@ -58,8 +58,8 @@ a network.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>48</x>
-      <y>102</y>
+      <x>30</x>
+      <y>30</y>
       <w>300</w>
       <h>174</h>
     </coordinates>
@@ -87,8 +87,8 @@ through this class so a connection may be shared.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>624</x>
-      <y>528</y>
+      <x>606</x>
+      <y>456</y>
       <w>144</w>
       <h>90</h>
     </coordinates>
@@ -107,8 +107,8 @@ Represents a 24-bit color.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>414</x>
-      <y>558</y>
+      <x>396</x>
+      <y>486</y>
       <w>126</w>
       <h>72</h>
     </coordinates>
@@ -125,8 +125,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>384</x>
-      <y>612</y>
+      <x>366</x>
+      <y>540</y>
       <w>108</w>
       <h>72</h>
     </coordinates>
@@ -136,8 +136,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>462</x>
-      <y>612</y>
+      <x>444</x>
+      <y>540</y>
       <w>96</w>
       <h>72</h>
     </coordinates>
@@ -147,8 +147,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>486</x>
-      <y>672</y>
+      <x>468</x>
+      <y>600</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -163,8 +163,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>336</x>
-      <y>672</y>
+      <x>318</x>
+      <y>600</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -179,8 +179,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>198</x>
-      <y>672</y>
+      <x>180</x>
+      <y>600</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -195,8 +195,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>168</x>
-      <y>624</y>
+      <x>150</x>
+      <y>552</y>
       <w>102</w>
       <h>60</h>
     </coordinates>
@@ -206,8 +206,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>126</x>
-      <y>570</y>
+      <x>108</x>
+      <y>498</y>
       <w>126</w>
       <h>72</h>
     </coordinates>
@@ -224,8 +224,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>96</x>
-      <y>624</y>
+      <x>78</x>
+      <y>552</y>
       <w>102</w>
       <h>60</h>
     </coordinates>
@@ -235,8 +235,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>48</x>
-      <y>672</y>
+      <x>30</x>
+      <y>600</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -251,8 +251,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>372</x>
-      <y>102</y>
+      <x>354</x>
+      <y>30</y>
       <w>234</w>
       <h>186</h>
     </coordinates>
@@ -281,8 +281,8 @@ decide on how to handle received data.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>636</x>
-      <y>102</y>
+      <x>618</x>
+      <y>30</y>
       <w>282</w>
       <h>186</h>
     </coordinates>
@@ -291,7 +291,8 @@ decide on how to handle received data.</panel_attributes>
 + enum Speed;
 + enum Mode;
 + enum FlowControl;
-+ struct Settings { speed: Speed; mode: Mode; flow: FlowControl; }
++ enum BlockMode
++ struct Settings { speed: Speed; mode: Mode; flow: FlowControl; blocking: BlockMode }
 - m_isValid: bool
 - m_fd: int
 - m_portName: std::string

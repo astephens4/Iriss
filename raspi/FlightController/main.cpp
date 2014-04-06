@@ -7,6 +7,9 @@
 #include <fstream>
 #include <cstring>
 
+// threads
+#include <thread>
+
 // allow printing of system errors
 #include <cstdio>
 #include <errno.h>
@@ -115,20 +118,21 @@ int main(int nargs, char *argv[])
     settings.mode = Utils::SerialPeer::UART_8N1;
     settings.flow = Utils::SerialPeer::UART_NO_FLOW_CONTROL;
     settings.speed = Utils::SerialPeer::BAUD_115200;
+    settings.blocking = Utils::SerialPeer::UART_FULL_BLOCK;
     Utils::SerialPeer uart(serialPort, settings);
 
+    // Let the ardupilot know we are online
+    Iriss::Command cmd(Iriss::Command::ACK); 
+    PRINT_VERBOSE("Sending ACK to ArduPilot");
+    uart.send(cmd);
+
     // Wait for an ACK from the ArduPilot
-    Iriss::Command cmd; 
     PRINT_VERBOSE("Waiting for ACK from ArduPilot");
     uart.recv(cmd);
     if(cmd.get() != Iriss::Command::ACK) {
         std::cerr << "Unable to estblish communication with ArduPilot! Exiting!\n";
         return -1;
     }
-    // send an ACK to the ArduPilot
-    PRINT_VERBOSE("Sending ACK to ArduPilot");
-    cmd.set(Iriss::Command::ACK);
-    uart.send(cmd);
 
     // connect to the CommandCenter software at 
     PRINT_VERBOSE("Connecting to CommandCenter at " << serverAddr << ":" << portNumber);
@@ -140,12 +144,10 @@ int main(int nargs, char *argv[])
     }
     
     // check for a running process called CameraDaemon.py, run it if isn't running
-    PRINT_VERBOSE("Checking to see if CameraDaemon is running");
-    if(!Iriss::is_process_running("CameraDaemon.py")) {
-        assert(Iriss::is_file("/usr/local/bin/CameraDaemon.py"));
-        PRINT_VERBOSE("Starting CameraDaemon");
-        system("python /usr/local/bin/CameraDaemon.py");
-    }
+    PRINT_VERBOSE("Preparing the photo cache");
+    system("mkdir -p /dev/shm/photocache");
+    std::string imageFile = "/dev/shm/photocache/lineFollow.png";
+    std::string takePhoto = "raspistill -awb auto -mm backlit -ex auto -w 640 -h 480 -t 1 -o " + imageFile;
 
     // Objects to use in the main loop
     std::string removeCmd;
@@ -159,7 +161,8 @@ int main(int nargs, char *argv[])
         // Now we have command, is it completed?
         PRINT_VERBOSE("Received Orders");
         while(orders.has_tasks()) {
-            std::string imageFile = Iriss::find_recent_image("/dev/shm/photocache", 0.1f); 
+            system(takePhoto.c_str());
+
             if(imageFile.empty()) {
                 continue;
             }
@@ -180,7 +183,7 @@ int main(int nargs, char *argv[])
             // delete the image we have used
             removeCmd = "rm ";
             removeCmd += imageFile;
-            system(removeCmd.c_str());
+//            system(removeCmd.c_str());
         }
     }
     std::cerr << "Connection with the command center has been terminated! Initiate land!\n";
@@ -188,7 +191,7 @@ int main(int nargs, char *argv[])
     Iriss::Orders land;
     land.queue_task(Iriss::Orders::LAND, 0);
     while(land.has_tasks()) {
-        std::string imageFile = Iriss::find_recent_image("/dev/shm/photocache", 0.1f); 
+        system(takePhoto.c_str());
         if(imageFile.empty()) {
             continue;
         }
@@ -207,6 +210,7 @@ int main(int nargs, char *argv[])
         removeCmd += imageFile;
         system(removeCmd.c_str());
     }
+    return 0;
 }
 
 /**

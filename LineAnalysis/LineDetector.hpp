@@ -63,7 +63,7 @@ public:
      * Set the image to detect lines in.
      * @param [in] image The image to use for line detectino
      */
-    void set_image(cv::Mat& image);
+    void set_image(cv::Mat image);
 
     /**
      * Set the colors of the lines to be detected

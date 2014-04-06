@@ -6,6 +6,7 @@
 #include "Utils/SerialPeer.hpp"
 #include "Iriss/Command.hpp"
 #include "Iriss/Orientation.hpp"
+#include <ctime>
 
 Utils::SerialPeer *uart;
 
@@ -39,9 +40,9 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
   
     if(directives & Iriss::Command::GET_ORIENTATION) {
         // get the orientation from ins and send it
-        float roll = 0.0,
-              pitch = 0.0,
-              yaw = 0.0;
+        float roll = (rand() % 180) - 90.0f,
+              pitch = (rand() % 180) - 90.0f,
+              yaw = (rand() % 180) - 90.0f;
        
         Iriss::Orientation orientation(roll, pitch, yaw);
         uart->send(orientation);
@@ -96,6 +97,7 @@ bool g_verbose = false;
 
 int main(int nargs, char *argv[])
 {
+    srand(time(NULL));
     std::string serialPort = "/dev/pts/7";
     for(int i = 1; i < nargs; ++i) {
         if((strcmp(argv[i], "-s") == 0) || (strcmp(argv[i], "--serial") == 0)) {
@@ -141,7 +143,6 @@ int main(int nargs, char *argv[])
     uart->send(cmd);
 
     while(1) {
-        system("clear");
         PRINT_VERBOSE("Waiting for Command from FlightController");
         uart->recv(cmd);
         PRINT_VERBOSE("Got Command from FlightController");

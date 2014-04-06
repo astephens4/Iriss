@@ -24,13 +24,9 @@ int main(int nargs, char **argv)
     // parse inputs
     unsigned char hue;
     std::string imageFile;
-    bool doVerbose = false;
     for(int i = 0; i < nargs; ++i) {
         if((strcmp(argv[i], "-i") == 0) && (i+1 < nargs)) {
             imageFile = std::string(argv[++i]);
-        }
-        else if(strcmp(argv[i], "-v") == 0) {
-            doVerbose = true;
         }
         else if((strcmp(argv[i], "-h") == 0) && (i+1 < nargs)) {
             sscanf(argv[++i], "%hhu", &hue);

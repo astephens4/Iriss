@@ -9,7 +9,7 @@ int main(int nargs, char *argv[])
     std::cout << nargs << std::endl;
     // test with table.png first
     LineDetector detector;
-    cv::Mat table = cv::imread(argv[1]);
+    cv::Mat table = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
     std::cout << "Opening " << argv[1] << std::endl;
 
     detector.set_image(table);
@@ -46,7 +46,7 @@ int main(int nargs, char *argv[])
         cv::circle(table, cv::Point(pixCX, pixCY), 5, cv::Scalar(0, 0, 255), -1);
     }
 
-    cv::imshow("Ermehgerd, Line!", table);
+    cv::imshow(argv[1], table);
 
     cv::waitKey();
 

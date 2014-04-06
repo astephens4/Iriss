@@ -36,7 +36,6 @@ LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 	-lopencv_core \
 	-lopencv_imgproc \
-	-lopencv_highgui \
 	-lUtils
 
 ##########    If all variables above are correctly filled out,
