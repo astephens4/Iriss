@@ -32,7 +32,7 @@ can issue to a quadcopter</panel_attributes>
       <x>104</x>
       <y>272</y>
       <w>376</w>
-      <h>192</h>
+      <h>176</h>
     </coordinates>
     <panel_attributes>Iriss::Command
 --
@@ -57,7 +57,7 @@ to the autopilot</panel_attributes>
       <x>496</x>
       <y>272</y>
       <w>376</w>
-      <h>192</h>
+      <h>112</h>
     </coordinates>
     <panel_attributes>Iriss::Orientation
 --
@@ -128,18 +128,18 @@ NUDGE_PITCH_UP</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>176</x>
-      <y>440</y>
+      <y>424</y>
       <w>120</w>
-      <h>104</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>24;88;104;24</additional_attributes>
+    <additional_attributes>24;104;104;24</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>96</x>
-      <y>16</y>
+      <x>688</x>
+      <y>8</y>
       <w>136</w>
       <h>24</h>
     </coordinates>
@@ -150,34 +150,34 @@ NUDGE_PITCH_UP</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>136</x>
-      <y>16</y>
-      <w>360</w>
-      <h>56</h>
+      <x>456</x>
+      <y>8</y>
+      <w>312</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>24;24;344;40</additional_attributes>
+    <additional_attributes>296;24;24;48</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>136</x>
-      <y>16</y>
-      <w>160</w>
-      <h>272</h>
+      <x>256</x>
+      <y>8</y>
+      <w>512</w>
+      <h>280</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>24;24;144;256</additional_attributes>
+    <additional_attributes>496;24;416;248;24;264</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>136</x>
-      <y>16</y>
-      <w>568</w>
-      <h>272</h>
+      <x>664</x>
+      <y>8</y>
+      <w>104</w>
+      <h>280</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>24;24;552;256</additional_attributes>
+    <additional_attributes>88;24;24;264</additional_attributes>
   </element>
 </diagram>

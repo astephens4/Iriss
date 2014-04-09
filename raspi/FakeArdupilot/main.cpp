@@ -10,7 +10,7 @@
 
 Utils::SerialPeer *uart;
 
-bool waitOnAck = false;
+bool sendAckBack = false;
 Iriss::Command lastSent;
 
 void do_respond(const Iriss::Command& cmd, int16_t *channels)
@@ -22,12 +22,14 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
     
     if(directives & Iriss::Command::ACK) {
         // reply with an ACK if not waiting on one
-        if(!waitOnAck) {
+        if(sendAckBack) {
+            std::cout << "Sending ACK from AutoPilot\n";
             Iriss::Command resp(Iriss::Command::ACK);
             uart->send(resp);
+            sendAckBack = false;
         }
         else {
-            waitOnAck = false;
+            sendAckBack = true;
         }
     }
 
@@ -141,6 +143,7 @@ int main(int nargs, char *argv[])
     PRINT_VERBOSE("FlightController online, sending ACK back");
     cmd.set(Iriss::Command::ACK);
     uart->send(cmd);
+    sendAckBack = false;
 
     while(1) {
         PRINT_VERBOSE("Waiting for Command from FlightController");

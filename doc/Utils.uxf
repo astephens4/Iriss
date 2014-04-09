@@ -3,8 +3,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>432</x>
-      <y>252</y>
+      <x>486</x>
+      <y>300</y>
       <w>204</w>
       <h>156</h>
     </coordinates>
@@ -30,8 +30,8 @@ requested. Allows reading and writing to streams</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>168</x>
-      <y>252</y>
+      <x>222</x>
+      <y>300</y>
       <w>234</w>
       <h>162</h>
     </coordinates>
@@ -58,8 +58,8 @@ a network.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>30</x>
-      <y>30</y>
+      <x>84</x>
+      <y>78</y>
       <w>300</w>
       <h>174</h>
     </coordinates>
@@ -87,9 +87,9 @@ through this class so a connection may be shared.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>606</x>
-      <y>456</y>
-      <w>144</w>
+      <x>660</x>
+      <y>504</y>
+      <w>234</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>Utils::Color
@@ -98,7 +98,8 @@ through this class so a connection may be shared.</panel_attributes>
 + green: unsigned char
 + blue: unsigned char
 --
-+ asUint32(format: Utils::Color::Format): unsigned int
++ asUint32(void): unsigned int
++ fromUint32(rep: unsigned int): void
 --
 Responsibilities
 Represents a 24-bit color.</panel_attributes>
@@ -107,8 +108,8 @@ Represents a 24-bit color.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>396</x>
-      <y>486</y>
+      <x>450</x>
+      <y>534</y>
       <w>126</w>
       <h>72</h>
     </coordinates>
@@ -125,8 +126,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>366</x>
-      <y>540</y>
+      <x>420</x>
+      <y>588</y>
       <w>108</w>
       <h>72</h>
     </coordinates>
@@ -136,8 +137,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>444</x>
-      <y>540</y>
+      <x>498</x>
+      <y>588</y>
       <w>96</w>
       <h>72</h>
     </coordinates>
@@ -147,8 +148,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>468</x>
-      <y>600</y>
+      <x>522</x>
+      <y>648</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -163,8 +164,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>318</x>
-      <y>600</y>
+      <x>372</x>
+      <y>648</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -179,8 +180,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>180</x>
-      <y>600</y>
+      <x>234</x>
+      <y>648</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -195,8 +196,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>150</x>
-      <y>552</y>
+      <x>204</x>
+      <y>600</y>
       <w>102</w>
       <h>60</h>
     </coordinates>
@@ -206,8 +207,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>108</x>
-      <y>498</y>
+      <x>162</x>
+      <y>546</y>
       <w>126</w>
       <h>72</h>
     </coordinates>
@@ -224,8 +225,8 @@ value: float
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>78</x>
-      <y>552</y>
+      <x>132</x>
+      <y>600</y>
       <w>102</w>
       <h>60</h>
     </coordinates>
@@ -235,8 +236,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>30</x>
-      <y>600</y>
+      <x>84</x>
+      <y>648</y>
       <w>126</w>
       <h>60</h>
     </coordinates>
@@ -251,8 +252,8 @@ value: float
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>354</x>
-      <y>30</y>
+      <x>408</x>
+      <y>78</y>
       <w>234</w>
       <h>186</h>
     </coordinates>
@@ -281,10 +282,10 @@ decide on how to handle received data.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>618</x>
-      <y>30</y>
+      <x>672</x>
+      <y>78</y>
       <w>282</w>
-      <h>186</h>
+      <h>192</h>
     </coordinates>
     <panel_attributes>Utils::SerialPeer
 --

@@ -84,7 +84,7 @@ void LineDetector::set_thresholds(float threshLow, float threshHigh)
  */
 bool LineDetector::add_color(const Utils::Color& color)
 {
-    float lowHue;
+/*    float lowHue;
     float highHue;
     cv::Mat bgr(1, 1, CV_8UC3, cv::Scalar(color.b, color.g, color.r)), hsv;
     cv::cvtColor(bgr, hsv, CV_BGR2HSV);
@@ -100,6 +100,7 @@ bool LineDetector::add_color(const Utils::Color& color)
             return false;
         }
     }
+*/
     m_colorList.push_back(color);
     return true;
 }

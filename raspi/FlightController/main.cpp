@@ -176,7 +176,7 @@ int main(int nargs, char *argv[])
             PRINT_VERBOSE("Got Orientation (" << orientation.roll << ", " << orientation.pitch << ", " << orientation.yaw << ")");
 
             // Apply the orientation and image to the current task
-            Iriss::Command cmd = orders.apply(imageFile, orientation);
+            cmd = orders.apply(imageFile, orientation);
             PRINT_VERBOSE("Applying Orders resulted with " << cmd);
             uart.send(cmd);
 
