@@ -16,7 +16,6 @@ void Orientation::pack(std::vector<uint8_t>& bytes) const
 {
     bytes.clear();
     bytes.resize(3*sizeof(float)+1);
-    std::cout << "Orientation size: " << bytes.size() << std::endl;
     bytes[0] = ORNTMSG;
     pack_float32(roll, &(bytes[1]));
     pack_float32(pitch, &(bytes[5]));
@@ -26,7 +25,6 @@ void Orientation::pack(std::vector<uint8_t>& bytes) const
 
 void Orientation::unpack(const std::vector<uint8_t>& bytes)
 {
-    std::cout << "Orientation size: " << bytes.size() << std::endl;
     assert(bytes.size() >= 3*sizeof(float)+1);
     assert(bytes[0] == ORNTMSG);
     unpack_float32(&(bytes[1]), roll);

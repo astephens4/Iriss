@@ -90,7 +90,9 @@ int main(void)
             std::cin >> selection;
             switch(selection) {
             case 1: // take off
-                orders.queue_task(Iriss::Orders::TAKE_OFF, 0);
+                std::cout << "Enter height to ascend to, in inches: ";
+                std::cin >> selection;
+                orders.queue_task(Iriss::Orders::TAKE_OFF, selection);
                 break;
             case 2: // follow line
                 std::cout << "Enter the line color as RGB\n"

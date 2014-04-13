@@ -139,7 +139,21 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
             cv::RotatedRect bbox = cv::minAreaRect(cv::Mat(contour));
             if(bbox.size.width * bbox.size.height < 400) {
                 // draw the ROI as black
-                cv::Mat roi(filtered, bbox.boundingRect());
+                cv::Rect clipArea = bbox.boundingRect();
+                clipArea.x = (int) clipArea.x;
+                clipArea.y = (int) clipArea.y;
+                clipArea.width = (int) clipArea.width;
+                clipArea.height = (int) clipArea.height;
+                if(clipArea.x < 0)
+                    clipArea.x = 0;
+                if(clipArea.x + clipArea.width > filtered.cols)
+                    clipArea.width = filtered.cols - clipArea.x;
+                if(clipArea.y < 0)
+                    clipArea.y = 0;
+                if(clipArea.y + clipArea.height > filtered.rows)
+                    clipArea.height = filtered.rows - clipArea.y;
+
+                cv::Mat roi(filtered, clipArea);
                 roi = cv::Scalar(0, 0, 0);
             }
             else {
@@ -167,7 +181,6 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
             }
             
         }
-
     }
 
     detectedLines.assign(m_lineList.begin(), m_lineList.end());
@@ -177,9 +190,13 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
 
 void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur)
 {
+    cv::imshow("Initial", image);
+    cv::waitKey();
     if(doBlur) {
         // Step 0: Blur!
         cv::blur(image, filtered, cv::Size(3, 3));
+        cv::imshow("Blurred", filtered);
+        cv::waitKey();
     }
     else {
         filtered = image.clone();
@@ -189,6 +206,9 @@ void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range
     cv::Scalar low(hueRange.start, satRange.start, valRange.start);
     cv::Scalar high(hueRange.end, satRange.end, valRange.end);
     cv::inRange(filtered, low, high, filtered);
+    cv::imshow("Threshold Filtering", filtered);
+    cv::waitKey();
+
 }
 
 Utils::Inches get_distance_from_width(unsigned int pixelsWide)

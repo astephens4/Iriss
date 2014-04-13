@@ -8,6 +8,10 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "test/Testing.hpp"
 #include <sstream>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+#include <ctime>
 
 
 namespace Iriss {
@@ -80,6 +84,10 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
 
     
     Iriss::Command cmd;
+    char buf[32];
+    snprintf(buf, 32, "%lu", time(NULL));
+    std::string name(buf);
+    std::ofstream("/dev/shm/photocache/"+name+".line");
     for(LineAnalysis::Line line : detectedLines) {
         // Determining corrections takes place in two stages:
         //  1. Corrections to get the quad straight and level
@@ -114,10 +122,10 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
             cmd.include(Iriss::Command::NUDGE_PITCH_DOWN);
         }
 
-        if(line.get_angle().asDegrees() > 0.001f) {
+        if(line.get_angle().asDegrees() > 90.5f) {
             cmd.include(Iriss::Command::NUDGE_YAW_CCW);
         }
-        else if(line.get_angle().asDegrees() < -0.001f) {
+        else if(line.get_angle().asDegrees() < 89.5f) {
             cmd.include(Iriss::Command::NUDGE_YAW_CW);
         }
 
@@ -204,7 +212,9 @@ Iriss::Command Orders::apply(const std::string& imgFile, const Iriss::Orientatio
             cmd.set(Iriss::Command::TX_ERR);
         }
     }
-
+    std::string cpCmd("cp /dev/shm/photocache/lineFollow.jpg ");
+    cpCmd += std::string("/dev/shm/photocache/")+name+std::string(".jpg");
+    system(cpCmd.c_str());
     return cmd;
 }
 

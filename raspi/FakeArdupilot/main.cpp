@@ -23,7 +23,6 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
     if(directives & Iriss::Command::ACK) {
         // reply with an ACK if not waiting on one
         if(sendAckBack) {
-            std::cout << "Sending ACK from AutoPilot\n";
             Iriss::Command resp(Iriss::Command::ACK);
             uart->send(resp);
             sendAckBack = false;
@@ -42,9 +41,9 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
   
     if(directives & Iriss::Command::GET_ORIENTATION) {
         // get the orientation from ins and send it
-        float roll = (rand() % 180) - 90.0f,
-              pitch = (rand() % 180) - 90.0f,
-              yaw = (rand() % 180) - 90.0f;
+        float roll = 0.0f,
+              pitch = 0.0f,
+              yaw = 0.0f;
        
         Iriss::Orientation orientation(roll, pitch, yaw);
         uart->send(orientation);
@@ -94,7 +93,7 @@ void do_respond(const Iriss::Command& cmd, int16_t *channels)
 bool g_verbose = false;
 #define PRINT_VERBOSE(output_stream) \
     if(g_verbose) { \
-        std::cout << output_stream << std::endl; \
+        std::cout << "FakeArduPilot: " << output_stream << std::endl; \
     }
 
 int main(int nargs, char *argv[])
@@ -156,5 +155,6 @@ int main(int nargs, char *argv[])
         }
     }
 
+    delete uart;
     return 0;
 }

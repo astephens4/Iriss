@@ -225,8 +225,8 @@ bool SerialPeer::send(const std::vector<uint8_t>& bytes)
     // write the number of bytes to be sent
     int lenNet = htonl(len);
     ret = write(m_uartFd, &lenNet, sizeof(int));
-    std::cout << "len: " << len << std::endl;
-    std::cout << "lenNet: " << lenNet << std::endl;
+
+
     if(ret < 0) {
         perror("send bytes");
         m_isValid = false;
@@ -289,7 +289,6 @@ bool SerialPeer::recv(std::vector<uint8_t>& bytes)
 
     }
 
-
     // read the message size
     int lenNet = 0;
     ssize_t ret;
@@ -304,10 +303,7 @@ bool SerialPeer::recv(std::vector<uint8_t>& bytes)
 
         lenNet |= static_cast<int>(byte)<<((3-i)*8);
     }
-    std::cout << "LenNet: " << lenNet << std::endl;
     int len = lenNet;
-    std::cout << "Len: " << len << std::endl;
-
 
     bytes.resize(len, 0);
     int bytesRecvd = 0;

@@ -30,7 +30,7 @@
 
 #define PRINT_VERBOSE(output_stream) \
     if(g_verbose) { \
-        std::cout << output_stream << std::endl; \
+        std::cout << "FlightController: " << output_stream << std::endl; \
     }
 
 int main(int nargs, char *argv[])
@@ -163,11 +163,6 @@ int main(int nargs, char *argv[])
         while(orders.has_tasks()) {
             system(takePhoto.c_str());
 
-            if(imageFile.empty()) {
-                continue;
-            }
-            PRINT_VERBOSE("Using image " << imageFile);
-
             // Get the orientation from the ArduPilot
             PRINT_VERBOSE("Asking for orientation from the ArduPilot");
             cmd.set(Iriss::Command::GET_ORIENTATION);
@@ -183,7 +178,7 @@ int main(int nargs, char *argv[])
             // delete the image we have used
             removeCmd = "rm ";
             removeCmd += imageFile;
-//            system(removeCmd.c_str());
+            system(removeCmd.c_str());
         }
     }
     std::cerr << "Connection with the command center has been terminated! Initiate land!\n";
@@ -192,10 +187,7 @@ int main(int nargs, char *argv[])
     land.queue_task(Iriss::Orders::LAND, 0);
     while(land.has_tasks()) {
         system(takePhoto.c_str());
-        if(imageFile.empty()) {
-            continue;
-        }
-        
+       
         // Get the orientation from the ArduPilot
         cmd.set(Iriss::Command::GET_ORIENTATION);
         uart.send(cmd);
