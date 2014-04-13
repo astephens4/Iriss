@@ -190,13 +190,9 @@ bool LineDetector::get_lines(std::vector<LineAnalysis::Line>& detectedLines)
 
 void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range& hueRange, const cv::Range& satRange, const cv::Range& valRange, bool doBlur)
 {
-    cv::imshow("Initial", image);
-    cv::waitKey();
     if(doBlur) {
         // Step 0: Blur!
         cv::blur(image, filtered, cv::Size(3, 3));
-        cv::imshow("Blurred", filtered);
-        cv::waitKey();
     }
     else {
         filtered = image.clone();
@@ -206,8 +202,6 @@ void get_filtered_image(const cv::Mat& image, cv::Mat& filtered, const cv::Range
     cv::Scalar low(hueRange.start, satRange.start, valRange.start);
     cv::Scalar high(hueRange.end, satRange.end, valRange.end);
     cv::inRange(filtered, low, high, filtered);
-    cv::imshow("Threshold Filtering", filtered);
-    cv::waitKey();
 
 }
 

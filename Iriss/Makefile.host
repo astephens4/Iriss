@@ -37,6 +37,7 @@ INCLUDES = ${SYS_INCLUDES} \
 LIBS = ${SYS_LIBS} \
 	-L${RELATIVE}/${ARCH}/${BUILD_VERSION}/lib \
 	-lLineAnalysis \
+	-lMath \
 	-lUtils \
 	-lopencv_core \
 	-lopencv_imgproc \
