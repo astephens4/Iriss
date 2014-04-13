@@ -2,7 +2,7 @@
 
 # install the executables for the build environment
 echo "Downloading local dependencies from Ubuntu repositories..."
-sudo apt-get install git cmake ia32-libs wget umlet build-essential arduino-core
+sudo apt-get install git cmake wget umlet build-essential arduino-core binutils:i386 libstdc++6:i386
 
 echo "Getting Raspberry Pi toolchain from the official Github"
 git clone https://github.com/raspberrypi/tools.git ./raspi_tc
